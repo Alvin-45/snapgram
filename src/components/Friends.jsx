@@ -1,238 +1,60 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Avatar from '@mui/material/Avatar';
 import { blue, red, yellow } from '@mui/material/colors';
-
+import { userdetails } from '../../services/allAPI';
+import userimg from '../assets/user.png'
 function Friends() {
+  const [users, setusers] = useState([]);
+  const [isClassA, setIsClassA] = useState(true);
+  const [handleFriend, sethandleFriend] = useState([]);
+
+  const toggleIcon = (userId) => {
+    sethandleFriend((prevToggled) =>
+      prevToggled.includes(userId) ? prevToggled.filter((id) => id !== userId) : [...prevToggled, userId]
+      
+    );
+    // setFriendResponse(true)
+  };
+
+    
+  useEffect(() => {
+        async function fetchData() {
+            try {
+                const result = await userdetails();
+                // console.log(result.status);
+                setusers(result.data);
+                // console.log(result);
+
+            } catch (err) {
+                console.log(err);
+            }
+        }
+        fetchData();
+    }, []);
+
   return (
     <>
     <h4 className='fw-bolder mt-5'>Friends</h4>
     <div className='frndlist'>
+    <div className="friends  d-flex justify-content-start align-items-start flex-wrap flex-column"style={{width:'80%'}}>
+                {users?.length>0?
+                users.map(user=>(
+                <div key={user._id} className="b1 d-flex justify-content-evenly align-items-center w-100 mb-1">
+                    <img src={userimg} alt="" style={{width:'80px'}} />
+                    <h5 className='text-light'>{user.username}</h5>
+                    <p className="text-secondary">{user.firstname}</p>
+                    <i
+                        onClick={() => toggleIcon(user._id)}
+                        className={` ${handleFriend.includes(user._id) ? 'fa-solid fa-user-plus text-primary' : 'fa-solid fa-user-minus  text-danger'
+                          }`}
+                      ></i>
+                </div>
+            )):<div className="fw-bolder text-danger text-center">User Not Found !!!</div>}
+                
+            </div>
       
-      <div className='d-flex justify-content-around w-50'>
-        <div className="d-flex mt-3" style={{width:'100%'}}>
-        <Avatar sx={{ bgcolor: red[500] }} className='' aria-label="name">
-                  A
-                </Avatar><b className='mt-2 ms-2' style={{fontSize:'20px'}}>Alax</b>
-          </div> 
-          <div><i className="fa-solid fa-user-minus fa-lg icn2" style={{color:'red'}}></i></div>
-       
-      </div>
-      <div className='d-flex justify-content-around w-50'>
-        <div className="d-flex mt-3" style={{width:'100%'}}>
-        <Avatar sx={{ bgcolor: blue[500] }} className='' aria-label="name">
-                  R
-                </Avatar><b className='mt-2 ms-2' style={{fontSize:'20px'}}>Ram</b>
-          </div> 
-          <div><i className="fa-solid fa-user-minus fa-lg icn2" style={{color:'red'}}></i></div>
-       
-      </div>
-      <div className='d-flex justify-content-around w-50'>
-        <div className="d-flex mt-3" style={{width:'100%'}}>
-        <Avatar sx={{ bgcolor: blue[500] }} className='' aria-label="name">
-                  M
-                </Avatar><b className='mt-2 ms-2' style={{fontSize:'20px'}}>Manu</b>
-          </div> 
-          <div><i className="fa-solid fa-user-minus fa-lg icn2" style={{color:'red'}}></i></div>
-       
-      </div>
-      <div className='d-flex justify-content-around w-50'>
-        <div className="d-flex mt-3" style={{width:'100%'}}>
-        <Avatar sx={{ bgcolor: yellow[500] }} className='' aria-label="name">
-                  Y
-                </Avatar><b className='mt-2 ms-2' style={{fontSize:'20px'}}>Yedu</b>
-          </div> 
-          <div><i className="fa-solid fa-user-minus fa-lg icn2" style={{color:'red'}}></i></div>
-       
-      </div>
-      <div className='d-flex justify-content-around w-50'>
-        <div className="d-flex mt-3" style={{width:'100%'}}>
-        <Avatar sx={{ bgcolor: red[500] }} className='' aria-label="name">
-                  L
-                </Avatar><b className='mt-2 ms-2' style={{fontSize:'20px'}}>Luffy</b>
-          </div> 
-          <div><i className="fa-solid fa-user-minus fa-lg icn2" style={{color:'red'}}></i></div>
-       
-      </div>
-      <div className='d-flex justify-content-around w-50'>
-        <div className="d-flex mt-3" style={{width:'100%'}}>
-        <Avatar sx={{ bgcolor: red[500] }} className='' aria-label="name">
-                  A
-                </Avatar><b className='mt-2 ms-2' style={{fontSize:'20px'}}>Alax</b>
-          </div> 
-          <div><i className="fa-solid fa-user-minus fa-lg icn2" style={{color:'red'}}></i></div>
-       
-      </div>
-      <div className='d-flex justify-content-around w-50'>
-        <div className="d-flex mt-3" style={{width:'100%'}}>
-        <Avatar sx={{ bgcolor: blue[500] }} className='' aria-label="name">
-                  R
-                </Avatar><b className='mt-2 ms-2' style={{fontSize:'20px'}}>Ram</b>
-          </div> 
-          <div><i className="fa-solid fa-user-minus fa-lg icn2" style={{color:'red'}}></i></div>
-       
-      </div>
-      <div className='d-flex justify-content-around w-50'>
-        <div className="d-flex mt-3" style={{width:'100%'}}>
-        <Avatar sx={{ bgcolor: blue[500] }} className='' aria-label="name">
-                  M
-                </Avatar><b className='mt-2 ms-2' style={{fontSize:'20px'}}>Manu</b>
-          </div> 
-          <div><i className="fa-solid fa-user-minus fa-lg icn2" style={{color:'red'}}></i></div>
-       
-      </div>
-      <div className='d-flex justify-content-around w-50'>
-        <div className="d-flex mt-3" style={{width:'100%'}}>
-        <Avatar sx={{ bgcolor: yellow[500] }} className='' aria-label="name">
-                  Y
-                </Avatar><b className='mt-2 ms-2' style={{fontSize:'20px'}}>Yedu</b>
-          </div> 
-          <div><i className="fa-solid fa-user-minus fa-lg icn2" style={{color:'red'}}></i></div>
-       
-      </div>
-      <div className='d-flex justify-content-around w-50'>
-        <div className="d-flex mt-3" style={{width:'100%'}}>
-        <Avatar sx={{ bgcolor: red[500] }} className='' aria-label="name">
-                  L
-                </Avatar><b className='mt-2 ms-2' style={{fontSize:'20px'}}>Luffy</b>
-          </div> 
-          <div><i className="fa-solid fa-user-minus fa-lg icn2" style={{color:'red'}}></i></div>
-       
-      </div>
-      <div className='d-flex justify-content-around w-50'>
-        <div className="d-flex mt-3" style={{width:'100%'}}>
-        <Avatar sx={{ bgcolor: red[500] }} className='' aria-label="name">
-                  A
-                </Avatar><b className='mt-2 ms-2' style={{fontSize:'20px'}}>Alax</b>
-          </div> 
-          <div><i className="fa-solid fa-user-minus fa-lg icn2" style={{color:'red'}}></i></div>
-       
-      </div>
-      <div className='d-flex justify-content-around w-50'>
-        <div className="d-flex mt-3" style={{width:'100%'}}>
-        <Avatar sx={{ bgcolor: blue[500] }} className='' aria-label="name">
-                  R
-                </Avatar><b className='mt-2 ms-2' style={{fontSize:'20px'}}>Ram</b>
-          </div> 
-          <div><i className="fa-solid fa-user-minus fa-lg icn2" style={{color:'red'}}></i></div>
-       
-      </div>
-      <div className='d-flex justify-content-around w-50'>
-        <div className="d-flex mt-3" style={{width:'100%'}}>
-        <Avatar sx={{ bgcolor: blue[500] }} className='' aria-label="name">
-                  M
-                </Avatar><b className='mt-2 ms-2' style={{fontSize:'20px'}}>Manu</b>
-          </div> 
-          <div><i className="fa-solid fa-user-minus fa-lg icn2" style={{color:'red'}}></i></div>
-       
-      </div>
-      <div className='d-flex justify-content-around w-50'>
-        <div className="d-flex mt-3" style={{width:'100%'}}>
-        <Avatar sx={{ bgcolor: yellow[500] }} className='' aria-label="name">
-                  Y
-                </Avatar><b className='mt-2 ms-2' style={{fontSize:'20px'}}>Yedu</b>
-          </div> 
-          <div><i className="fa-solid fa-user-minus fa-lg icn2" style={{color:'red'}}></i></div>
-       
-      </div>
-      <div className='d-flex justify-content-around w-50'>
-        <div className="d-flex mt-3" style={{width:'100%'}}>
-        <Avatar sx={{ bgcolor: red[500] }} className='' aria-label="name">
-                  L
-                </Avatar><b className='mt-2 ms-2' style={{fontSize:'20px'}}>Luffy</b>
-          </div> 
-          <div><i className="fa-solid fa-user-minus fa-lg icn2" style={{color:'red'}}></i></div>
-       
-      </div>
-      <div className='d-flex justify-content-around w-50'>
-        <div className="d-flex mt-3" style={{width:'100%'}}>
-        <Avatar sx={{ bgcolor: red[500] }} className='' aria-label="name">
-                  A
-                </Avatar><b className='mt-2 ms-2' style={{fontSize:'20px'}}>Alax</b>
-          </div> 
-          <div><i className="fa-solid fa-user-minus fa-lg icn2" style={{color:'red'}}></i></div>
-       
-      </div>
-      <div className='d-flex justify-content-around w-50'>
-        <div className="d-flex mt-3" style={{width:'100%'}}>
-        <Avatar sx={{ bgcolor: blue[500] }} className='' aria-label="name">
-                  R
-                </Avatar><b className='mt-2 ms-2' style={{fontSize:'20px'}}>Ram</b>
-          </div> 
-          <div><i className="fa-solid fa-user-minus fa-lg icn2" style={{color:'red'}}></i></div>
-       
-      </div>
-      <div className='d-flex justify-content-around w-50'>
-        <div className="d-flex mt-3" style={{width:'100%'}}>
-        <Avatar sx={{ bgcolor: blue[500] }} className='' aria-label="name">
-                  M
-                </Avatar><b className='mt-2 ms-2' style={{fontSize:'20px'}}>Manu</b>
-          </div> 
-          <div><i className="fa-solid fa-user-minus fa-lg icn2" style={{color:'red'}}></i></div>
-       
-      </div>
-      <div className='d-flex justify-content-around w-50'>
-        <div className="d-flex mt-3" style={{width:'100%'}}>
-        <Avatar sx={{ bgcolor: yellow[500] }} className='' aria-label="name">
-                  Y
-                </Avatar><b className='mt-2 ms-2' style={{fontSize:'20px'}}>Yedu</b>
-          </div> 
-          <div><i className="fa-solid fa-user-minus fa-lg icn2" style={{color:'red'}}></i></div>
-       
-      </div>
-      <div className='d-flex justify-content-around w-50'>
-        <div className="d-flex mt-3" style={{width:'100%'}}>
-        <Avatar sx={{ bgcolor: red[500] }} className='' aria-label="name">
-                  L
-                </Avatar><b className='mt-2 ms-2' style={{fontSize:'20px'}}>Luffy</b>
-          </div> 
-          <div><i className="fa-solid fa-user-minus fa-lg icn2" style={{color:'red'}}></i></div>
-       
-      </div>
-      <div className='d-flex justify-content-around w-50'>
-      <div className="d-flex mt-3" style={{width:'100%'}}>
-      <Avatar sx={{ bgcolor: red[500] }} className='' aria-label="name">
-                A
-              </Avatar><b className='mt-2 ms-2' style={{fontSize:'20px'}}>Alax</b>
-        </div> 
-        <div><i className="fa-solid fa-user-minus fa-lg icn2" style={{color:'red'}}></i></div>
      
-    </div>
-    <div className='d-flex justify-content-around w-50'>
-      <div className="d-flex mt-3" style={{width:'100%'}}>
-      <Avatar sx={{ bgcolor: blue[500] }} className='' aria-label="name">
-                R
-              </Avatar><b className='mt-2 ms-2' style={{fontSize:'20px'}}>Ram</b>
-        </div> 
-        <div><i className="fa-solid fa-user-minus fa-lg icn2" style={{color:'red'}}></i></div>
-     
-    </div>
-    <div className='d-flex justify-content-around w-50'>
-      <div className="d-flex mt-3" style={{width:'100%'}}>
-      <Avatar sx={{ bgcolor: blue[500] }} className='' aria-label="name">
-                M
-              </Avatar><b className='mt-2 ms-2' style={{fontSize:'20px'}}>Manu</b>
-        </div> 
-        <div><i className="fa-solid fa-user-minus fa-lg icn2" style={{color:'red'}}></i></div>
-     
-    </div>
-    <div className='d-flex justify-content-around w-50'>
-      <div className="d-flex mt-3" style={{width:'100%'}}>
-      <Avatar sx={{ bgcolor: yellow[500] }} className='' aria-label="name">
-                Y
-              </Avatar><b className='mt-2 ms-2' style={{fontSize:'20px'}}>Yedu</b>
-        </div> 
-        <div><i className="fa-solid fa-user-minus fa-lg icn2" style={{color:'red'}}></i></div>
-     
-    </div>
-    <div className='d-flex justify-content-around w-50'>
-      <div className="d-flex mt-3" style={{width:'100%'}}>
-      <Avatar sx={{ bgcolor: red[500] }} className='' aria-label="name">
-                L
-              </Avatar><b className='mt-2 ms-2' style={{fontSize:'20px'}}>Luffy</b>
-        </div> 
-        <div><i className="fa-solid fa-user-minus fa-lg icn2" style={{color:'red'}}></i></div>
-     
-    </div>
+    
     </div>
     
     </>

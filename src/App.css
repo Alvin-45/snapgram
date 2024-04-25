@@ -1,6 +1,7 @@
 *{
-  background-color: black;
+  /* background-image: url(https://media.istockphoto.com/id/1451792814/video/4k-black-luxury-background-with-golden-dynamic-spots-diagonal-stripes-shimmers-bokeh-dots.jpg?s=640x640&k=20&c=YlBTrEOII8zcXJnhkUNpy6BtUUb6iuR4N9N0224Zm1w=); */
   font-family: "Alegreya Sans", sans-serif;
+  
 }
 .title{
   font-family: "Jacquard 24", system-ui;
@@ -8,6 +9,8 @@
 .nav1{
   margin-top: 15%;
   font-size: 20px;
+    cursor: pointer;
+
 }
 .navleft{
   border-right: 1px solid;
@@ -66,7 +69,7 @@
   display: none;
 }
 .btm{
-  margin-top: 90%;
+  margin-top: 60%;
 }
 .box{
   border-radius: 20px;
@@ -86,4 +89,67 @@
 }
 .cmttxt{
   margin-top: 64%;
+}
+.fullsearchbdy{
+  overflow-x: hidden;
+  position: relative;
+}
+.users{
+  overflow-y: auto;
+}
+.srch{
+  position: fixed;
+  padding-bottom: 25px;
+  border-bottom: 1px solid white;
+  z-index: 45;
+  margin-top: -50px;
+  margin-left: -75px;
+  padding-left: 75px;
+  padding-top: 80px;
+}
+.li1{
+  text-decoration: none;
+  color: white;
+}
+.logot{
+  cursor: pointer;
+}
+.friendsp{
+  margin-left: -150px;
+}
+.friendspage{
+  overflow-x: hidden;
+}
+.profile{
+  overflow-x: hidden;
+}
+.po1{
+  overflow-y: hidden;
+}
+.li2{
+  width: 100%;
+  text-decoration: none;
+  color: white;
+  margin-bottom: 50px;
+  margin-left: 15px;
+}
+.li3{
+  margin-bottom: 50px;
+  margin-left: 15px;
+}
+.nameu{
+  line-height: 2px;
+}
+.btm2{
+  margin-top: 5%;
+}
+.srch2{
+  position: fixed;
+  padding-bottom: 10px;
+  border-bottom: 1px solid grey;
+  z-index: 45;
+  margin-top: -100px;
+  margin-left: -25px;
+  padding-left: 15px;
+  padding-top: 80px;
 }

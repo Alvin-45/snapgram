@@ -1,0 +1,19 @@
+.inp{
+    width: 40%;
+    margin: auto;
+    text-align: center;
+    border-left: 0px;
+    border-bottom: 1px solid;
+    color: blue;
+    
+}
+.border1{
+    /* background-color: white; */
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-direction: column;
+}
+.head1{
+    margin-top: -150px;
+}

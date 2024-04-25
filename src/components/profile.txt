@@ -1,0 +1,128 @@
+import React, { useContext, useEffect, useState } from 'react'
+import { Navbar } from 'react-bootstrap'
+import NavLeft from './NavLeft'
+import userimg from '../assets/user.png'
+import { getUserPostsAPI, userdetails } from '../../services/allAPI'
+import { addResponseContext } from '../Context/ContextAPI'
+
+
+function Profile() {
+  const { addResponse, setAddResponse } = useContext(addResponseContext)
+const [userpost, setUserPosts] = useState([])
+console.log(userpost);
+
+  const [displayuName , setDisplayuName] = useState("")
+  const [fname , setFname] = useState("")
+
+useEffect(()=>{
+  if(sessionStorage.getItem("existingUser")){
+    const {username} = JSON.parse(sessionStorage.getItem("existingUser"))
+    const {firstName} = JSON.parse(sessionStorage.getItem("existingUser"))
+  setDisplayuName(username)
+  setFname(firstName)
+
+  }else{
+    setDisplayuName("")
+    setFname("")
+  }
+  getUserPosts()
+},[addResponse])
+
+
+const getUserPosts = async () => {
+  const token = sessionStorage.getItem("token")
+  const reqHeader = {
+    "Authorization": `Bearer ${token}`
+  }
+  try {
+    const result = await getUserPosts(reqHeader)
+    console.log(result);
+    if (result.status == 200) {
+      setUserPosts(result.data)
+    }
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+
+  return (
+    <>
+    
+    <div className='profile' style={{ backgroundColor: 'black', height: '150vh' }}>
+        <Navbar />
+        <div className='row'>
+          <div
+            className='col-lg-2 text-light pt-5 pb-5 navl ms-3'
+            style={{ height: '100vh', position: 'fixed' }}
+          >
+            <NavLeft />
+          </div>
+          <div className='col-lg-8' style={{ marginLeft: '350px' }}>
+            <div className="proileinfo d-flex justify-content-start align-items-start" style={{height:'150px'}}>
+              <img src={userimg} alt=""  style={{ width: '120px' }} />
+             <div className='mt-4 '>
+                <h4 className='text-light'>{fname.split(" ")[0]}</h4>
+                <p className="text-light">{displayuName.split(" ")[0]}</p>
+             </div>
+             <button className="btn btn-light text-dark w-50 " style={{marginTop:'90px'}}>Edit Profile</button>
+
+            </div>
+            <hr style={{color:'white'}}/>
+            <div className="post">
+              <div className="row">
+                <div className="col text-center text-light">POST</div>
+                <hr style={{color:'white',marginLeft: '100px' }}/>
+              </div>
+              {/* <div className="post d-flex justify-content-start align-items-start flex-wrap" style={{marginLeft: '100px'}}>
+                <div className="p1 mb-1 me-1">
+                  <img src="https://insomniac.games/wp-content/uploads/2018/09/Spider-Man_PS4_Selfie_Photo_Mode_LEGAL.jpg" style={{width:'300px'}} alt="" />
+                </div>
+                <div className="p1 mb-1 me-1">
+                  <img src="https://insomniac.games/wp-content/uploads/2018/09/Spider-Man_PS4_Selfie_Photo_Mode_LEGAL.jpg" style={{width:'300px'}} alt="" />
+                </div>
+                <div className="p1 mb-1 me-1">
+                  <img src="https://insomniac.games/wp-content/uploads/2018/09/Spider-Man_PS4_Selfie_Photo_Mode_LEGAL.jpg" style={{width:'300px'}} alt="" />
+                </div>
+                <div className="p1 mb-1 me-1">
+                  <img src="https://insomniac.games/wp-content/uploads/2018/09/Spider-Man_PS4_Selfie_Photo_Mode_LEGAL.jpg" style={{width:'300px'}} alt="" />
+                </div>
+                <div className="p1 mb-1 me-1">
+                  <img src="https://insomniac.games/wp-content/uploads/2018/09/Spider-Man_PS4_Selfie_Photo_Mode_LEGAL.jpg" style={{width:'300px'}} alt="" />
+                </div>
+                <div className="p1 mb-1 me-1">
+                  <img src="https://insomniac.games/wp-content/uploads/2018/09/Spider-Man_PS4_Selfie_Photo_Mode_LEGAL.jpg" style={{width:'300px'}} alt="" />
+                </div>
+                <div className="p1 mb-1 me-1">
+                  <img src="https://insomniac.games/wp-content/uploads/2018/09/Spider-Man_PS4_Selfie_Photo_Mode_LEGAL.jpg" style={{width:'300px'}} alt="" />
+                </div>
+                <div className="p1 mb-1 me-1">
+                  <img src="https://insomniac.games/wp-content/uploads/2018/09/Spider-Man_PS4_Selfie_Photo_Mode_LEGAL.jpg" style={{width:'300px'}} alt="" />
+                </div>
+                <div className="p1 mb-1 me-1">
+                  <img src="https://insomniac.games/wp-content/uploads/2018/09/Spider-Man_PS4_Selfie_Photo_Mode_LEGAL.jpg" style={{width:'300px'}} alt="" />
+                </div>
+              </div> */}
+              <div className="mt-4">
+        {
+          userpost?.length > 0 ?
+
+            userpost?.map(post => (
+              <div className="d-flex justify-content-between border p-2 rounded mb-2">
+                <h3>{post?.caption}</h3>
+                <img src={post?.image} alt="" />
+              </div>
+            ))
+            :
+            <div className=' fw-bolder text-danger text-center'>No Projects Uploaded Yet !!!</div>
+        }
+      </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  )
+}
+
+export default Profile
