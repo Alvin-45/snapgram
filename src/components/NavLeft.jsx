@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import Modal from 'react-bootstrap/Modal';
-import { addResponseContext } from '../Context/ContextAPI';
+import { addResponseContext, likecountResponseContext } from '../Context/ContextAPI';
 import { useContext } from 'react';
 import { addPostAPI } from '../../services/allAPI';
 import 'react-toastify/dist/ReactToastify.css';
@@ -11,11 +11,13 @@ import uploadpic from '../assets/preview.png'
 function NavLeft(props) {
   const [modalShow, setModalShow] = React.useState(false);
   const navigate = useNavigate();
+  const {likecountResponse,setLikecountResponse}=useContext(likecountResponseContext)
 
   const handleLogout = () => {
     sessionStorage.clear();
     toast.success('Logout Successful!!');
     navigate('/login');
+    localStorage.setItem('likec',likecountResponse)
   };
   const handleModalClose=()=>{
     setModalShow(false)
@@ -46,7 +48,7 @@ useEffect(()=>{
 
 const handleuploadPost = async ()=>{
   const {image,caption}=postDetails
-  if(!image && !caption){
+  if(!image || !caption){
     toast.warning("Please fill the form completely!!!")
   }else{
 

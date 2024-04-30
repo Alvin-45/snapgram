@@ -80,7 +80,7 @@
 
 }
 .post{
-  margin-left: -90px;
+  margin-left: -60px;
 }
 .mdl{
   margin-top: 50px;
@@ -93,6 +93,7 @@
 .fullsearchbdy{
   overflow-x: hidden;
   position: relative;
+  overflow-y: auto;
 }
 .users{
   overflow-y: auto;
@@ -152,4 +153,23 @@
   margin-left: -25px;
   padding-left: 15px;
   padding-top: 80px;
+}
+.cmt1{
+  margin-left: -2px;
+}
+.msgpart{
+  overflow-y: auto;
+}
+.active1{
+  color:#ffffff;
+}
+.active2{
+  color:#df1e1e;
+}
+
+.fullcomment{
+  overflow-y: scroll;
+}
+.fullcomment::-webkit-scrollbar{
+  display: none;
 }

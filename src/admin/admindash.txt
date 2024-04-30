@@ -1,0 +1,146 @@
+import React, { useEffect, useState } from 'react'
+import AdminNav from './AdminNav'
+import { adminallUsersAPI, getflagPostsAPI } from '../../services/allAPI'
+import { Button, Dropdown, DropdownMenu, Modal } from 'react-bootstrap'
+
+function Admindashboard(props) {
+    const [flag,setFlag]=useState("")
+    const [users, setUsers] = useState([]);
+    const [modalShow, setModalShow] = React.useState(false);
+    useEffect(()=>{
+        getFlagposts()
+        getAllUsers();
+    },[])
+    async function getAllUsers(){
+        const token = sessionStorage.getItem('token');
+        const reqHeader = {
+          Authorization: `Bearer ${token}`
+        };
+    
+        try {
+          const result = await adminallUsersAPI(reqHeader);
+          if (result.status === 200) {
+            setUsers(result.data);
+            console.log(users);
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      };
+
+    async function getFlagposts(){
+        const token = sessionStorage.getItem('token');
+    const reqHeader = { "Authorization": `Bearer ${token}` };
+    try {
+      const result = await getflagPostsAPI(reqHeader);
+      // console.log(result.data);
+      setFlag(result.data);
+    } catch (err) {
+      console.log(err);
+    }
+  
+    }
+    const handleopenmodal=async(flag)=>{
+      setModalShow(true)
+    }
+  return (
+    <>
+    <div className="adminportal text-light" style={{backgroundColor:'black',width:'100%',height:'100vh'}}>
+        <div className="row">
+            <div className="col-2 ms-4 mt-5">
+                <AdminNav/>
+            </div>
+            <div className="col-8 pt-5">
+                <h3>Reported Cases</h3>
+                <div className="reportedcases w-100 border">
+                    <div className="w-100">
+                        <table style={{width:'100%'}}>
+                            <thead style={{width:'100%',height:'50px'}}>
+                                <tr  className='border text-center'>
+                                    <th>Sl.No</th>
+                                    <th>Reporter Id</th>
+                                    <th>Reported Account</th>
+                                    <th>Post Details</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {flag?.length>0?
+                                flag.map((report,index)=>(
+    
+                                
+                                <tr key={report._id} className='border text-center'>
+                                    <td>{index+1}</td>
+                                    <td>{report.poster} </td>
+                                    <td>{report.reporter}</td>
+                                    <td>{report.postId} <i className="fa-solid fa-eye text-primary "></i></td>
+                                    <Dropdown>
+                                        <Dropdown.Toggle value="Pending" className='w-100 text-warning text-center  fw-bolder'>Pending</Dropdown.Toggle>
+
+                                        <DropdownMenu>
+                                          <Dropdown.Item value="Pending" className='w-100 text-warning text-center text-success fw-bolder'>Pending</Dropdown.Item>
+                                          <Dropdown.Item value="Report Invalid" className='w-100 text-dark text-center  fw-bolder'>Report Invalid</Dropdown.Item>
+                                          <Dropdown.Item value="Delete Post" className='text-danger text-center  fw-bolder' onClick={() => handleopenmodal(report)}>Delete Post</Dropdown.Item>
+                                          <option value="Delete Account" className='text-danger fw-bolder text-center'>Delete Account</option>
+                                        </DropdownMenu>
+
+                                    </Dropdown>
+                                </tr>)): ''}
+                            </tbody>
+                        </table>
+                        
+                    </div>
+                </div>
+                <div className="row" style={{height:'50px'}}></div>
+                
+                <h3 className='text-center'>Analysis</h3>
+                <hr />
+                <div className='d-flex justify-content-around align-items-center'>
+                  <p className="fw-bolder">Total No of User: <span style={{fontSize:'25px'}} className='text-success ms-2'>{users.length}</span></p>
+                  <p className="fw-bolder">No of Warned User: <span style={{fontSize:'25px'}} className='text-warning ms-2'>0
+                    {/* {users.length} */}
+                    </span></p>
+                  <p className="fw-bolder">No of Accounts taken down : <span style={{fontSize:'25px'}} className='text-danger ms-2'>0 
+                  {/* {users.length} */}
+                  </span></p>
+                </div>
+                <h5>No of cases:<span className={flag.length<50 ?"text-warning fw-bolder":"text-danger fw-bolder "}>{flag.length}</span></h5>
+
+               <div className='d-flex justify-content-end' style={{position:'relative'}}> 
+               <div className="piechart bg-success" style={{width:'200px',height:'200px',borderRadius:'50%',position:'absolute'}}></div>
+               <div className="piechart bg-warning" style={{width:'200px',height:'200px',borderRadius:'50%',position:'absolute'}}></div>
+               <div className="piechart bg-danger" style={{width:'200px',height:'200px',borderRadius:'50%',position:'absolute'}}></div>
+               </div>
+
+            </div>
+            <div className="col"></div>
+        </div>
+    </div>
+    <Modal
+      {...props}
+      size="lg"
+      aria-labelledby="contained-modal-title-vcenter"
+      centered
+    >
+      <Modal.Header closeButton>
+        <Modal.Title id="contained-modal-title-vcenter">
+          Modal heading
+        </Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <h4>Centered Modal</h4>
+        <p>
+          Cras mattis consectetur purus sit amet fermentum. Cras justo odio,
+          dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac
+          consectetur ac, vestibulum at eros.
+        </p>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button onClick={props.onHide}>Close</Button>
+      </Modal.Footer>
+    </Modal>
+    </>
+  )
+}
+
+export default Admindashboard

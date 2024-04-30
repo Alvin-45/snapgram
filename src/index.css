@@ -17,3 +17,7 @@
 .head1{
     margin-top: -150px;
 }
+.adminportal{
+    overflow-x: hidden;
+    overflow-y: auto;
+}

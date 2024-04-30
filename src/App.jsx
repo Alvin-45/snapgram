@@ -9,6 +9,14 @@ import Friendspage from './pages/Friendspage';
 import Messages from './pages/Messages';
 import Profile from './components/Profile';
 import Addpostpage from './pages/Addpostpage';
+import UserProfile from './pages/UserProfile';
+import AdminRegister from './admin/AdminRegister';
+import Adminlogin from './admin/Adminlogin';
+import Admindashboard from './admin/Admindashboard';
+import AdminFeed from './admin/AdminFeed';
+import AdminSearch from './admin/AdminSearch';
+import AdminSearchpost from './admin/AdminSearchpost';
+import AdminUserProfile from './admin/AdminUserProfile';
 
 
 function App() {
@@ -25,6 +33,14 @@ function App() {
       <Route path='/messages'element={<Messages/>}></Route>
       <Route path='/profile'element={<Profile/>}></Route>
       <Route path='/add-post'element={<Addpostpage/>}></Route>
+      <Route path='/user-Profile'element={<UserProfile/>}></Route>
+      <Route path='/adminsignup'element={<AdminRegister/>}></Route>
+      <Route path='/adminlogin'element={<Adminlogin/>}></Route>
+      <Route path='/admindashboard'element={<Admindashboard/>}></Route>
+      <Route path='/adminfeed'element={<AdminFeed/>}></Route>
+      <Route path='/adminsearch'element={<AdminSearch/>}></Route>
+      <Route path='/adminsearchpost'element={<AdminSearchpost/>}></Route>
+      <Route path='/adminusersearch'element={<AdminUserProfile/>}></Route>
 
       <Route path='/*'element={<Home/>}></Route>
 
