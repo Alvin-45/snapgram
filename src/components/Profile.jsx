@@ -1,12 +1,13 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Modal, Navbar } from 'react-bootstrap';
+import { Dropdown, Modal, Navbar } from 'react-bootstrap';
 import NavLeft from './NavLeft';
 import userimg from '../assets/user.png';
-import { addCommentAPI, editProfileAPI, getPostCommentsAPI, getUserPostsAPI, luserAPI } from '../../services/allAPI';
-import { addResponseContext, editResponseContext } from '../Context/ContextAPI';
+import { addCommentAPI, editProfileAPI, getPostCommentsAPI, getUserPostsAPI, luserAPI, removePostAPI } from '../../services/allAPI';
+import { addResponseContext, editResponseContext, postremoveResponseContext } from '../Context/ContextAPI';
 import { SERVER_URL } from '../../services/serverURL';
 import { Avatar } from '@mui/material';
 import { orange, purple, red } from '@mui/material/colors';
+import { toast } from 'react-toastify';
 
 
 function Profile(post) {
@@ -20,12 +21,42 @@ function Profile(post) {
     id: post?._id, image: "", caption: post?.caption
   })
   const [comments, setComments] = useState([]);
+  const {poststatusResponse, setPostStatusResponse}=useContext(postremoveResponseContext)
 
   const [lgShow, setLgShow] = useState(false);
   const [selectedPost, setSelectedPost] = useState(null);
   const [userInput, setUserInput] = useState({
     comment: "",
   });
+
+  const handleremovePost = async (postId) => {
+    const token = sessionStorage.getItem("token") 
+    console.log(postId);
+    if (token) {
+      const reqHeader = {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      }
+      try {
+       
+        const result = await removePostAPI(postId, reqHeader)
+        console.log(result);
+        if (result.status == 200) {
+          setPostStatusResponse(result.status)
+          setLgShow(false)
+          toast.success('Post deleted Successfully')
+        } else {
+          console.log(result)
+          toast.error('There has been a small problem....Try after sometime....')
+
+        }
+      } catch (err) {
+        console.log(err);
+      }
+
+    }
+  }
+
   const [luser, setlUser] = useState('')
   useEffect(() => {
     if (sessionStorage.getItem('existingUser')) {
@@ -66,7 +97,7 @@ function Profile(post) {
       fetchComments();
     }
 
-  }, [postData.image, addResponse, lgShow,editResponse]);
+  }, [postData.image, addResponse, lgShow,editResponse,poststatusResponse]);
   async function currentUser() {
     const token = sessionStorage.getItem("token");
     if (token && selectedPost?._id) {
@@ -268,13 +299,21 @@ function Profile(post) {
                   <img src={`${SERVER_URL}/uploads/${selectedPost.image}`} style={{ width: '100%', height: '600px' }} className='img-fluid mt-2' />
                 </div>
                 <div className="col-lg-6 text-light">
-                  <div className='w-100 d-flex mt-4'>
-                    <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-                      A
-                    </Avatar>
-                    <b className='mt-2 ms-2'>{selectedPost.username} </b><span className='text-light mt-2 ms-2'>
-                      {selectedPost.caption}
-                    </span>
+                  <div className='w-100 d-flex mt-4 justify-content-between'>
+                    <div className='d-flex'>
+                      <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
+                        A
+                      </Avatar>
+                      <b className='mt-2 ms-2'>{selectedPost.username} </b><span className='text-light mt-2 ms-2'>
+                        {selectedPost.caption}
+                      </span>
+                    </div>
+                    <Dropdown>
+                      <Dropdown.Toggle className='bg-dark'><i className="fa-solid fa-ellipsis-vertical"></i></Dropdown.Toggle>
+                    <Dropdown.Menu>
+                      <Dropdown.Item onClick={()=>handleremovePost(selectedPost._id)}>Delete Post</Dropdown.Item>
+                    </Dropdown.Menu>
+                    </Dropdown>
                   </div>
                   <hr />
                   <div className='fullcomment' style={{ height: '450px' }}>

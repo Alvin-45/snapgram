@@ -91,7 +91,7 @@ function AdminNav(props) {
         <span onClick={() => setModalShow(true)}><i className="fa-solid fa-square-plus nav1"></i> Add Post</span>
 
         <div className='d-flex justify-content-start flex-column btm'>
-          {/* <Link to={'/profile'} className='li1'><span><i className="fa-regular fa-circle-user nav1"></i> User Profile</span></Link> */}
+          <Link to={'/adminprofile'} className='li1'><span><i className="fa-regular fa-circle-user nav1"></i> User Profile</span></Link>
           <span className='text-danger logot' onClick={handleLogout}><i className="fa-solid fa-right-from-bracket nav1 "></i> Logout</span>
         </div>
         <ToastContainer position='top-center' theme='colored' autoClose={3000} />

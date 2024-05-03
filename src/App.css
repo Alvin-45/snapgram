@@ -81,6 +81,7 @@
 }
 .post{
   margin-left: -60px;
+  cursor: pointer;
 }
 .mdl{
   margin-top: 50px;
@@ -172,4 +173,7 @@
 }
 .fullcomment::-webkit-scrollbar{
   display: none;
+}
+.p1:hover{
+color: black;
 }

@@ -42,6 +42,10 @@ export const addFlagPostAPI = async (pid,pc,reqBody,reqHeader)=>{
   return await commonAPI("POST",`${SERVER_URL}/flag-post/${pid}/${pc}`,reqBody,reqHeader)
 }
 
+export const addFavPostAPI = async (pu,pc,reqBody,reqHeader)=>{
+  return await commonAPI("POST",`${SERVER_URL}/fav-post/${pu}/${pc}`,reqBody,reqHeader)
+}
+
 export const getflagPostsAPI = async (reqHeader)=>{
   return await commonAPI("GET",`${SERVER_URL}/flag-post`,"",reqHeader)
 }
@@ -77,6 +81,10 @@ export const getAllFriendsAPI = async (reqHeader)=>{
   return await commonAPI("GET",`${SERVER_URL}/friendspage`,'',reqHeader)
 }
 
+export const isFavAPI=async (pid,reqHeader)=>{
+  return await commonAPI("GET",`${SERVER_URL}/isfav/${pid}`,reqHeader)
+}
+
 export const getfrienddetails =async (uid,reqHeader)=>{
   return await commonAPI("GET",`${SERVER_URL}/${uid}`,'',reqHeader)
 }
@@ -91,6 +99,10 @@ export const removeflagAPI = async (pid,reqHeader)=>{
 
 export const removeFriendAPI = async (fid,reqHeader)=>{
   return await commonAPI("DELETE",`${SERVER_URL}/remove-friend/${fid}`,{},reqHeader)
+}
+
+export const removecommentAPI = async (cid,reqHeader)=>{
+  return await commonAPI("DELETE",`${SERVER_URL}/remove-comment/${cid}`,{},reqHeader)
 }
 
 //chat part
@@ -128,4 +140,12 @@ export const getAdminSearchPostsAPI = async (pid,reqHeader)=>{
 
 export const doespostexist = async (pid,reqHeader)=>{
   return await commonAPI("GET",`${SERVER_URL}/doespostexist/${pid}`,'',reqHeader)
+}
+
+export const addFlagcommentAPI = async (pid,cid,reqBody,reqHeader)=>{
+  return await commonAPI("POST",`${SERVER_URL}/flag-comment/${pid}/${cid}`,reqBody,reqHeader)
+}
+
+export const editCommentAPI = async (cid,reqBody,reqHeader)=>{
+  return await commonAPI("PUT",`${SERVER_URL}/edit-comment/${cid}`,reqBody,reqHeader)
 }

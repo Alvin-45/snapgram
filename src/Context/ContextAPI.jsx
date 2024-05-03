@@ -13,6 +13,7 @@ export const chatstartResponseContext = createContext()
 export const chataddResponseContext = createContext()
 export const responseinvalidContext = createContext()
 export const modaldataContext = createContext()
+export const commentdeleteContext = createContext()
 
 
 function ContextAPI({ children }) {
@@ -29,35 +30,38 @@ function ContextAPI({ children }) {
     const [chataddResponse, setChataddResponse] = useState("")
     const [responseinvalid, SetResponseinvalid] = useState("")
     const [modaldata, SetModaldata] = useState("")
+    const [commentdlt, SetCommentdlt] = useState("")
 
     return (
         <>
-          <modaldataContext.Provider value={{modaldata, SetModaldata}}>
-               <responseinvalidContext.Provider value={{responseinvalid,SetResponseinvalid}}>
-                   <chataddResponseContext.Provider value={{chataddResponse,setChataddResponse}}>
-                       <chatstartResponseContext.Provider value={{chatstartResponse,setChatstartResponse}}>
-                           <friendremoveResponseContext.Provider value={{friendstatusResponse,setFriendStatusResponse}}>
-                               <postremoveResponseContext.Provider value={{poststatusResponse,setPostStatusResponse}}>
-                                    <userResponseContext.Provider value={{ userResponse, setUserResponse }}>
-                                        <likecountResponseContext.Provider value={{ likecountResponse, setLikecountResponse }}>
-                                            <addCommentResponseContext.Provider value={{ addCommentResponse, setAddCommentResponse }}>
-                                                <addResponseContext.Provider value={{ addResponse, setAddResponse }}>
-                        
-                                                    <friendResponseContext.Provider value={{ friendResponse, setFriendResponse }}>
-                                                        <editResponseContext.Provider value={{ editResponse, setEditResponse }}>
-                                                            {children}
-                                                        </editResponseContext.Provider>
-                                                    </friendResponseContext.Provider>
-                                                </addResponseContext.Provider>
-                                            </addCommentResponseContext.Provider>
-                                        </likecountResponseContext.Provider>
-                                    </userResponseContext.Provider>
-                               </postremoveResponseContext.Provider>
-                           </friendremoveResponseContext.Provider>
-                       </chatstartResponseContext.Provider>
-                   </chataddResponseContext.Provider>
-               </responseinvalidContext.Provider>
-          </modaldataContext.Provider>
+          <commentdeleteContext.Provider value={{commentdlt, SetCommentdlt}}>
+              <modaldataContext.Provider value={{modaldata, SetModaldata}}>
+                   <responseinvalidContext.Provider value={{responseinvalid,SetResponseinvalid}}>
+                       <chataddResponseContext.Provider value={{chataddResponse,setChataddResponse}}>
+                           <chatstartResponseContext.Provider value={{chatstartResponse,setChatstartResponse}}>
+                               <friendremoveResponseContext.Provider value={{friendstatusResponse,setFriendStatusResponse}}>
+                                   <postremoveResponseContext.Provider value={{poststatusResponse,setPostStatusResponse}}>
+                                        <userResponseContext.Provider value={{ userResponse, setUserResponse }}>
+                                            <likecountResponseContext.Provider value={{ likecountResponse, setLikecountResponse }}>
+                                                <addCommentResponseContext.Provider value={{ addCommentResponse, setAddCommentResponse }}>
+                                                    <addResponseContext.Provider value={{ addResponse, setAddResponse }}>
+                            
+                                                        <friendResponseContext.Provider value={{ friendResponse, setFriendResponse }}>
+                                                            <editResponseContext.Provider value={{ editResponse, setEditResponse }}>
+                                                                {children}
+                                                            </editResponseContext.Provider>
+                                                        </friendResponseContext.Provider>
+                                                    </addResponseContext.Provider>
+                                                </addCommentResponseContext.Provider>
+                                            </likecountResponseContext.Provider>
+                                        </userResponseContext.Provider>
+                                   </postremoveResponseContext.Provider>
+                               </friendremoveResponseContext.Provider>
+                           </chatstartResponseContext.Provider>
+                       </chataddResponseContext.Provider>
+                   </responseinvalidContext.Provider>
+              </modaldataContext.Provider>
+          </commentdeleteContext.Provider>
         </>
     )
 }

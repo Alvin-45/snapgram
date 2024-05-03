@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import AdminNav from './AdminNav'
-import { adddeletedpostAPI, adminallUsersAPI, doespostexist, getflagPostsAPI, removePostAPI, removeflagAPI, reportedPost } from '../../services/allAPI'
+import { adddeletedpostAPI, adminallUsersAPI, doespostexist, getHomePostsAPI, getflagPostsAPI, removePostAPI, removeflagAPI, reportedPost } from '../../services/allAPI'
 import { Button, Dropdown, DropdownMenu, Modal } from 'react-bootstrap'
 import { postremoveResponseContext, responseinvalidContext } from '../Context/ContextAPI'
 import { SERVER_URL } from '../../services/serverURL'
@@ -14,18 +14,19 @@ function Admindashboard(props) {
   const [delUser, setDelUser] = React.useState(false);
   const { responseinvalid, SetResponseinvalid } = useContext(responseinvalidContext)
   const [action, setAction] = useState('')
-  const { poststatusResponse, setPostStatusResponse } = useContext(postremoveResponseContext)
+  const { poststatusResponse,setPostStatusResponse } = useContext(postremoveResponseContext)
   const [postData, setPostData] = useState('')
   const [ReqinvpostData, setReqinvpostData] = useState('')
   const [delpostData, setDelpostData] = useState('')
-
+ const [totalpost,setTotalPost]=useState('')
   const [pimg, setpimg] = useState('')
   const [delmodal, setDelmodal] = useState(false)
 
   useEffect(() => {
     getFlagposts()
     getAllUsers();
-  }, [postremoveResponseContext, poststatusResponse])
+    getHomePosts();
+  }, [poststatusResponse, poststatusResponse])
   async function getAllUsers() {
     const token = sessionStorage.getItem('token');
     const reqHeader = {
@@ -54,6 +55,15 @@ function Admindashboard(props) {
       console.log(err);
     }
 
+  }
+
+  async function getHomePosts() {
+    try {
+      const result = await getHomePostsAPI();
+      setTotalPost(result.data);
+    } catch (err) {
+      console.log(err);
+    }
   }
 
 
@@ -217,8 +227,75 @@ function Admindashboard(props) {
     }
 
   }
+//success delete from view modal
+const handleremovereportmodal = async (report) => {
+  console.log(report);
+  console.log('Inside Report delete option');
+  const token = sessionStorage.getItem("token");
+  const postId = report?._id;
+  console.log(postId);
 
+  // console.log(report);
+  if (!token) {
+    // console.log("Token is missing.");
+    return;
+  }
+  if (!postId) {
+    // console.log("Post ID is missing in the report object.");
+    return;
+  }
 
+  const reqHeader = {
+    "Content-Type": "application/json",
+    "Authorization": `Bearer ${token}`
+  };
+  try {
+    const result = await removeflagAPI(postId, reqHeader);
+    console.log(result);
+    if (result.status === 200) {
+      setPostStatusResponse(result.status);
+      console.log('Inside success Report delete option');
+      setModalShow(false)
+      // setReqinvmodal(false)
+
+    } else {
+      console.log(result);
+    }
+  } catch (err) {
+    console.log(err);
+  } toast.success('Request was removed successfully!!!')
+
+};
+
+//success delete from view modal
+const handleremovePostmodal = async (report) => {
+  console.log("Inside Remove post function");
+  console.log(report);
+  console.log(report);
+  const token = sessionStorage.getItem("token")
+  const postId = report._id
+  console.log(postId);
+  if (token) {
+    const reqHeader = {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`
+    }
+    try {
+      const result2 = await removeflagAPI(postId, reqHeader)
+      const result = await removePostAPI(postId, reqHeader)
+      console.log(result);
+      if (result.status == 200 && result2.status == 200) {
+        setPostStatusResponse(result.status)
+        setModalShow(false)
+      } else {
+        console.log(result)
+      }
+    } catch (err) {
+      console.log(err);
+    }
+
+  }
+}
 
 
 
@@ -279,11 +356,12 @@ function Admindashboard(props) {
             <hr />
             <div className='d-flex justify-content-around align-items-center'>
               <p className="fw-bolder">Total No of User: <span style={{ fontSize: '25px' }} className='text-success ms-2'>{users.length}</span></p>
-              {/* <p className="fw-bolder">No of Warned User: <span style={{ fontSize: '25px' }} className='text-warning ms-2'>0
+              <p className="fw-bolder">Total No of Post: <span style={{ fontSize: '25px' }} className='text-warning ms-2'>{totalpost.length}
               </span></p>
-              <p className="fw-bolder">No of Accounts taken down : <span style={{ fontSize: '25px' }} className='text-danger ms-2'>0
+              {/*  */}
+              <h5>No of cases:<span style={{ fontSize: '25px' }}  className={flag.length < 50 ? "text-warning fw-bolder" : "text-danger fw-bolder "}> {flag.length}</span></h5>
+              {/* <p className="fw-bolder">No of Accounts taken down : <span style={{ fontSize: '25px' }} className='text-danger ms-2'>0
               </span></p> */}
-              <h5>No of cases:<span className={flag.length < 50 ? "text-warning fw-bolder" : "text-danger fw-bolder "}>{flag.length}</span></h5>
             </div>
 
 
@@ -307,7 +385,7 @@ function Admindashboard(props) {
       >
         {postData[0]? 
           (<Modal.Body className='bg-dark p-5'>
-            <img src={`${SERVER_URL}/uploads/${postData[0].image}`} alt="" className='img-fluid' />
+            <img src={`${SERVER_URL}/uploads/${postData[0].image}`} alt="" className='img-fluid' style={{width:'100%',height:'450px'}}/>
             <p className='text-light fw-bolder mt-2'>{postData[0].username}: <span className="text-light fw-normal ms-2">{postData[0].caption}</span> </p>
           </Modal.Body>)
          : 
@@ -317,7 +395,9 @@ function Admindashboard(props) {
         }
         <Modal.Footer className='bg-dark d-flex justify-content-around align-item-center'>
           <Button className='w-25' onClick={() => setModalShow(false)}>Close</Button>
-          <Button className='btn btn-danger w-25' onClick={() => handleremovePost(postData[0].id)}> <i className="fa-solid fa-trash"></i> Delete</Button>
+          <Button className='btn btn-success w-25' onClick={() => handleremovereportmodal(postData[0])}> <i className="fa-solid fa-trash"></i> Mark report Invalid</Button>
+
+          <Button className='btn btn-danger w-25' onClick={() => handleremovePostmodal(postData[0])}> <i className="fa-solid fa-trash"></i> Delete</Button>
         </Modal.Footer>
       </Modal>
       {/* <Modal

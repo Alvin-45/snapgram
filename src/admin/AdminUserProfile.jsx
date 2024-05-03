@@ -7,7 +7,7 @@ import { SERVER_URL } from '../../services/serverURL';
 import AdminNav from './AdminNav';
 
 
-function AdminUserProfile() {
+function AdminUserProfile({post}) {
     const {addResponse,setAddResponse}=useContext(addResponseContext)
     const {editResponse,setEditResponse}=useContext(editResponseContext)
     const {userResponse,setUserResponse}=useContext(userResponseContext)

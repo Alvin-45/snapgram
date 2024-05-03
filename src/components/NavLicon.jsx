@@ -48,7 +48,7 @@ function NavLicon(props) {
   const handleuploadPost = async ()=>{
     const {image,caption}=postDetails
     if(!image && !caption){
-      toast.warning("Please fill the form completely!!!")
+      toast.warning("Don't be like that...Share a line on the post.Everyone is eager to know about your view!!!")
     }else{
   
       const reqBody = new FormData()

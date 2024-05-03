@@ -8,6 +8,7 @@ import Post from '../components/Post'
 import Ad from '../components/Ad'
 import Navbar from '../components/Navbar'
 import Friends from '../components/Friends'
+import Adminfeedpost from './Adminfeedpost'
 
 
 function AdminFeed() {
@@ -38,7 +39,7 @@ function AdminFeed() {
               <AdminNav/>
             </div>
             <div className="col-lg-6 text-light" style={{ marginLeft: '400px' }}>
-              <Post/>
+              <Adminfeedpost/>
             </div>
             <div className="col text-light adfrnd" style={{ position: 'fixed', width: '25%' }}>
               <Ad />

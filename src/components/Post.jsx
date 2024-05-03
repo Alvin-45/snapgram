@@ -12,13 +12,14 @@ import BookmarkBorderOutlinedIcon from '@mui/icons-material/BookmarkBorderOutlin
 import BookmarkOutlinedIcon from '@mui/icons-material/BookmarkOutlined';
 import Modal from 'react-bootstrap/Modal';
 import { Button, Dropdown } from 'react-bootstrap';
-import { addCommentAPI, addFlagPostAPI, getHomePostsAPI, getPostCommentsAPI, getUsernamesAPI, removePostAPI } from '../../services/allAPI';
+import { addCommentAPI, addFavPostAPI, addFlagPostAPI, addFlagcommentAPI, editCommentAPI, getHomePostsAPI, getPostCommentsAPI, getUsernamesAPI, removePostAPI, removecommentAPI } from '../../services/allAPI';
 import { SERVER_URL } from '../../services/serverURL';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import userimg from '../assets/user.png';
 import { useNavigate } from 'react-router-dom';
-import { addResponseContext, likecountResponseContext, postremoveResponseContext } from '../Context/ContextAPI';
+import { addResponseContext, commentdeleteContext, likecountResponseContext, postremoveResponseContext } from '../Context/ContextAPI';
+
 
 function Post({ post }) {
   const navigate = useNavigate();
@@ -32,10 +33,11 @@ function Post({ post }) {
   const [comments, setComments] = useState([]);
   const {poststatusResponse, setPostStatusResponse}=useContext(postremoveResponseContext)
   const {addResponse,setAddResponse}=useContext(addResponseContext)
+  const {commentdlt, SetCommentdlt}=useContext(commentdeleteContext)
   useEffect(() => {
     
     getHomePosts();
-  }, [poststatusResponse]);
+  }, [poststatusResponse,commentdlt]);
   async function getHomePosts() {
       try {
         const result = await getHomePostsAPI();
@@ -78,7 +80,7 @@ function Post({ post }) {
         };
         try {
           const result = await getPostCommentsAPI(selectedPost._id, reqHeader);
-          console.log(result);
+          // console.log(result);
           if (result.status === 200) {
             setComments(result.data);
           }
@@ -156,7 +158,8 @@ function Post({ post }) {
       }
     }
   };
-  const lusername=sessionStorage.getItem('username')
+  const lusername=JSON.parse(sessionStorage.getItem('username')) 
+  // console.log(lusername);
   //like part
   const [like, setLike] = useState(0);
   const [liked, setLiked] = useState(false);
@@ -165,6 +168,99 @@ function Post({ post }) {
     setLiked((prevLiked) => !prevLiked);
     setLike((prevLike) => (liked ? prevLike - 1 : prevLike + 1));
   };
+
+  //success
+  const handlereportcomment = async (cmt) => {
+    const token = sessionStorage.getItem("token");
+    const posterId = cmt.userId; 
+    const postId=cmt.postId
+    const commentId=cmt._id
+    console.log(posterId);
+    console.log(postId);
+    console.log(commentId);
+
+
+    if (token) {
+      const reqHeader = {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      };
+  
+      try {
+        const result = await addFlagcommentAPI(postId,commentId,{posterId}, reqHeader);
+        console.log(result);
+        if (result.status === 200) {
+          setPostStatusResponse(result.status);
+          toast.success('Report Sumbitted Successfully! Waiting for admin to analyse it....')
+          // alert('Report Sumbitted Successfully! Waiting for admin to analyse it....')
+        } else {
+          console.log(result);
+          toast.error('Its not you but us getting this patched up....Try after sometime')
+
+        }
+      } catch (err) {
+      //  alert('Its not you but us getting this patched up....Try after sometime')
+        console.log(err);
+      }
+    }
+  };
+
+  //success -dlt comment
+  const handleremovecomment = async (cmt) => {
+    const token = sessionStorage.getItem("token") 
+    console.log(cmt);
+    if (token) {
+      const reqHeader = {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      }
+      try {
+       
+        const result = await removecommentAPI(cmt, reqHeader)
+        console.log(result);
+        if (result.status == 200) {
+          SetCommentdlt(result.data)
+          toast.success('Comment removed Successfully!!!')
+        } else {
+          console.log(result)
+        }
+      } catch (err) {
+        console.log(err);
+      }
+
+    }
+  }
+
+  //success fav post(working duplicate)
+  const handlefavPost = async (post) => {
+    const token = sessionStorage.getItem("token");
+    const poster = post.username; 
+    console.log(poster);
+    if (token) {
+      const reqHeader = {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      };
+  
+      try {
+        const result = await addFavPostAPI(post._id,post.caption,{poster}, reqHeader);
+        console.log(result);
+        if (result.status === 200) {
+          setPostStatusResponse(result.status);
+          // toast.success('Added to Favourites')
+          // alert('Added to Favourites')
+        } else {
+          console.log(result);
+          toast.error(`Admin Post can't be added to favourites`)
+
+        }
+      } catch (err) {
+      //  alert('Its not you but us getting this patched up....Try after sometime')
+        console.log(err);
+      }
+    }
+  };
+
   return (
     <>
       <div className='postbdy'>
@@ -176,8 +272,14 @@ function Post({ post }) {
                 action={<Dropdown >
                   <Dropdown.Toggle variant="dark" id="dropdown-basic" >
                     <i className="fa-solid fa-ellipsis-vertical" style={{ color: "#ffffff" }}></i>
-                  </Dropdown.Toggle><Dropdown.Menu>
-                    {lusername==posted.username?<Dropdown.Item onClick={()=>handleremovePost(posted._id)} >Delete Post</Dropdown.Item>:<Dropdown.Item onClick={()=>handlereportPost(posted)} >Report Post</Dropdown.Item>}
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu className='bg-dark'>
+                    {lusername==posted.username?
+                    <Dropdown.Item onClick={()=>handleremovePost(posted._id)} className='text-light'><span className='p-3 p1 w-100' style={{
+                      height:'100%'
+                    }}><i className="fa-regular fa-trash-can"></i> Delete Post</span> </Dropdown.Item>:<Dropdown.Item onClick={()=>handlereportPost(posted)} className='text-light'><span className='p-3 p1' style={{
+                      height:'100%'
+                    }}><i className="fa-regular fa-flag"></i>  Report Post</span></Dropdown.Item>}
 
                     {/* <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
         <Dropdown.Item href="#/action-3">Something else</Dropdown.Item> */}
@@ -211,7 +313,7 @@ function Post({ post }) {
                     {/* <SendIcon className="ic1 snd" /> */}
                   </div>
                   <div className="d-flex justify-content-evenly">
-                    <BookmarkBorderOutlinedIcon className="bk" />
+                    <BookmarkBorderOutlinedIcon className="bk"  onClick={()=>handlefavPost(posted)}/>
                     <BookmarkOutlinedIcon className="bk1 active" style={{ display: 'none' }} />
                   </div>
                 </div>
@@ -248,9 +350,27 @@ function Post({ post }) {
                   <div className='fullcomment' style={{ height: '450px' }}>
                     {comments.length > 0 ?
                       comments.map((comment, index) => (
+                        <div className="d-flex justify-content-between align-items-start w-100">
                         <div className="comments mt-4" key={index}>
                           <img src={userimg} alt='' style={{ width: '40px' }} /> <span className="text-light fw-bolder">{comment.username} <span className="text-light fw-normal ms-2">{comment.comment} </span></span>
+                          </div>
+                          <Dropdown className='mt-4'>
+                      <Dropdown.Toggle className='btn-dark'><i className="fa-solid fa-ellipsis-vertical "></i></Dropdown.Toggle>
+                    {lusername!=comment.username?<Dropdown.Menu className='bg-dark text-light'>
+                    <Dropdown.Item className='text-light' onClick={()=>handlereportcomment(comment)}><span className='p-3 p1' style={{
+                      height:'100%'
+                    }}><i class="fa-regular fa-flag" aria-hidden="true"></i> Report Comment</span></Dropdown.Item></Dropdown.Menu>:
+                    <Dropdown.Menu className='bg-dark text-light'>
+                      {/* <Dropdown.Item className='text-light' onClick={()=>handleeditcomment(comment)}><span className='p-3 p1' style={{
+                      height:'100%'
+                    }}> <i className="fa-solid fa-pen"></i> Edit Comment </span></Dropdown.Item> */}
+                      <Dropdown.Item  className='text-light'> <span className='p-3 p1' style={{
+                      height:'100%'
+                    }} onClick={()=>handleremovecomment(comment._id)}><i className="fa-regular fa-trash-can"></i> Delete Comment </span></Dropdown.Item>
+                    </Dropdown.Menu>}
+                    </Dropdown>
                         </div>
+                        
                       )) :
                       <div className="comments mt-4">
                         No comments yet.
@@ -265,7 +385,7 @@ function Post({ post }) {
             )}
           </Modal.Body>
         </Modal>
-        <ToastContainer position='top-center' theme='colored' autoClose={3000} />
+        <ToastContainer position='top-center' theme='colored' autoClose={2000} />
       </div>
     </>
   );
