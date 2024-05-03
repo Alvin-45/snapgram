@@ -18,10 +18,11 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import userimg from '../assets/user.png';
 import { useNavigate } from 'react-router-dom';
-import { addResponseContext, commentdeleteContext, likecountResponseContext, postremoveResponseContext } from '../Context/ContextAPI';
+import { addCommentResponseContext, addResponseContext, commentdeleteContext, likecountResponseContext, postremoveResponseContext } from '../Context/ContextAPI';
 
 
 function Post({ post }) {
+  const {addCommentResponse, setAddCommentResponse}=useContext(addCommentResponseContext)
   const navigate = useNavigate();
   const [lgShow, setLgShow] = useState(false);
   const [selectedPost, setSelectedPost] = useState("");
@@ -83,6 +84,7 @@ function Post({ post }) {
           // console.log(result);
           if (result.status === 200) {
             setComments(result.data);
+            setAddCommentResponse(result.data)
           }
         } catch (err) {
           console.log("y", err);
@@ -91,7 +93,7 @@ function Post({ post }) {
       }
       fetchComments();
     }
-  }, [lgShow,addResponse]);
+  }, [lgShow,addResponse,addCommentResponse]);
 
   const handleModalOpen = (posted) => {
     setSelectedPost(posted);
@@ -355,19 +357,19 @@ function Post({ post }) {
                           <img src={userimg} alt='' style={{ width: '40px' }} /> <span className="text-light fw-bolder">{comment.username} <span className="text-light fw-normal ms-2">{comment.comment} </span></span>
                           </div>
                           <Dropdown className='mt-4'>
-                      <Dropdown.Toggle className='btn-dark'><i className="fa-solid fa-ellipsis-vertical "></i></Dropdown.Toggle>
-                    {lusername!=comment.username?<Dropdown.Menu className='bg-dark text-light'>
+                      <Dropdown.Toggle className='btn-dark'><i className="fa-solid fa-ellipsis-vertical "></i></Dropdown.Toggle><Dropdown.Menu className='bg-dark text-light'>
+                    {lusername!=comment.username?
                     <Dropdown.Item className='text-light' onClick={()=>handlereportcomment(comment)}><span className='p-3 p1' style={{
                       height:'100%'
-                    }}><i class="fa-regular fa-flag" aria-hidden="true"></i> Report Comment</span></Dropdown.Item></Dropdown.Menu>:
-                    <Dropdown.Menu className='bg-dark text-light'>
-                      {/* <Dropdown.Item className='text-light' onClick={()=>handleeditcomment(comment)}><span className='p-3 p1' style={{
+                    }}><i class="fa-regular fa-flag" aria-hidden="true"></i> Report Comment</span></Dropdown.Item>:
+                      <Dropdown.Item onClick={()=>handleremovecomment(comment._id)}  className='text-light'> <span className='p-3 p1' style={{
+                      height:'100%'
+                    }} ><i className="fa-regular fa-trash-can"></i> Delete Comment </span></Dropdown.Item>
+                    }
+                    {/* <Dropdown.Item className='text-light' onClick={()=>handleeditcomment(comment)}><span className='p-3 p1' style={{
                       height:'100%'
                     }}> <i className="fa-solid fa-pen"></i> Edit Comment </span></Dropdown.Item> */}
-                      <Dropdown.Item  className='text-light'> <span className='p-3 p1' style={{
-                      height:'100%'
-                    }} onClick={()=>handleremovecomment(comment._id)}><i className="fa-regular fa-trash-can"></i> Delete Comment </span></Dropdown.Item>
-                    </Dropdown.Menu>}
+                    </Dropdown.Menu>
                     </Dropdown>
                         </div>
                         

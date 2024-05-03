@@ -114,7 +114,7 @@ export const getChatsAPI = async (receiver,sender, reqHeader)=>{
 }
 
 export const luserAPI = async (reqHeader)=>{
-  return await commonAPI("DELETE",`${SERVER_URL}/luser`,'',reqHeader)
+  return await commonAPI("GET",`${SERVER_URL}/luser`,"",reqHeader)
 }
 
 
@@ -148,4 +148,8 @@ export const addFlagcommentAPI = async (pid,cid,reqBody,reqHeader)=>{
 
 export const editCommentAPI = async (cid,reqBody,reqHeader)=>{
   return await commonAPI("PUT",`${SERVER_URL}/edit-comment/${cid}`,reqBody,reqHeader)
+}
+
+export const frndcountAPI = async (reqHeader)=>{
+  return await commonAPI("GET",`${SERVER_URL}/frndcount`,'',reqHeader)
 }

@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Dropdown, Modal, Navbar } from 'react-bootstrap';
 import NavLeft from './NavLeft';
 import userimg from '../assets/user.png';
-import { addCommentAPI, editProfileAPI, frndcountAPI, getPostCommentsAPI, getUserPostsAPI, luserAPI, removePostAPI, removecommentAPI } from '../../services/allAPI';
+import { addCommentAPI, editProfileAPI, frndcountAPI, getPostCommentsAPI, getUserPostsAPI, luserAPI, removePostAPI } from '../../services/allAPI';
 import { addResponseContext, editResponseContext, postremoveResponseContext } from '../Context/ContextAPI';
 import { SERVER_URL } from '../../services/serverURL';
 import { Avatar } from '@mui/material';
@@ -22,7 +22,7 @@ function Profile(post) {
   })
   const [comments, setComments] = useState([]);
   const {poststatusResponse, setPostStatusResponse}=useContext(postremoveResponseContext)
-  const [currentuser,setcurrentUser]=useState('')
+
   const [lgShow, setLgShow] = useState(false);
   const [selectedPost, setSelectedPost] = useState(null);
   const [userInput, setUserInput] = useState({
@@ -98,27 +98,20 @@ function Profile(post) {
         }
       }
       fetchComments();
-      
     }
-
+frndcount()
   }, [postData.image, addResponse, lgShow,editResponse,poststatusResponse]);
-
-  useEffect(()=>{
-    frndcount()
-    loggedinUser()
-  },[])
-  async function loggedinUser() {
-    console.log('Inside logged in user details');
+  async function currentUser() {
     const token = sessionStorage.getItem("token");
-    if (token) {
+    if (token && selectedPost?._id) {
       const reqHeader = {
+        "Content-Type": "application/json",
         "Authorization": `Bearer ${token}`,
       };
       try {
         const result = await luserAPI(reqHeader)
-        console.log(result);
-        setcurrentUser(result.data)
-        console.log(currentuser);
+        console.log(result.data);
+        setlUser(result.data)
 
       } catch (error) {
         console.log(err);
@@ -246,47 +239,29 @@ function Profile(post) {
       }
     }
   }
-//success
+
 async function frndcount(){
-  const token = sessionStorage.getItem("token")
+  const token = sessionStorage.getItem("token");
+  if (token) {
     const reqHeader = {
-      "Authorization": `Bearer ${token}`
-    }
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`,
+    };
     try {
-      // console.log('Inside frnd count function');
+      console.log('Inside frnd count function');
     
     const result=await frndcountAPI(reqHeader)
-    // console.log(result);
+    console.log(result);
     setflwr(result.data)
     } catch (err) {
       console.log(err);
     }
-}
-
-const handleremovecomment = async (cmt) => {
-  const token = sessionStorage.getItem("token") 
-  console.log(cmt);
-  if (token) {
-    const reqHeader = {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${token}`
-    }
-    try {
-     
-      const result = await removecommentAPI(cmt, reqHeader)
-      console.log(result);
-      if (result.status == 200) {
-        SetCommentdlt(result.data)
-        toast.success('Comment removed Successfully!!!')
-      } else {
-        console.log(result)
-      }
-    } catch (err) {
-      console.log(err);
-    }
-
+    
+  }else{
+    console.log('no token');
   }
 }
+
 
   
 
@@ -300,22 +275,22 @@ const handleremovecomment = async (cmt) => {
             <NavLeft />
           </div>
           <div className='col-lg-10' style={{ marginLeft: '450px' }}>
-            {currentuser ? <div className='proileinfo d-flex justify-content-start align-items-start' style={{ height: '150px' }}>
+            {existingUser ? <div className='proileinfo d-flex justify-content-start align-items-start' style={{ height: '150px' }}>
               <div className='d-flex justify-content-between align-items-center w-75'>
                 <div className='d-flex'>
                   <img src={userimg} alt='' style={{ width: '120px' }} />
                   <div className='mt-4 '>
-                    <h4 className='text-light'>{currentuser.firstName}</h4>
-                    <p className='text-light'>{currentuser.username}</p>
+                    <h4 className='text-light'>{existingUser.firstName}</h4>
+                    <p className='text-light'>{existingUser.username}</p>
                   </div>
                 </div>
                 <div className="Followers d-flex flex-column">
                   <p className="text-light fw-bolder">Followers</p>
-                  <p className="text-light text-center fw-bolder">{flwr.length}</p>
+                  <p className="text-light text-center fw-bolder">{totalFollowers}</p>
                 </div>
                 <div className="following d-flex flex-column">
                   <p className="text-light fw-bolder">Following</p>
-                  <p className="text-light text-center fw-bolder">{currentuser.friends.length}</p>
+                  <p className="text-light text-center fw-bolder">{existingUser.friends.length}</p>
                 </div>
                 
               </div>
@@ -323,12 +298,11 @@ const handleremovecomment = async (cmt) => {
                 Edit Profile
               </button> */}
             </div> : ''}
-            
+            <hr style={{ color: 'white' }} />
             <div className='post'>
-              <div className='row' style={{marginLeft:'-140px'}}>
-                <hr style={{ color: 'white' }} />
-                <p className='text-center text-light w-100 fw-bolder' style={{marginLeft:'-80px'}}>POST</p>
-                <hr style={{ color: 'white' }} />
+              <div className='row'>
+                <div className='col text-center text-light'>POST</div>
+                <hr style={{ color: 'white', marginLeft: '100px' }} />
               </div>
               <div className='mt-4 w-100 d-flex justify-content-start   align-items-start flex-wrap'>
                 {postData?.length > 0 ? (
@@ -380,19 +354,8 @@ const handleremovecomment = async (cmt) => {
                   <div className='fullcomment' style={{ height: '450px' }}>
                     {comments.length > 0 ?
                       comments.map((comment, index) => (
-                        <div className="d-flex justify-content-between align-items-start w-100">
                         <div className="comments mt-4" key={index}>
                           <img src={userimg} alt='' style={{ width: '40px' }} /> <span className="text-light fw-bolder">{comment.username} <span className="text-light fw-normal ms-2">{comment.comment} </span></span>
-                        </div>
-                        <Dropdown className='mt-4'>
-                      <Dropdown.Toggle className='btn-dark'><i className="fa-solid fa-ellipsis-vertical "></i></Dropdown.Toggle><Dropdown.Menu className='bg-dark text-light'>
-                    
-                      <Dropdown.Item onClick={()=>handleremovecomment(comment._id)}  className='text-light'> <span className='p-3 p1' style={{
-                      height:'100%'
-                    }} ><i className="fa-regular fa-trash-can"></i> Delete Comment </span></Dropdown.Item>
-                    
-                    </Dropdown.Menu>
-                    </Dropdown>
                         </div>
                       )) :
                       <div className="comments mt-4">

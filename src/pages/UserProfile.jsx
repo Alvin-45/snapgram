@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Modal, Navbar } from 'react-bootstrap';
 import userimg from '../assets/user.png';
-import { addCommentAPI, getPostCommentsAPI, getSearchNavigatePostsAPI, getUserPostsAPI } from '../../services/allAPI';
+import { addCommentAPI, frndcountAPI, getPostCommentsAPI, getSearchNavigatePostsAPI, getUserPostsAPI } from '../../services/allAPI';
 import { addResponseContext, editResponseContext, userResponseContext } from '../Context/ContextAPI';
 import { SERVER_URL } from '../../services/serverURL';
 import { Avatar } from '@mui/material';
@@ -23,7 +23,7 @@ function UserProfile(post) {
       })
     //   const fcount=userData.friends.length()
     //   console.log(fcount);
-      console.log(userData);
+      // console.log(userData);
     const [postData,setPostData]=useState({
       id:post?._id,image:"",caption:post?.caption 
     })
@@ -36,13 +36,25 @@ function UserProfile(post) {
     const [userInput, setUserInput] = useState({
       comment: "",
     });
+    const [searchUser,setSearchUser]=useState('')
+    const [searchfriends,setSearchFriends]=useState([])
+    const [flwr,setflwr]=useState([])
+
     
     useEffect(() => {
+      frndcount()
       if (userResponse) {
+        setSearchUser(userResponse)
+        console.log(userResponse);
+
         const username=userResponse.username
         const  firstName = userResponse.firstName;
+        const userId=userResponse._id
         setDisplayuName(username);
         setFname(firstName);
+        const frnd=userResponse.friends
+        console.log(frnd);
+        setSearchFriends(frnd)
         if(postData.image){
           setPreview(URL.createObjectURL(postData.image))
           console.log("setting preview");
@@ -131,6 +143,22 @@ function UserProfile(post) {
     const handleModalsOpen=()=>{
       setmLShow(true)
     }
+    async function frndcount(){
+      const token = sessionStorage.getItem("token")
+        const reqHeader = {
+          "Authorization": `Bearer ${token}`
+        }
+        try {
+          // console.log('Inside frnd count function');
+        
+        const result=await frndcountAPI(reqHeader)
+        // console.log(result);
+        setflwr(result.data)
+        } catch (err) {
+          console.log(err);
+        }
+    }
+    
   return (
     <>
     <div className='profile' style={{ backgroundColor: 'black', height: '150vh' }}>
@@ -140,12 +168,25 @@ function UserProfile(post) {
             <NavLeft />
           </div>
           <div className='col-lg-10' style={{ marginLeft: '380px' }}>
-            <div className='proileinfo d-flex justify-content-start align-items-start' style={{ height: '150px' }}>
-              <img src={userimg} alt='' style={{ width: '120px' }} />
-              <div className='mt-4 '>
-                <h4 className='text-light'>{fname}</h4>
-                <p className='text-light'>{displayuName.split(' ')[0]}</p>
+            <div className='proileinfo d-flex justify-content-between align-items-center w-75' style={{ height: '150px' }}>
+
+              <div className='d-flex'>
+                <img src={userimg} alt='' style={{ width: '120px' }} />
+                <div className='mt-4 '>
+                  <h4 className='text-light'>{searchUser.firstName}</h4>
+                  <p className='text-light'>{searchUser.username}</p>
               </div>
+              </div>
+              <div className="Followers d-flex flex-column">
+                  <p className="text-light fw-bolder">Followers</p>
+                  <p className="text-light text-center fw-bolder">{flwr.length}</p>
+                </div>
+                <div className="following d-flex flex-column">
+                  <p className="text-light fw-bolder">Following</p>
+                  <p className="text-light text-center fw-bolder">
+                    {searchfriends.length}
+                  </p>
+                </div>
               {/* <button className='btn btn-light text-dark w-50' onClick={() => handleModalsOpen()} style={{ marginTop: '90px' }} >
                 Edit Profile
               </button> */}
