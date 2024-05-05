@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import AdminNav from './AdminNav'
-import { adddeletedpostAPI, adminallUsersAPI, doespostexist, getHomePostsAPI, getflagPostsAPI, getflagcmtAPI, removePostAPI, removecmtflagAPI, removecommentAPI, removeflagAPI, reportedPost } from '../../services/allAPI'
+import { adddeletedpostAPI, adminallUsersAPI, doespostexist, getHomePostsAPI, getflagPostsAPI, getflagcmtAPI, removePostAPI, removecmtflagAPI, removecommentAPI, removefavAPI, removeflagAPI, reportedPost } from '../../services/allAPI'
 import { Button, Dropdown, DropdownMenu, Modal } from 'react-bootstrap'
 import { commentdeleteContext, postremoveResponseContext, responseinvalidContext } from '../Context/ContextAPI'
 import { SERVER_URL } from '../../services/serverURL'
@@ -98,10 +98,11 @@ function Admindashboard(props) {
         "Authorization": `Bearer ${token}`
       }
       try {
+        const result3=await removefavAPI(postId,reqHeader)
         const result2 = await removeflagAPI(postId, reqHeader)
         const result = await removePostAPI(postId, reqHeader)
         console.log(result);
-        if (result.status == 200 && result2.status == 200) {
+        if (result.status == 200 && result2.status == 200 && result3.status==200) {
           setPostStatusResponse(result.status)
           setDelmodal(false);
         } else {
@@ -125,6 +126,8 @@ function Admindashboard(props) {
     };
     try {
       const result = await reportedPost(pid, reqHeader);
+      const result3=await removefavAPI(pid,reqHeader)
+
       // console.log(result);
       if (result.status === 200) {
         setPostStatusResponse(result.status);
@@ -329,8 +332,10 @@ alert('Request was removed successfully!!!')
         "Authorization": `Bearer ${token}`
       }
       try {
+        const result3=await removefavAPI(postId,reqHeader)
         const result2 = await removeflagAPI(postId, reqHeader)
         const result = await removePostAPI(postId, reqHeader)
+        
         console.log(result);
         if (result.status == 200 && result2.status == 200) {
           setPostStatusResponse(result.status)

@@ -2,12 +2,13 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Dropdown, Modal, Navbar } from 'react-bootstrap';
 import userimg from '../assets/user.png';
 import { addCommentAPI, addFlagPostAPI, editProfileAPI, frndcountAPI, getPostCommentsAPI, getUserPostsAPI, getallfavAPI, luserAPI, removePostAPI, removecommentAPI, removefavAPI } from '../../services/allAPI';
-import { addResponseContext, editResponseContext, postremoveResponseContext } from '../Context/ContextAPI';
+import { addResponseContext, commentdeleteContext, editResponseContext, postremoveResponseContext } from '../Context/ContextAPI';
 import { SERVER_URL } from '../../services/serverURL';
 import { Avatar } from '@mui/material';
 import { orange, purple, red } from '@mui/material/colors';
 import { toast } from 'react-toastify';
 import NavLeft from '../components/NavLeft';
+
 
 function Bookmark(post) {
     const { addResponse, setAddResponse } = useContext(addResponseContext)
@@ -29,6 +30,7 @@ function Bookmark(post) {
   });
   const [flwr,setflwr]=useState([])
   const [fav,setfav]=useState('')
+  const {commentdlt, SetCommentdlt}=useContext(commentdeleteContext)
 
 
   const handleremovePost = async (postId) => {
@@ -59,7 +61,32 @@ function Bookmark(post) {
 
     }
   }
+  const handleremovefav = async (postId) => {
+    console.log(postId);
+    const token = sessionStorage.getItem("token") 
+    if (token) {
+      const reqHeader = {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      }
+      try {
+       const result=await removefavAPI(postId,reqHeader)
+        console.log(result);
+        if (result.status == 200) {
+          setPostStatusResponse(result.status)
+          setLgShow(false)
+          // toast.success('Post deleted Successfully')
+        } else {
+          console.log(result)
+          toast.error('There has been a small problem....Try after sometime....')
 
+        }
+      } catch (err) {
+        console.log(err);
+      }
+
+    }
+  }
   const [luser, setlUser] = useState('')
   useEffect(() => {
     if (sessionStorage.getItem('existingUser')) {
@@ -288,7 +315,7 @@ const handleremovecomment = async (cmt) => {
   
   return (
     <>
-    <div className='profile' style={{ backgroundColor: 'black', height: '150vh' }}>
+    <div className='profile' style={{ backgroundColor: 'black', height: '100vh' }}>
         <Navbar />
         <div className='row'>
           <div className='col-lg-2 text-light pt-5 pb-5 navl ms-3' style={{ height: '100vh', position: 'fixed' }}>
@@ -364,14 +391,24 @@ const handleremovecomment = async (cmt) => {
                     </div>
                     <Dropdown>
                       <Dropdown.Toggle className='bg-dark'><i className="fa-solid fa-ellipsis-vertical"></i></Dropdown.Toggle>
-                    <Dropdown.Menu className='bg-dark'>
-                    {lusername==selectedPost.poster?
+                    
+                    {lusername==selectedPost.poster?<Dropdown.Menu className='bg-dark'>
+                    <Dropdown.Item onClick={()=>handleremovefav(selectedPost.postId)} className='text-light'><span className='p-3 p1 w-100' style={{
+                      height:'100%'
+                    }}><i className="fa-regular fa-bookmark"></i> Remove Favourite</span> </Dropdown.Item>
                     <Dropdown.Item onClick={()=>handleremovePost(selectedPost.postId)} className='text-light'><span className='p-3 p1 w-100' style={{
                       height:'100%'
-                    }}><i className="fa-regular fa-trash-can"></i> Delete Post</span> </Dropdown.Item>:<Dropdown.Item onClick={()=>handlereportPost(selectedPost)} className='text-light'><span className='p-3 p1' style={{
-                      height:'100%'
-                    }}><i className="fa-regular fa-flag"></i>  Report Post</span></Dropdown.Item>}
+                    }}><i className="fa-regular fa-trash-can"></i> Delete Post</span> </Dropdown.Item>
                     </Dropdown.Menu>
+                    :
+                    <Dropdown.Menu className='bg-dark'>
+                      <Dropdown.Item onClick={()=>handleremovefav(selectedPost.postId)} className='text-light'><span className='p-3 p1 w-100' style={{
+                      height:'100%'
+                    }}><i className="fa-regular fa-bookmark"></i> Remove Favourite</span> </Dropdown.Item>
+                    <Dropdown.Item onClick={()=>handlereportPost(selectedPost)} className='text-light'><span className='p-3 p1' style={{
+                      height:'100%'
+                    }}><i className="fa-regular fa-flag"></i>  Report Post</span></Dropdown.Item></Dropdown.Menu>}
+                    
                     </Dropdown>
                   </div>
                   <hr />

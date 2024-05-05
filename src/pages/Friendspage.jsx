@@ -80,7 +80,7 @@ function Friendspage() {
 
   return (
     <>
-      <div className='friendspage' style={{ backgroundColor: 'black', height: '150vh' }}>
+      <div className='friendspage' style={{ backgroundColor: 'black', height: '100vh' }}>
         <Navbar />
         <div className='row'>
           <div className='col-lg-2 text-light pt-5 pb-5 navl ms-3' style={{ height: '100vh', position: 'fixed' }}>
@@ -91,16 +91,7 @@ function Friendspage() {
               <div className='brd1'>
                 <div className=''>
                   <div className='w-100 srch' style={{ backgroundColor: 'black' }}>
-                    {/* <input
-                      type='text'
-                      onChange={(e) => setSearchKey(e.target.value)}
-                      className='bg-dark rounded me-1 text-light'
-                      placeholder='Search by username'
-                      style={{ width: '50%', height: '30px', textAlign: 'center' }}
-                    />
-                    <button className='btn btn-primary'>
-                      <i className='fa-solid fa-search'></i> Search
-                    </button> */}
+                    
                   </div>
                 </div>
                 <hr style={{ opacity: '0' }} />

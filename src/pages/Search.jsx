@@ -91,18 +91,15 @@ function Search() {
                       placeholder='Search by username'
                       style={{ width: '70%', height: '30px', textAlign: 'center' }}
                     />
-                    {/* <button className='btn btn-primary'>
-                      <i className='fa-solid fa-search'></i> Search
-                    </button> */}
                   </div>
                 </div>
                 <hr style={{ opacity: '0' }} />
               </div>
-              <div className='users d-flex justify-content-start align-items-center flex-wrap' style={{ marginTop: '250px' }} >
+              <div className='users d-flex justify-content-start align-items-center flex-wrap' style={{ marginTop: '200px' }} >
                 {users?.length > 0 ? (
                   users.map((user) => (
                     luser !== user.username && (
-                      <div key={user._id} className='b1 d-flex justify-content-start align-items-center w-25 mb-4 ms-3'>
+                      <div key={user._id} className='b1 d-flex justify-content-start align-items-center w-25 mb-2 ms-3'>
                         <div className='d-flex justify-content-around'  onClick={() => handleNavigate(user)}>
                           <img src={userimg} alt='' style={{ width: '80px' }} />
                           <div className='flex-column'>
