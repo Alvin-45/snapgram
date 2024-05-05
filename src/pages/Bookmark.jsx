@@ -1,22 +1,20 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Dropdown, Modal, Navbar } from 'react-bootstrap';
-import NavLeft from './NavLeft';
 import userimg from '../assets/user.png';
-import { addCommentAPI, editProfileAPI, frndcountAPI, getPostCommentsAPI, getUserPostsAPI, luserAPI, removePostAPI, removecommentAPI } from '../../services/allAPI';
-import { addResponseContext, commentdeleteContext, editProfileContext, editResponseContext, postremoveResponseContext } from '../Context/ContextAPI';
+import { addCommentAPI, addFlagPostAPI, editProfileAPI, frndcountAPI, getPostCommentsAPI, getUserPostsAPI, getallfavAPI, luserAPI, removePostAPI, removecommentAPI, removefavAPI } from '../../services/allAPI';
+import { addResponseContext, editResponseContext, postremoveResponseContext } from '../Context/ContextAPI';
 import { SERVER_URL } from '../../services/serverURL';
 import { Avatar } from '@mui/material';
 import { orange, purple, red } from '@mui/material/colors';
 import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
+import NavLeft from '../components/NavLeft';
 
-
-function Profile(post) {
-  const navigate=useNavigate()
-  const { addResponse, setAddResponse } = useContext(addResponseContext)
+function Bookmark(post) {
+    const { addResponse, setAddResponse } = useContext(addResponseContext)
   const { editResponse, setEditResponse } = useContext(editResponseContext)
   const [show, setShow] = useState(false);
   const [preview, setPreview] = useState("")
+  const [displayuName, setDisplayuName] = useState('');
   const [fname, setFname] = useState('');
   const [postData, setPostData] = useState({
     id: post?._id, image: "", caption: post?.caption
@@ -30,10 +28,11 @@ function Profile(post) {
     comment: "",
   });
   const [flwr,setflwr]=useState([])
-  const {editprofile, SetEditProfile}=useContext(editProfileContext)
-  const {commentdlt, SetCommentdlt}=useContext(commentdeleteContext)
+  const [fav,setfav]=useState('')
+
 
   const handleremovePost = async (postId) => {
+    console.log(postId);
     const token = sessionStorage.getItem("token") 
     console.log(postId);
     if (token) {
@@ -42,13 +41,13 @@ function Profile(post) {
         "Authorization": `Bearer ${token}`
       }
       try {
-       
+       const result2=await removefavAPI(postId,reqHeader)
         const result = await removePostAPI(postId, reqHeader)
         console.log(result);
         if (result.status == 200) {
           setPostStatusResponse(result.status)
           setLgShow(false)
-          toast.success('Post deleted Successfully')
+          // toast.success('Post deleted Successfully')
         } else {
           console.log(result)
           toast.error('There has been a small problem....Try after sometime....')
@@ -65,6 +64,7 @@ function Profile(post) {
   useEffect(() => {
     if (sessionStorage.getItem('existingUser')) {
       const { username, firstName } = JSON.parse(sessionStorage.getItem('existingUser'));
+      setDisplayuName(username);
       setFname(firstName);
       if (postData.image) {
         setPreview(URL.createObjectURL(postData.image))
@@ -79,6 +79,7 @@ function Profile(post) {
       // console.log("getting user post");
 
     } else {
+      setDisplayuName('');
       setFname('');
     }
     if (lgShow) {
@@ -102,14 +103,16 @@ function Profile(post) {
       
     }
 
-  }, [postData.image, addResponse, lgShow,editResponse,poststatusResponse]);
+    
+  }, [postData.image, addResponse, lgShow,editResponse]);
 
   useEffect(()=>{
     frndcount()
     loggedinUser()
-  },[])
+    getallfav()
+  },[poststatusResponse])
   async function loggedinUser() {
-    console.log('Inside logged in user details');
+    // console.log('Inside logged in user details');
     const token = sessionStorage.getItem("token");
     if (token) {
       const reqHeader = {
@@ -119,6 +122,27 @@ function Profile(post) {
         const result = await luserAPI(reqHeader)
         console.log(result);
         setcurrentUser(result.data)
+        
+
+      } catch (error) {
+        console.log(err);
+      }
+    }
+  }
+ const loggeduser=currentuser.username
+//  console.log(currentuser);
+
+  async function getallfav(){
+    console.log('Inside get All fav request');
+    const token = sessionStorage.getItem("token");
+    if (token) {
+      const reqHeader = {
+        "Authorization": `Bearer ${token}`,
+      };
+      try {
+        const result = await getallfavAPI(reqHeader)
+        console.log(result);
+        setfav(result.data)
         console.log(currentuser);
 
       } catch (error) {
@@ -126,6 +150,8 @@ function Profile(post) {
       }
     }
   }
+  
+
   const getUserPosts = async () => {
     const token = sessionStorage.getItem("token")
     const reqHeader = {
@@ -175,23 +201,47 @@ function Profile(post) {
     }
   };
 
-
+// console.log(selectedPost);
   const data = sessionStorage.getItem('existingUser')
   const existingUser = JSON.parse(data);
   // console.log(existingUser);
 
   const totalFollowers = flwr ? flwr.reduce((acc, curr) => acc + curr.friends.length, 0) : 0;
 
+  const lusername=JSON.parse(sessionStorage.getItem('username')) 
 
-
-  const handleupdateProfile = async (user) => {
-
-    console.log(user);
-    SetEditProfile(user)
-    navigate('/updateprofile')
-      
-    }
+  const handlereportPost = async (post) => {
+    console.log(post);
+    const token = sessionStorage.getItem("token");
+    const userId = post.posterId; 
+    console.log(userId);
+    if (token) {
+      const reqHeader = {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      };
   
+      try {
+        const result = await addFlagPostAPI(post.postId,post.postCaption,{userId}, reqHeader);
+        console.log(result.data);
+        if (result.status === 200) {
+          setPostStatusResponse(result.status);
+          toast.success('Report Sumbitted Successfully! Waiting for admin to analyse it....')
+          // alert('Report Sumbitted Successfully! Waiting for admin to analyse it....')
+        } else {
+          console.log(result);
+          toast.error('Its not you but us getting this patched up....Try after sometime')
+
+        }
+      } catch (err) {
+      //  alert('Its not you but us getting this patched up....Try after sometime')
+        console.log(err);
+      }
+    }
+  };
+
+
+  // console.log(lusername);
 //success
 async function frndcount(){
   const token = sessionStorage.getItem("token")
@@ -212,7 +262,6 @@ async function frndcount(){
 const handleremovecomment = async (cmt) => {
   const token = sessionStorage.getItem("token") 
   console.log(cmt);
-  const commentId=cmt._id
   if (token) {
     const reqHeader = {
       "Content-Type": "application/json",
@@ -220,7 +269,7 @@ const handleremovecomment = async (cmt) => {
     }
     try {
      
-      const result = await removecommentAPI(commentId, reqHeader)
+      const result = await removecommentAPI(cmt, reqHeader)
       console.log(result);
       if (result.status == 200) {
         SetCommentdlt(result.data)
@@ -235,19 +284,18 @@ const handleremovecomment = async (cmt) => {
   }
 }
 
+
   
-
-
   return (
     <>
-      <div className='profile' style={{ backgroundColor: 'black', height: '100vh' }}>
+    <div className='profile' style={{ backgroundColor: 'black', height: '150vh' }}>
         <Navbar />
         <div className='row'>
           <div className='col-lg-2 text-light pt-5 pb-5 navl ms-3' style={{ height: '100vh', position: 'fixed' }}>
             <NavLeft />
           </div>
-          <div className='col-lg-10 ' style={{ marginLeft: '450px' }}>
-            {currentuser ? <div className='proileinfo d-flex justify-content-start align-items-start flex-column mb-5 ' style={{ height: '100px' }}>
+          <div className='col-lg-10' style={{ marginLeft: '450px' }}>
+            {currentuser ? <div className='proileinfo d-flex justify-content-start align-items-start' style={{ height: '150px' }}>
               <div className='d-flex justify-content-between align-items-center w-75'>
                 <div className='d-flex'>
                   <img src={userimg} alt='' style={{ width: '120px' }} />
@@ -266,24 +314,22 @@ const handleremovecomment = async (cmt) => {
                 </div>
                 
               </div>
-              <button className='btn btn-light text-dark w-50 mb-4' style={{marginLeft:'13%'}} onClick={() => handleupdateProfile(currentuser)}>
-                Edit Profile
-              </button>
+              
             </div> : ''}
             
-            <div className='post '>
-              <div className='row pt-4' style={{marginLeft:'-140px'}}>
+            <div className='post'>
+              <div className='row' style={{marginLeft:'-140px'}}>
                 <hr style={{ color: 'white' }} />
-                <p className='text-center text-light w-100 fw-bolder' style={{marginLeft:'-80px'}}>POST</p>
+                <p className='text-center text-light w-100 fw-bolder' style={{marginLeft:'-80px'}}> <i className="fa-solid fa-bookmark"></i> FAVOURITES</p>
                 <hr style={{ color: 'white' }} />
               </div>
               <div className='mt-4 w-100 d-flex justify-content-start   align-items-start flex-wrap'>
-                {postData?.length > 0 ? (
-                  postData?.map((post) => (
+                {fav?.length > 0 ? (
+                  fav?.map((post) => (
                     <div key={post.id} className='d-flex justify-content-start border align-items-start p-1 shadow  mb-2 me-2 flex-column po1' style={{ width: '20%', height: '280px' }} onClick={() => handleModalOpen(post)}>
 
-                      <img className='img-fluid' src={preview ? preview : `${SERVER_URL}/uploads/${post.image}`} alt='post img' style={{ width: '350px', height: '200px' }} />
-                      <p className='text-light'><span className="fw-bolder">{post?.username}:  </span>{post?.caption}</p>
+                      <img className='img-fluid' src={preview ? preview : `${SERVER_URL}/uploads/${post.postImage}`} alt='post img' style={{ width: '350px', height: '200px' }} />
+                      <p className='text-light'><span className="fw-bolder">{post?.poster}:  </span>{post?.postCaption}</p>
 
                     </div>
                   ))
@@ -304,7 +350,7 @@ const handleremovecomment = async (cmt) => {
             {selectedPost && (
               <div className="row" style={{ height: '700px', width: '100%' }}>
                 <div className="col-lg-6">
-                  <img src={`${SERVER_URL}/uploads/${selectedPost.image}`} style={{ width: '100%', height: '600px' }} className='img-fluid mt-2' />
+                  <img src={`${SERVER_URL}/uploads/${selectedPost.postImage}`} style={{ width: '100%', height: '600px' }} className='img-fluid mt-2' />
                 </div>
                 <div className="col-lg-6 text-light">
                   <div className='w-100 d-flex mt-4 justify-content-between'>
@@ -312,14 +358,19 @@ const handleremovecomment = async (cmt) => {
                       <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
                         A
                       </Avatar>
-                      <b className='mt-2 ms-2'>{selectedPost.username} </b><span className='text-light mt-2 ms-2'>
-                        {selectedPost.caption}
+                      <b className='mt-2 ms-2'>{selectedPost.poster} </b><span className='text-light mt-2 ms-2'>
+                        {selectedPost.postCaption}
                       </span>
                     </div>
                     <Dropdown>
                       <Dropdown.Toggle className='bg-dark'><i className="fa-solid fa-ellipsis-vertical"></i></Dropdown.Toggle>
-                    <Dropdown.Menu>
-                      <Dropdown.Item onClick={()=>handleremovePost(selectedPost._id)}>Delete Post</Dropdown.Item>
+                    <Dropdown.Menu className='bg-dark'>
+                    {lusername==selectedPost.poster?
+                    <Dropdown.Item onClick={()=>handleremovePost(selectedPost.postId)} className='text-light'><span className='p-3 p1 w-100' style={{
+                      height:'100%'
+                    }}><i className="fa-regular fa-trash-can"></i> Delete Post</span> </Dropdown.Item>:<Dropdown.Item onClick={()=>handlereportPost(selectedPost)} className='text-light'><span className='p-3 p1' style={{
+                      height:'100%'
+                    }}><i className="fa-regular fa-flag"></i>  Report Post</span></Dropdown.Item>}
                     </Dropdown.Menu>
                     </Dropdown>
                   </div>
@@ -334,7 +385,7 @@ const handleremovecomment = async (cmt) => {
                         <Dropdown className='mt-4'>
                       <Dropdown.Toggle className='btn-dark'><i className="fa-solid fa-ellipsis-vertical "></i></Dropdown.Toggle><Dropdown.Menu className='bg-dark text-light'>
                     
-                      <Dropdown.Item onClick={()=>handleremovecomment(comment)}  className='text-light'> <span className='p-3 p1' style={{
+                      <Dropdown.Item onClick={()=>handleremovecomment(comment._id)}  className='text-light'> <span className='p-3 p1' style={{
                       height:'100%'
                     }} ><i className="fa-regular fa-trash-can"></i> Delete Comment </span></Dropdown.Item>
                     
@@ -357,7 +408,7 @@ const handleremovecomment = async (cmt) => {
         </Modal>
       </div>
     </>
-  );
+  )
 }
 
-export default Profile;
+export default Bookmark

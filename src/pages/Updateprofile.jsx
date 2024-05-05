@@ -1,0 +1,93 @@
+import React, { useContext, useEffect, useState } from 'react';
+import { Modal, Navbar } from 'react-bootstrap';
+import userimg from '../assets/user.png';
+import { addCommentAPI, editProfileAPI, frndcountAPI, getPostCommentsAPI, getSearchNavigatePostsAPI, getUserPostsAPI } from '../../services/allAPI';
+import { addResponseContext, editProfileContext, editResponseContext, userResponseContext } from '../Context/ContextAPI';
+import { SERVER_URL } from '../../services/serverURL';
+import { Avatar } from '@mui/material';
+import { orange, purple, red } from '@mui/material/colors';
+import NavLeft from '../components/NavLeft';
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
+
+function Updateprofile(post) {
+    const navigate=useNavigate()
+    const { editprofile, SetEditProfile } = useContext(editProfileContext)
+
+    const { userResponse, setUserResponse } = useContext(userResponseContext)
+
+    const [fname, setFname] = useState('');
+    const [userData, setuserData] = useState({
+        id: userResponse._id, firstName: userResponse.firstName, username: userResponse?.username, email: userResponse?.email, friends: userResponse.friends
+    })
+
+
+
+
+
+    useEffect(() => {
+
+
+    }, [editprofile]);
+
+    const handleUpdate = async() => {
+        const firstName = editprofile.firstName
+        const email = editprofile.email
+        const username = editprofile.username
+        const password = editprofile.password
+        const friends = editprofile.friends
+        console.log('Inside update function');
+        const token = sessionStorage.getItem("token")
+        if (token) {
+            const reqHeader = {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            }
+            try {
+                const result = await editProfileAPI({firstName, email, username, password, friends},reqHeader)
+                if(result.status==200){
+                    toast.success("Profile Updated Successfully!!!")
+                    console.log(result.data);
+                    navigate('/profile')
+                } else {
+          console.log(result)
+          toast.error('There has been a small problem....Try after sometime....')
+
+        }
+            } catch (err) {
+                console.log(err);
+            }
+        }
+    }
+
+
+
+
+
+        return (
+            <>
+                <div className='profile' style={{ backgroundColor: 'black', height: '150vh' }}>
+                    <Navbar />
+                    <div className='row'>
+                        <div className='col-lg-2 text-light pt-5 pb-5 navl ms-3' style={{ height: '100vh', position: 'fixed' }}>
+                            <NavLeft />
+                        </div>
+                        <div className='col-lg-10' style={{ marginLeft: '380px' }}>
+                            <h1 className="w-75 text-center text-light">Update Profile</h1>
+                            <div className="updateprofile w-75 d-flex justify-content-center align-items-center flex-column">
+                                <label><img src={userimg} alt="" /><input type="file" name="" id="" style={{ display: 'none' }} /></label>
+
+                                <input type="text" className="name bg-dark text-light mb-3 w-50 text-center" style={{ height: '35px' }} value={editprofile.firstName} placeholder='Enter Name' onChange={(e) => SetEditProfile({ ...editprofile, firstName: e.target.value })} />
+                                <input type="text" className="name bg-dark text-light mb-3 w-50 text-center" style={{ height: '35px' }} value={editprofile.email} readOnly placeholder='Email' />
+                                <input type="text" className="name bg-dark text-light mb-3 w-50 text-center" style={{ height: '35px' }} value={editprofile.username} placeholder='Enter Username' onChange={(e) => SetEditProfile({ ...editprofile, username: e.target.value })} />
+                                <p className="text-danger">*email cannot be changed</p>
+                                <button className="btn btn-primary mt-5 w-25" onClick={handleUpdate}>Update Profile</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </>
+        )
+    }
+    export default Updateprofile

@@ -90,12 +90,13 @@ const handleuploadPost = async ()=>{
         <Link to={'/friends'} className='li1'><span><i className="fa-solid fa-user-group nav1"></i> Friends</span></Link>
         <span onClick={() => setModalShow(true)}><i className="fa-solid fa-square-plus nav1"></i> Add Post</span>
 
-        <div className='d-flex justify-content-start flex-column btm'>
+        
+        <Link to={'/saved'} className='li1'><span><i className="fa-regular fa-bookmark nav1"></i> Saved</span></Link>
           <Link to={'/profile'} className='li1'><span><i className="fa-regular fa-circle-user nav1"></i> User Profile</span></Link>
           <span className='text-danger logot' onClick={handleLogout}><i className="fa-solid fa-right-from-bracket nav1 "></i> Logout</span>
         </div>
         <ToastContainer position='top-center' theme='colored' autoClose={3000} />
-      </div>
+      
 
       <Modal
         {...props}

@@ -81,18 +81,18 @@ function NavLicon(props) {
   }
     return (
       <>
-        <div className='navleft d-flex flex-column' style={{ height: '100vh', zIndex: '99999999' }}>
+        <div className='navleft2 d-flex flex-column' style={{ height: '100vh', zIndex: '99999999' }}>
           <img src={logo} alt="" style={{width:'100%'}}/>
-          <Link to={'/'} className='li2'><span><i className="fa-solid fa-house nav1"></i> </span></Link>
-          <Link className='li2' to={'/search'}><span><i className="fa-solid fa-magnifying-glass nav1"></i> </span></Link>
-          <Link to={'/messages'} className='li2'><span><i className="fa-regular fa-comment nav1"></i> </span></Link>
-          <Link to={'/friends'} className='li2'><span><i className="fa-solid fa-user-group nav1"></i> </span></Link>
-          <span className='li2' onClick={() => setModalShow(true)}><i className="fa-solid fa-square-plus nav1"></i></span>
+          <Link to={'/'} className='l10'><span><i className="fa-solid fa-house nav1"></i> </span></Link>
+          <Link className='l10' to={'/search'}><span><i className="fa-solid fa-magnifying-glass nav1"></i> </span></Link>
+          <Link to={'/messages'} className='l10'><span><i className="fa-regular fa-comment nav1"></i> </span></Link>
+          <Link to={'/friends'} className='l10'><span><i className="fa-solid fa-user-group nav1"></i> </span></Link>
+          <span className='l10' onClick={() => setModalShow(true)}><i className="fa-solid fa-square-plus nav1"></i></span>
   
-          <div className='d-flex justify-content-start flex-column btm2'>
-            <Link to={'/profile'} className='li2'><span><i className="fa-regular fa-circle-user nav1"></i></span></Link>
-            <span className='text-danger logot' onClick={handleLogout}><i className="fa-solid fa-right-from-bracket nav1 li3"></i></span>
-          </div>
+          <Link to={'/saved'} className='l10'><span><i className="fa-regular fa-bookmark nav1"></i></span></Link>
+            <Link to={'/profile'} className='l10'><span><i className="fa-regular fa-circle-user  nav1"></i></span></Link>
+            <span className='text-danger logot' onClick={handleLogout}><i className="fa-solid fa-right-from-bracket text-danger nav1 l10"></i></span>
+         
           <ToastContainer position='top-center' theme='colored' autoClose={3000} />
         </div>
   

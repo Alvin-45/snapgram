@@ -14,6 +14,11 @@
 }
 .navleft{
   border-right: 1px solid;
+  line-height: 50px;
+}
+.navleft2{
+  border-right: 1px solid;
+  line-height: 50px;
 }
 .pic{
   padding-left: 10px;
@@ -69,7 +74,7 @@
   display: none;
 }
 .btm{
-  margin-top: 60%;
+  margin-top: 30%;
 }
 .box{
   border-radius: 20px;
@@ -135,6 +140,13 @@
   margin-bottom: 50px;
   margin-left: 15px;
 }
+.l10{
+  width: 100%;
+  text-decoration: none;
+  color: white;
+  margin-bottom: 20px;
+  margin-left: 15px;
+}
 .li3{
   margin-bottom: 50px;
   margin-left: 15px;
@@ -177,3 +189,4 @@
 .p1:hover{
 color: black;
 }
+

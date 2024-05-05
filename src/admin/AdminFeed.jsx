@@ -32,7 +32,7 @@ function AdminFeed() {
   return (
     <>
     <div className='fullscreen' style={{ backgroundColor: 'black'}}>
-        <div className="fullbody ms-5 me-5 mb-5" style={{ backgroundColor: 'black' }}>
+        <div className="fullbody ms-5 me-5" style={{ backgroundColor: 'black' }}>
           
           <div className="row">
             <div className="col-lg-2 text-light pt-5 pb-5 navl" style={{ height: '100vh', position: 'fixed' }}>

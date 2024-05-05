@@ -235,9 +235,12 @@ function Post({ post }) {
 
   //success fav post(working duplicate)
   const handlefavPost = async (post) => {
+    console.log(post);
+    const poster=post.username
+    const postId=post._id
+    const postCaption=post.caption
+    const postImage=post.image
     const token = sessionStorage.getItem("token");
-    const poster = post.username; 
-    console.log(poster);
     if (token) {
       const reqHeader = {
         "Content-Type": "application/json",
@@ -245,20 +248,22 @@ function Post({ post }) {
       };
   
       try {
-        const result = await addFavPostAPI(post._id,post.caption,{poster}, reqHeader);
+        const result = await addFavPostAPI({poster,postId,postCaption,postImage},reqHeader);
         console.log(result);
-        if (result.status === 200) {
+        if (result.status==200) {
           setPostStatusResponse(result.status);
-          // toast.success('Added to Favourites')
+          toast.success('Added to Favourites')
           // alert('Added to Favourites')
         } else {
           console.log(result);
-          toast.error(`Admin Post can't be added to favourites`)
+          toast.error(`Post Already added to Favourites`)
 
         }
       } catch (err) {
       //  alert('Its not you but us getting this patched up....Try after sometime')
         console.log(err);
+        
+
       }
     }
   };
@@ -267,7 +272,7 @@ function Post({ post }) {
     <>
       <div className='postbdy'>
         {posts?.length > 0 ?
-          posts?.map(posted => (
+          posts.sort((a, b) => b._id.localeCompare(a._id)).map(posted => (
             <Card key={posted._id} sx={{ width: '80%', paddingBottom: '40px' }} className='text-light mt-5' style={{ backgroundColor: 'black' }}>
               <CardHeader
                 avatar={<Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">A</Avatar>}

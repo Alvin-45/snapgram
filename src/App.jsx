@@ -17,6 +17,8 @@ import AdminFeed from './admin/AdminFeed';
 import AdminSearch from './admin/AdminSearch';
 import AdminUserProfile from './admin/AdminUserProfile';
 import AdminProfile from './admin/AdminProfile';
+import Bookmark from './pages/Bookmark';
+import Updateprofile from './pages/Updateprofile';
 
 
 function App() {
@@ -41,6 +43,8 @@ function App() {
       <Route path='/adminsearch'element={<AdminSearch/>}></Route>
       <Route path='/adminusersearch'element={<AdminUserProfile/>}></Route>
       <Route path='/adminprofile'element={<AdminProfile/>}></Route>
+      <Route path='/saved'element={<Bookmark/>}></Route>
+      <Route path='/updateprofile'element={<Updateprofile/>}></Route>
 
       <Route path='/*'element={<Home/>}></Route>
 

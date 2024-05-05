@@ -42,8 +42,8 @@ export const addFlagPostAPI = async (pid,pc,reqBody,reqHeader)=>{
   return await commonAPI("POST",`${SERVER_URL}/flag-post/${pid}/${pc}`,reqBody,reqHeader)
 }
 
-export const addFavPostAPI = async (pu,pc,reqBody,reqHeader)=>{
-  return await commonAPI("POST",`${SERVER_URL}/fav-post/${pu}/${pc}`,reqBody,reqHeader)
+export const addFavPostAPI = async (reqBody,reqHeader)=>{
+  return await commonAPI("POST",`${SERVER_URL}/fav-post`,reqBody,reqHeader)
 }
 
 export const getflagPostsAPI = async (reqHeader)=>{
@@ -97,12 +97,20 @@ export const removeflagAPI = async (pid,reqHeader)=>{
   return await commonAPI("DELETE",`${SERVER_URL}/remove-flag/${pid}`,{},reqHeader)
 }
 
+export const removecmtflagAPI = async (cid,reqHeader)=>{
+  return await commonAPI("DELETE",`${SERVER_URL}/remove-cmtflag/${cid}`,{},reqHeader)
+}
+
 export const removeFriendAPI = async (fid,reqHeader)=>{
   return await commonAPI("DELETE",`${SERVER_URL}/remove-friend/${fid}`,{},reqHeader)
 }
 
 export const removecommentAPI = async (cid,reqHeader)=>{
   return await commonAPI("DELETE",`${SERVER_URL}/remove-comment/${cid}`,{},reqHeader)
+}
+
+export const removefavAPI = async (pid,reqHeader)=>{
+  return await commonAPI("DELETE",`${SERVER_URL}/remove-fav/${pid}`,{},reqHeader)
 }
 
 //chat part
@@ -118,8 +126,8 @@ export const luserAPI = async (reqHeader)=>{
 }
 
 
-export const editProfileAPI = async (uid,reqBody,reqHeader)=>{
-  return await commonAPI("PUT",`${SERVER_URL}/edit-profile/${uid}`,reqBody,reqHeader)
+export const editProfileAPI = async (reqBody,reqHeader)=>{
+  return await commonAPI("PUT",`${SERVER_URL}/edit-profile`,reqBody,reqHeader)
 }
 
 export const adminregister = async (reqBody)=>{
@@ -152,4 +160,12 @@ export const editCommentAPI = async (cid,reqBody,reqHeader)=>{
 
 export const frndcountAPI = async (reqHeader)=>{
   return await commonAPI("GET",`${SERVER_URL}/frndcount`,'',reqHeader)
+}
+
+export const getallfavAPI = async (reqHeader)=>{
+  return await commonAPI("GET",`${SERVER_URL}/getallfav`,'',reqHeader)
+}
+
+export const getflagcmtAPI = async (reqHeader)=>{
+  return await commonAPI("GET",`${SERVER_URL}/getflagcmt`,'',reqHeader)
 }
