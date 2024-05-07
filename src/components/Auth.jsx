@@ -1,5 +1,5 @@
 import { TextField } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import logo from "../assets/instalogo.png"
 import { Password } from '@mui/icons-material'
 import { FloatingLabel, Form } from 'react-bootstrap'
@@ -7,11 +7,14 @@ import { register } from '../../services/allAPI'
 import { Link, useNavigate } from 'react-router-dom'
 import { Bounce, ToastContainer, toast } from 'react-toastify'
 import "react-toastify/dist/ReactToastify.css"
+import { profilepicContext } from '../Context/ContextAPI'
 // import { GoogleLogin } from '@react-oauth/google';
 // import { jwtDecode } from 'jwt-decode'
 
 
 function Auth(insideregister) {
+  const {updateprofilepic,setUpdateprofilepic}=useContext(profilepicContext)
+
   const [emptyStatus, setEmptyStatus] = useState(false)
   const navigate = useNavigate()
   const [inregister, setInregister] = useState(true)
@@ -36,7 +39,9 @@ function Auth(insideregister) {
     try {
       const result = await register(userInput);
       console.log(result);
+      setUpdateprofilepic(userInput)
       if (result.status === 200) {
+        sessionStorage.setItem('token',result.data.token)
         toast.success(`Welcome ${result.data.firstName}... Please Login to Explore Our Website!!!`);
         setUserinput({
           firstName: "",
@@ -45,7 +50,7 @@ function Auth(insideregister) {
           password: "",
         });
         setTimeout(() => {
-          navigate('/login');
+          navigate('/uploadpic');
         }, 2000);
       } else {
         toast.error(result.response.data);

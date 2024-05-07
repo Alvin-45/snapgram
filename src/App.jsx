@@ -19,6 +19,7 @@ import AdminUserProfile from './admin/AdminUserProfile';
 import AdminProfile from './admin/AdminProfile';
 import Bookmark from './pages/Bookmark';
 import Updateprofile from './pages/Updateprofile';
+import Uploadpic from './components/Uploadpic';
 
 
 function App() {
@@ -45,6 +46,7 @@ function App() {
       <Route path='/adminprofile'element={<AdminProfile/>}></Route>
       <Route path='/saved'element={<Bookmark/>}></Route>
       <Route path='/updateprofile'element={<Updateprofile/>}></Route>
+      <Route path='/uploadpic'element={<Uploadpic/>}></Route>
 
       <Route path='/*'element={<Home/>}></Route>
 

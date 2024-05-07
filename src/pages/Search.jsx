@@ -6,6 +6,7 @@ import Navbar from '../components/Navbar';
 import { Modal } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { userResponseContext } from '../Context/ContextAPI';
+import { SERVER_URL } from '../../services/serverURL';
 
 function Search() {
   const [searchKey, setSearchKey] = useState('');
@@ -101,7 +102,7 @@ function Search() {
                     luser !== user.username && (
                       <div key={user._id} className='b1 d-flex justify-content-start align-items-center w-25 mb-2 ms-3'>
                         <div className='d-flex justify-content-around'  onClick={() => handleNavigate(user)}>
-                          <img src={userimg} alt='' style={{ width: '80px' }} />
+                        {user.profileImage?<img className=' me-2' src={`${SERVER_URL}/uploads/${user.profileImage}`} alt='' style={{ width: '80px',height:'80px',borderRadius:'50%' }} />:<img src={userimg} alt='' className='' style={{ width: '80px',height:'80px',borderRadius:'50%' }} />}
                           <div className='flex-column'>
                             <h5 className='text-light mt-3'>{user.username}</h5>
                             <p className='text-secondary' style={{marginTop:'-9px'}}>{user.firstName}</p>

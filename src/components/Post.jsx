@@ -275,7 +275,7 @@ function Post({ post }) {
           posts.sort((a, b) => b._id.localeCompare(a._id)).map(posted => (
             <Card key={posted._id} sx={{ width: '80%', paddingBottom: '40px' }} className='text-light mt-5' style={{ backgroundColor: 'black' }}>
               <CardHeader
-                avatar={<Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">A</Avatar>}
+                avatar={<Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">{posted.profileImage?<img className='img-fluid' src={`${SERVER_URL}/uploads/${posted.profileImage}`} alt='' style={{ width: '100%',height:'100%'}} />:<img src={userimg} alt='' className='mt-2' style={{}} />}</Avatar>}
                 action={<Dropdown >
                   <Dropdown.Toggle variant="dark" id="dropdown-basic" >
                     <i className="fa-solid fa-ellipsis-vertical" style={{ color: "#ffffff" }}></i>
@@ -347,7 +347,7 @@ function Post({ post }) {
                 <div className="col-lg-6 text-light">
                   <div className='w-100 d-flex mt-4'>
                     <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-                      A
+                    {selectedPost.profileImage?<img className='img-fluid' src={`${SERVER_URL}/uploads/${selectedPost.profileImage}`} alt='' style={{ width: '100%',height:'100%'}} />:<img src={userimg} alt='' className='mt-2' style={{}} />}
                     </Avatar>
                     <b className='mt-2 ms-2'>{selectedPost.username} </b><span className='text-light mt-2 ms-2'>
                       {selectedPost.caption}

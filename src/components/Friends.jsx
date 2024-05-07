@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { getAllFriendsAPI, removeFriendAPI, userdetails } from '../../services/allAPI';
 import userimg from '../assets/user.png'
 import { friendremoveResponseContext } from '../Context/ContextAPI';
+import { SERVER_URL } from '../../services/serverURL';
 
 
 function Friends() {
@@ -56,7 +57,7 @@ function Friends() {
                   users.map(user => (
                     <div key={user._id} className="b1 d-flex justify-content-between w-75 align-items-center " >
                       <div className='d-flex justify-content-start'>
-                        <img src={userimg} alt="" style={{ width: '80px' }} />
+                      {user.fimg?<img className='img-fluid me-4 mt-3' src={`${SERVER_URL}/uploads/${user.fimg}`} alt='' style={{ width: '60px',height:'60px',borderRadius:'50%'}} />:<img src={userimg} alt='' className='me-3' style={{ width: '65px',height:'65px'}} />}
                         <h5 className='text-light mt-4'>{user.fname}</h5>
                       </div>
                       <i

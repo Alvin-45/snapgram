@@ -325,7 +325,7 @@ const handleremovecomment = async (cmt) => {
             {currentuser ? <div className='proileinfo d-flex justify-content-start align-items-start' style={{ height: '150px' }}>
               <div className='d-flex justify-content-between align-items-center w-75'>
                 <div className='d-flex'>
-                  <img src={userimg} alt='' style={{ width: '120px' }} />
+                {currentuser.profileImage?<img className='mt-2 me-2' src={`${SERVER_URL}/uploads/${currentuser.profileImage}`} alt='' style={{ width: '100px',height:'100px',borderRadius:'50%' }} />:<img src={userimg} alt='' className='mt-2' style={{ width: '100px',height:'100px',borderRadius:'50%' }} />}
                   <div className='mt-4 '>
                     <h4 className='text-light'>{currentuser.firstName}</h4>
                     <p className='text-light'>{currentuser.username}</p>

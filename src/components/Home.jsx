@@ -6,8 +6,6 @@ import Addpost from './Addpost'
 import Friends from './Friends'
 import Ad from './Ad'
 import { useNavigate } from 'react-router-dom'
-import { ToastContainer, toast } from 'react-toastify'
-import "react-toastify/dist/ReactToastify.css"
 import { addResponseContext } from '../Context/ContextAPI'
 
 function Home() {
@@ -22,7 +20,6 @@ function Home() {
     }else{
       setLStatus(false)
       navigate('/login')
-      toast.error("Login to Continue");
       
     }
   },[addResponse])
@@ -49,7 +46,6 @@ function Home() {
           </div>
 
         </div>
-        <ToastContainer position='top-center' theme='colored' autoClose={3000} />
       </div>
     </>
   )

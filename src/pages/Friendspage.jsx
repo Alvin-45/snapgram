@@ -6,6 +6,7 @@ import userimg from '../assets/user.png';
 import { ToastContainer, toast } from 'react-toastify';
 import { friendremoveResponseContext, userResponseContext } from '../Context/ContextAPI';
 import { useNavigate } from 'react-router-dom';
+import { SERVER_URL } from '../../services/serverURL';
 
 function Friendspage() {
   const {friendstatusResponse, setFriendStatusResponse}=useContext(friendremoveResponseContext)
@@ -100,8 +101,8 @@ function Friendspage() {
                 {users?.length > 0 ?
                   users.map(user => (
                     <div key={user._id} className="b1 d-flex justify-content-between align-items-center mb-1 me-2 border rounded flex-wrap" style={{width:'32%'}}>
-                      <div className='d-flex justify-content-start' onClick={() => handleNavigate(user)}>
-                        <img src={userimg} alt="" style={{ width: '80px' }} />
+                      <div className='d-flex justify-content-start p-2' onClick={() => handleNavigate(user)}>
+                        {user.fimg?<img className='me-2' src={`${SERVER_URL}/uploads/${user.fimg}`} alt='' style={{ width: '80px',height:'80px',borderRadius:'50%' }} />:<img src={userimg} alt='' className='me-2' style={{ width: '80px',height:'80px'}} />}
                         <h5 className='text-light mt-4'>{user.fname}</h5>
                       </div>
                       {/* <p className="text-secondary">{user.fid}</p> */}

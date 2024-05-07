@@ -169,3 +169,7 @@ export const getallfavAPI = async (reqHeader)=>{
 export const getflagcmtAPI = async (reqHeader)=>{
   return await commonAPI("GET",`${SERVER_URL}/getflagcmt`,'',reqHeader)
 }
+
+export const profilepicAPI = async (reqBody,reqHeader)=>{
+  return await commonAPI("PUT",`${SERVER_URL}/profile-pic`,reqBody,reqHeader)
+}

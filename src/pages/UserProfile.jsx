@@ -171,7 +171,7 @@ function UserProfile(post) {
             <div className='proileinfo d-flex justify-content-between align-items-center w-75' style={{ height: '150px' }}>
 
               <div className='d-flex'>
-                <img src={userimg} alt='' style={{ width: '120px' }} />
+              {searchUser.profileImage?<img className='mt-2 me-2' src={`${SERVER_URL}/uploads/${searchUser.profileImage}`} alt='' style={{ width: '100px',height:'100px',borderRadius:'50%' }} />:<img src={userimg} alt='' className='' style={{ width: '100px',height:'100px',borderRadius:'50%' }} />}
                 <div className='mt-4 '>
                   <h4 className='text-light'>{searchUser.firstName}</h4>
                   <p className='text-light'>{searchUser.username}</p>

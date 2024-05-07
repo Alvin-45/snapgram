@@ -20,8 +20,10 @@ function Updateprofile(post) {
     const [userData, setuserData] = useState({
         profileImage:editprofile.profileImage
     })
-
-console.log(userData.profileImage);
+    
+    const [preview,setPreview]=useState({
+        profileImage:''
+    })
 
 
 
@@ -61,8 +63,12 @@ console.log(userData.profileImage);
     }
 
 
+console.log(preview.profileImage);
 
-
+const handleImageChange = (e) => {
+    setuserData({...userData,profileImage:e.target.files[0]})
+    setPreview({ profileImage: URL.createObjectURL(e.target.files[0]) });
+}
 
         return (
             <>
@@ -75,7 +81,9 @@ console.log(userData.profileImage);
                         <div className='col-lg-10' style={{ marginLeft: '380px' }}>
                             <h1 className="w-75 text-center text-light">Update Profile</h1>
                             <div className="updateprofile w-75 d-flex justify-content-center align-items-center flex-column">
-                                {userData.profileImage?<img className='mt-2 me-2 mb-5' src={`${SERVER_URL}/uploads/${userData.profileImage}`} alt='' style={{ width: '120px',height:'120px',borderRadius:'50%' }} />:<img src={userimg} alt='' className='mt-2' style={{ width: '80px',height:'80px',borderRadius:'50%' }} />}
+                                <label>{preview.profileImage?<img className='mt-2 me-2 mb-5' src={preview.profileImage} alt='' style={{ width: '120px',height:'120px',borderRadius:'50%' }} />
+                                :
+                                <img className='mt-2 me-2 mb-5' src={`${SERVER_URL}/uploads/${userData.profileImage}`} alt='' style={{ width: '120px',height:'120px',borderRadius:'50%' }} />}<input type="file" onChange={handleImageChange} style={{ display: 'none' }} /></label>
 
                                 <input type="text" className="name bg-dark text-light mb-3 w-50 text-center" style={{ height: '35px' }} value={editprofile.firstName} placeholder='Enter Name' onChange={(e) => SetEditProfile({ ...editprofile, firstName: e.target.value })} />
                                 <input type="text" className="name bg-dark text-light mb-3 w-50 text-center" style={{ height: '35px' }} value={editprofile.email} readOnly placeholder='Email' />
