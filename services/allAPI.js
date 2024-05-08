@@ -173,3 +173,11 @@ export const getflagcmtAPI = async (reqHeader)=>{
 export const profilepicAPI = async (reqBody,reqHeader)=>{
   return await commonAPI("PUT",`${SERVER_URL}/profile-pic`,reqBody,reqHeader)
 }
+
+export const managelikeAPI = async (reqBody,reqHeader)=>{
+  return await commonAPI("POST",`${SERVER_URL}/manage-likes`,reqBody,reqHeader)
+}
+
+export const dltlikeAPI = async (reqBody,reqHeader)=>{
+  return await commonAPI("POST",`${SERVER_URL}/dlt-likes`,reqBody,reqHeader)
+}

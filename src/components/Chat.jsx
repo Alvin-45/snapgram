@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 
 function Chat() {
   const navigate=useNavigate()
-  const { setChatstartResponse } = useContext(chatstartResponseContext);
+  const { chatstartResponse,setChatstartResponse } = useContext(chatstartResponseContext);
   const [friends, setFriends] = useState([]);
   const [searchKey, setSearchKey] = useState('');
   const [users, setUsers] = useState([]);
@@ -77,7 +77,7 @@ function Chat() {
           );
           return updatedUsers;
         });
-        setUserResponse(result)
+        setUserResponse(result.data)
       }
     } catch (error) {
       console.log(error);

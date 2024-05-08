@@ -61,6 +61,7 @@ function AdminRegister() {
           <img src={logo} alt="" style={{ width: '45%', height: '500px' }} />
           <h1 className='title text-light head1'>SnapGram</h1>
           <h5 className="text-light"> Admin Portal</h5>
+          <p className="text-warning">*use example@snapgram to register as admin</p>
           <FloatingLabel controlId="floatingInput2" label="Name" className='mb-3 inp'>
             <Form.Control type="text" placeholder="name" onChange={e => setUserinput({ ...userInput, firstName: e.target.value })} style={{ backgroundColor: 'black', borderTop: '0px', borderBottom: '2px solid white', borderLeft: '0px', borderRight: '0px', textAlign: 'center', borderRadius: '0px', color: 'white' }} />
           </FloatingLabel>

@@ -12,17 +12,17 @@ import BookmarkBorderOutlinedIcon from '@mui/icons-material/BookmarkBorderOutlin
 import BookmarkOutlinedIcon from '@mui/icons-material/BookmarkOutlined';
 import Modal from 'react-bootstrap/Modal';
 import { Button, Dropdown } from 'react-bootstrap';
-import { addCommentAPI, addFavPostAPI, addFlagPostAPI, addFlagcommentAPI, editCommentAPI, getHomePostsAPI, getPostCommentsAPI, getUsernamesAPI, removePostAPI, removecommentAPI } from '../../services/allAPI';
+import { addCommentAPI, addFavPostAPI, addFlagPostAPI, addFlagcommentAPI, dltlikeAPI, editCommentAPI, getHomePostsAPI, getPostCommentsAPI, getUsernamesAPI, luserAPI, managelikeAPI, removePostAPI, removecommentAPI } from '../../services/allAPI';
 import { SERVER_URL } from '../../services/serverURL';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import userimg from '../assets/user.png';
 import { useNavigate } from 'react-router-dom';
-import { addCommentResponseContext, addResponseContext, commentdeleteContext, likecountResponseContext, postremoveResponseContext } from '../Context/ContextAPI';
+import { addCommentResponseContext, addResponseContext, commentdeleteContext, likecountResponseContext, likeremoveContext, postremoveResponseContext } from '../Context/ContextAPI';
 
 
 function Post({ post }) {
-  const {addCommentResponse, setAddCommentResponse}=useContext(addCommentResponseContext)
+  const { addCommentResponse, setAddCommentResponse } = useContext(addCommentResponseContext)
   const navigate = useNavigate();
   const [lgShow, setLgShow] = useState(false);
   const [selectedPost, setSelectedPost] = useState("");
@@ -32,24 +32,104 @@ function Post({ post }) {
     comment: "",
   });
   const [comments, setComments] = useState([]);
-  const {poststatusResponse, setPostStatusResponse}=useContext(postremoveResponseContext)
-  const {addResponse,setAddResponse}=useContext(addResponseContext)
-  const {commentdlt, SetCommentdlt}=useContext(commentdeleteContext)
+  const { poststatusResponse, setPostStatusResponse } = useContext(postremoveResponseContext)
+  const { addResponse, setAddResponse } = useContext(addResponseContext)
+  const { commentdlt, SetCommentdlt } = useContext(commentdeleteContext)
+  const [currentuser,setcurrentUser]=useState('')
+  const { likecountResponse, setLikecountResponse } = useContext(likecountResponseContext)
+  const {likeremove,setLikeremove}=useContext(likeremoveContext)
+
+
+
+  const managelike = async (post) => {
+    console.log(post);
+    const postId = post._id
+    const token = sessionStorage.getItem("token");
+    if (token) {
+      
+    }
+    try {
+      const reqHeader = {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      };
+      const result=await managelikeAPI({postId},reqHeader)
+      console.log(result);
+      if (result.status === 200) {
+        setLikecountResponse(result.data)
+        // alert("like success")
+      } else {
+        console.log(result);
+        alert("Network failure!!!!")
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  const dltike = async (post) => {
+    console.log(post);
+    const postId = post._id
+    const token = sessionStorage.getItem("token");
+    try {
+      const reqHeader = {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      };
+      const result=await dltlikeAPI({postId},reqHeader)
+      console.log(result);
+      if (result.status === 200) {
+        setLikeremove(result.data)
+        // alert("like removed")
+      } else {
+        console.log(result);
+        // alert("Network failure!!!!")
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   useEffect(() => {
-    
+
     getHomePosts();
-  }, [poststatusResponse,commentdlt]);
+  }, [poststatusResponse, commentdlt,likecountResponse,addResponse,likeremove]);
   async function getHomePosts() {
+    try {
+      const result = await getHomePostsAPI();
+      setPosts(result.data);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  useEffect(()=>{
+    loggedinUser()
+  },[])
+
+  async function loggedinUser() {
+    console.log('Inside logged in user details');
+    const token = sessionStorage.getItem("token");
+    if (token) {
+      const reqHeader = {
+        "Authorization": `Bearer ${token}`,
+      };
       try {
-        const result = await getHomePostsAPI();
-        setPosts(result.data);
-      } catch (err) {
+        const result = await luserAPI(reqHeader)
+        console.log(result.data);
+        setcurrentUser(result.data)
+        
+
+      } catch (error) {
         console.log(err);
       }
     }
+  }
+console.log(currentuser);
+const luserId=currentuser._id
   //remove post part
   const handleremovePost = async (postId) => {
-    const token = sessionStorage.getItem("token") 
+    const token = sessionStorage.getItem("token")
     console.log(postId);
     if (token) {
       const reqHeader = {
@@ -57,7 +137,7 @@ function Post({ post }) {
         "Authorization": `Bearer ${token}`
       }
       try {
-       
+
         const result = await removePostAPI(postId, reqHeader)
         console.log(result);
         if (result.status == 200) {
@@ -93,26 +173,26 @@ function Post({ post }) {
       }
       fetchComments();
     }
-  }, [lgShow,addResponse,addCommentResponse]);
+  }, [lgShow, addCommentResponse]);
 
   const handleModalOpen = (posted) => {
     setSelectedPost(posted);
     setLgShow(true);
   };
 
- 
+
   const handlereportPost = async (post) => {
     const token = sessionStorage.getItem("token");
-    const userId = post.userId; 
+    const userId = post.userId;
     console.log(userId);
     if (token) {
       const reqHeader = {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${token}`
       };
-  
+
       try {
-        const result = await addFlagPostAPI(post._id,post.caption,{userId}, reqHeader);
+        const result = await addFlagPostAPI(post._id, post.caption, { userId }, reqHeader);
         console.log(result);
         if (result.status === 200) {
           setPostStatusResponse(result.status);
@@ -124,13 +204,13 @@ function Post({ post }) {
 
         }
       } catch (err) {
-      //  alert('Its not you but us getting this patched up....Try after sometime')
+        //  alert('Its not you but us getting this patched up....Try after sometime')
         console.log(err);
       }
     }
   };
-  
-  
+
+
 
   const handleComment = async (e) => {
     e.preventDefault();
@@ -160,23 +240,28 @@ function Post({ post }) {
       }
     }
   };
-  const lusername=JSON.parse(sessionStorage.getItem('username')) 
+  const lusername = JSON.parse(sessionStorage.getItem('username'))
   // console.log(lusername);
   //like part
-  const [like, setLike] = useState(0);
-  const [liked, setLiked] = useState(false);
-  const { likecountResponse, setLikecountResponse } = useContext(likecountResponseContext)
-  const handlelike = () => {
-    setLiked((prevLiked) => !prevLiked);
-    setLike((prevLike) => (liked ? prevLike - 1 : prevLike + 1));
-  };
+  // const [like, setLike] = useState(0);
+  // const [liked, setLiked] = useState(false);
+
+  // const handlelike = () => {
+  //   setLiked((prevLiked) => !prevLiked);
+  //   setLike((prevLike) => (liked ? prevLike - 1 : prevLike + 1));
+  // };
 
   //success
+
+ 
+useEffect(()=>{
+
+},[currentuser])
   const handlereportcomment = async (cmt) => {
     const token = sessionStorage.getItem("token");
-    const posterId = cmt.userId; 
-    const postId=cmt.postId
-    const commentId=cmt._id
+    const posterId = cmt.userId;
+    const postId = cmt.postId
+    const commentId = cmt._id
     console.log(posterId);
     console.log(postId);
     console.log(commentId);
@@ -187,9 +272,9 @@ function Post({ post }) {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${token}`
       };
-  
+
       try {
-        const result = await addFlagcommentAPI(postId,commentId,{posterId}, reqHeader);
+        const result = await addFlagcommentAPI(postId, commentId, { posterId }, reqHeader);
         console.log(result);
         if (result.status === 200) {
           setPostStatusResponse(result.status);
@@ -201,7 +286,7 @@ function Post({ post }) {
 
         }
       } catch (err) {
-      //  alert('Its not you but us getting this patched up....Try after sometime')
+        //  alert('Its not you but us getting this patched up....Try after sometime')
         console.log(err);
       }
     }
@@ -209,7 +294,7 @@ function Post({ post }) {
 
   //success -dlt comment
   const handleremovecomment = async (cmt) => {
-    const token = sessionStorage.getItem("token") 
+    const token = sessionStorage.getItem("token")
     console.log(cmt);
     if (token) {
       const reqHeader = {
@@ -217,7 +302,7 @@ function Post({ post }) {
         "Authorization": `Bearer ${token}`
       }
       try {
-       
+
         const result = await removecommentAPI(cmt, reqHeader)
         console.log(result);
         if (result.status == 200) {
@@ -236,21 +321,21 @@ function Post({ post }) {
   //success fav post(working duplicate)
   const handlefavPost = async (post) => {
     console.log(post);
-    const poster=post.username
-    const postId=post._id
-    const postCaption=post.caption
-    const postImage=post.image
+    const poster = post.username
+    const postId = post._id
+    const postCaption = post.caption
+    const postImage = post.image
     const token = sessionStorage.getItem("token");
     if (token) {
       const reqHeader = {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${token}`
       };
-  
+
       try {
-        const result = await addFavPostAPI({poster,postId,postCaption,postImage},reqHeader);
+        const result = await addFavPostAPI({ poster, postId, postCaption, postImage }, reqHeader);
         console.log(result);
-        if (result.status==200) {
+        if (result.status == 200) {
           setPostStatusResponse(result.status);
           toast.success('Added to Favourites')
           // alert('Added to Favourites')
@@ -260,9 +345,9 @@ function Post({ post }) {
 
         }
       } catch (err) {
-      //  alert('Its not you but us getting this patched up....Try after sometime')
+        //  alert('Its not you but us getting this patched up....Try after sometime')
         console.log(err);
-        
+
 
       }
     }
@@ -275,18 +360,18 @@ function Post({ post }) {
           posts.sort((a, b) => b._id.localeCompare(a._id)).map(posted => (
             <Card key={posted._id} sx={{ width: '80%', paddingBottom: '40px' }} className='text-light mt-5' style={{ backgroundColor: 'black' }}>
               <CardHeader
-                avatar={<Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">{posted.profileImage?<img className='img-fluid' src={`${SERVER_URL}/uploads/${posted.profileImage}`} alt='' style={{ width: '100%',height:'100%'}} />:<img src={userimg} alt='' className='mt-2' style={{}} />}</Avatar>}
+                avatar={<Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">{posted.profileImage ? <img className='img-fluid' src={`${SERVER_URL}/uploads/${posted.profileImage}`} alt='' style={{ width: '100%', height: '100%' }} /> : <img src={userimg} alt='' className='mt-2' style={{}} />}</Avatar>}
                 action={<Dropdown >
                   <Dropdown.Toggle variant="dark" id="dropdown-basic" >
                     <i className="fa-solid fa-ellipsis-vertical" style={{ color: "#ffffff" }}></i>
                   </Dropdown.Toggle>
                   <Dropdown.Menu className='bg-dark'>
-                    {lusername==posted.username?
-                    <Dropdown.Item onClick={()=>handleremovePost(posted._id)} className='text-light'><span className='p-3 p1 w-100' style={{
-                      height:'100%'
-                    }}><i className="fa-regular fa-trash-can"></i> Delete Post</span> </Dropdown.Item>:<Dropdown.Item onClick={()=>handlereportPost(posted)} className='text-light'><span className='p-3 p1' style={{
-                      height:'100%'
-                    }}><i className="fa-regular fa-flag"></i>  Report Post</span></Dropdown.Item>}
+                    {lusername == posted.username ?
+                      <Dropdown.Item onClick={() => handleremovePost(posted._id)} className='text-light'><span className='p-3 p1 w-100' style={{
+                        height: '100%'
+                      }}><i className="fa-regular fa-trash-can"></i> Delete Post</span> </Dropdown.Item> : <Dropdown.Item onClick={() => handlereportPost(posted)} className='text-light'><span className='p-3 p1' style={{
+                        height: '100%'
+                      }}><i className="fa-regular fa-flag"></i>  Report Post</span></Dropdown.Item>}
 
                     {/* <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
         <Dropdown.Item href="#/action-3">Something else</Dropdown.Item> */}
@@ -308,19 +393,19 @@ function Post({ post }) {
                   <b>{posted.username} </b>
                   {posted.caption}
                 </Typography>
-                
+
               </CardContent>
-              {like>0?<p className="text-light fw-bolder ps-3">{like} Like</p>:""}
+              {posted.likes.length>0? <p className="text-light fw-bolder ps-3">{posted.likes.length} Like</p> : ""}
               <CardActions style={{ width: '100%' }}>
                 <div className="d-flex justify-content-between w-100">
 
                   <div className="d-flex justify-content-evenly">
-                    <i className={`fa-solid fa-heart fa-lg ic1 mt-2 likebtn ${liked ? 'active1' : ''}`} onClick={handlelike}></i>
+                    {posted.likes.some(like => like.lid === luserId)?(<i className={`fa-solid fa-heart text-danger fa-lg ic1 mt-2 likebtn `} onClick={() => dltike(posted)}></i>):(<i className={`fa-regular fa-heart fa-lg ic1 mt-2 likebtn`} onClick={() => managelike(posted)}></i>)}
                     <ChatBubbleOutlineOutlinedIcon className="ic1" onClick={() => handleModalOpen(posted)} />
                     {/* <SendIcon className="ic1 snd" /> */}
                   </div>
                   <div className="d-flex justify-content-evenly">
-                    <BookmarkBorderOutlinedIcon className="bk"  onClick={()=>handlefavPost(posted)}/>
+                    <BookmarkBorderOutlinedIcon className="bk" onClick={() => handlefavPost(posted)} />
                     <BookmarkOutlinedIcon className="bk1 active" style={{ display: 'none' }} />
                   </div>
                 </div>
@@ -347,7 +432,7 @@ function Post({ post }) {
                 <div className="col-lg-6 text-light">
                   <div className='w-100 d-flex mt-4'>
                     <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-                    {selectedPost.profileImage?<img className='img-fluid' src={`${SERVER_URL}/uploads/${selectedPost.profileImage}`} alt='' style={{ width: '100%',height:'100%'}} />:<img src={userimg} alt='' className='mt-2' style={{}} />}
+                      {selectedPost.profileImage ? <img className='img-fluid' src={`${SERVER_URL}/uploads/${selectedPost.profileImage}`} alt='' style={{ width: '100%', height: '100%' }} /> : <img src={userimg} alt='' className='mt-2' style={{}} />}
                     </Avatar>
                     <b className='mt-2 ms-2'>{selectedPost.username} </b><span className='text-light mt-2 ms-2'>
                       {selectedPost.caption}
@@ -358,26 +443,26 @@ function Post({ post }) {
                     {comments.length > 0 ?
                       comments.map((comment, index) => (
                         <div className="d-flex justify-content-between align-items-start w-100">
-                        <div className="comments mt-4" key={index}>
-                          <img src={userimg} alt='' style={{ width: '40px' }} /> <span className="text-light fw-bolder">{comment.username} <span className="text-light fw-normal ms-2">{comment.comment} </span></span>
+                          <div className="comments mt-4" key={index}>
+                            <img src={userimg} alt='' style={{ width: '40px' }} /> <span className="text-light fw-bolder">{comment.username} <span className="text-light fw-normal ms-2">{comment.comment} </span></span>
                           </div>
                           <Dropdown className='mt-4'>
-                      <Dropdown.Toggle className='btn-dark'><i className="fa-solid fa-ellipsis-vertical "></i></Dropdown.Toggle><Dropdown.Menu className='bg-dark text-light'>
-                    {lusername!=comment.username?
-                    <Dropdown.Item className='text-light' onClick={()=>handlereportcomment(comment)}><span className='p-3 p1' style={{
-                      height:'100%'
-                    }}><i class="fa-regular fa-flag" aria-hidden="true"></i> Report Comment</span></Dropdown.Item>:
-                      <Dropdown.Item onClick={()=>handleremovecomment(comment._id)}  className='text-light'> <span className='p-3 p1' style={{
-                      height:'100%'
-                    }} ><i className="fa-regular fa-trash-can"></i> Delete Comment </span></Dropdown.Item>
-                    }
-                    {/* <Dropdown.Item className='text-light' onClick={()=>handleeditcomment(comment)}><span className='p-3 p1' style={{
+                            <Dropdown.Toggle className='btn-dark'><i className="fa-solid fa-ellipsis-vertical "></i></Dropdown.Toggle><Dropdown.Menu className='bg-dark text-light'>
+                              {lusername != comment.username ?
+                                <Dropdown.Item className='text-light' onClick={() => handlereportcomment(comment)}><span className='p-3 p1' style={{
+                                  height: '100%'
+                                }}><i class="fa-regular fa-flag" aria-hidden="true"></i> Report Comment</span></Dropdown.Item> :
+                                <Dropdown.Item onClick={() => handleremovecomment(comment._id)} className='text-light'> <span className='p-3 p1' style={{
+                                  height: '100%'
+                                }} ><i className="fa-regular fa-trash-can"></i> Delete Comment </span></Dropdown.Item>
+                              }
+                              {/* <Dropdown.Item className='text-light' onClick={()=>handleeditcomment(comment)}><span className='p-3 p1' style={{
                       height:'100%'
                     }}> <i className="fa-solid fa-pen"></i> Edit Comment </span></Dropdown.Item> */}
-                    </Dropdown.Menu>
-                    </Dropdown>
+                            </Dropdown.Menu>
+                          </Dropdown>
                         </div>
-                        
+
                       )) :
                       <div className="comments mt-4">
                         No comments yet.

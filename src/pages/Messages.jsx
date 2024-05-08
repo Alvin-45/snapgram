@@ -38,7 +38,7 @@ function Messages() {
   async function getChats() {
     const receiver = chatstartResponse.fname
     const lfirstname = sessionStorage.getItem('username').replace(/^"(.*)"$/, '$1');
-    console.log(receiver);
+    // console.log(receiver);
     if (chatstartResponse) {
       const token = sessionStorage.getItem("token");
       const reqHeader = {
@@ -48,9 +48,9 @@ function Messages() {
 
       try {
         const result = await getChatsAPI(receiver, lfirstname, reqHeader);
-        console.log(result);
+        // console.log(result);
         if (result.status === 200) {
-          setChataddResponse(result.status);
+          setChataddResponse(result.data);
           setChatData({ ...chatData, chatmessage: "" })
           setUpdateValue(result.data)
         } else {
@@ -151,8 +151,7 @@ function Messages() {
               <div className="col-lg-12 d-flex justify-content-center align-items-center">
                 {chatstartResponse ?
                   <div className='w-100 d-flex justify-content-center align-items-center'>
-                    <input type="text" className='bg-dark w-75 rounded text-light' value={chatData.chatmessage} onChange={(e) => setChatData({ ...chatData, chatmessage: e.target.value })} placeholder='Type Here...' />
-                    <button className="btn btn-primary" onClick={handleuploadChat}><i className="fa-regular fa-paper-plane"></i> Send</button>
+                    <Msgbox/>
                   </div>
                   : ''}
               </div>

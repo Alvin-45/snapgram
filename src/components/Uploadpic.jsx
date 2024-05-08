@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import userimg from '../assets/user.png'
+import userimg from '../assets/addpic.png'
 import { profilepicContext } from '../Context/ContextAPI'
 import { useNavigate } from 'react-router-dom'
 import { profilepicAPI } from '../../services/allAPI'
@@ -52,6 +52,8 @@ function Uploadpic() {
                     console.log('success');
                     alert("profilepic updated successfully!!!")
                     navigate('/login')
+                }else{
+                    alert('Provide ProfilePic to continue!!!')
                 }
             } catch (err) {
                 toast.warning('Provide profileImage to continue!!!')
@@ -71,6 +73,7 @@ function Uploadpic() {
                             <img src={preview} alt="" style={{ width: '150px', height: '150px', borderRadius: '50%' }} />
                             <input type="file" name="" id="" style={{ display: 'none' }} onChange={(e) => setUserinput({ ...userInput, profileImage: e.target.files[0] })} />
                         </label>
+                        <p className="text-danger">*required</p>
                         <div className='d-flex justify-content-evenly w-50'><h5 className='mt-4' style={{marginLeft:'10px'}}>Username:</h5>
                         <h5 className='mt-4' >{updateprofilepic.username}</h5></div>
                         <div className='d-flex justify-content-evenly w-50'><h5  className='me-4'  style={{marginLeft:'10px'}}>Name:</h5>

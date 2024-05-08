@@ -60,6 +60,7 @@ function Login() {
           <button onClick={handleLogin} className="btn btn-primary mt-5" style={{width:'40%'}}>Login</button>
 
           <p className='text-light mt-2'>New Here!!!  <Link to={'/signup'}><span className="text-primary"> Sign up</span></Link></p>
+          <Link to={'/adminlogin'}><p className="text-primary">Login as Admin</p></Link>
         </div>
         <ToastContainer position='top-center' theme='colored' autoClose={3000} />
       </div>
