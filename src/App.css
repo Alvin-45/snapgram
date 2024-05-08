@@ -103,6 +103,10 @@
 }
 .users{
   overflow-y: auto;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  flex-wrap: wrap;
 }
 .srch{
   position: fixed;
@@ -129,9 +133,17 @@
 }
 .profile{
   overflow-x: hidden;
+
+}
+.bkmrkprofile{
+  overflow-x: hidden;
+  background-color: black;
 }
 .po1{
   overflow-y: hidden;
+  width: 20%;
+  height: 280px;
+  margin-right: 0.5rem;
 }
 .li2{
   width: 100%;
@@ -182,6 +194,7 @@
 
 .fullcomment{
   overflow-y: scroll;
+  height: 450px;
 }
 .fullcomment::-webkit-scrollbar{
   display: none;
@@ -189,4 +202,335 @@
 .p1:hover{
 color: black;
 }
+.homepost{
+  margin-left: 400px;
+}
+.favouritepage{
+  margin-left: 450px;
+}
+.cardstyle{
+  width: 80%;
+  padding-bottom: 40px;
+}
+.navbarhome{
+  display: none;
+}
+.navbarhomesrchpg{
+  display: none;
+}
+.fullbody{
+  margin-left: 2.5rem;
+  margin-right: 2.5rem;
+}
+.userinfobookmaark{
+  width: 75%;
+}
+.postfavpage{
+  margin-left: -140px;
+}
+.navbtm{
+  display: none;
+}
+.proileinfo{
+  height: 150px;
+}
+.favhead{
+ margin-left: -80px;
+}
+.favimg{
+  width: 20%;
+  height: 280px;
+  margin-right: 0.5rem;
+}
+.searchpg{
+  margin-left: 350px;
+}
+.searchpginp{
+  width: 70%;
+  height: 30px;
+  text-align: center;
+}
+.srchpgalluser{
+  margin-top: 200px;
+}
+.srcheachuser{
+  width: 25%;
+  margin-left: 1.25rem;
+}
+.srchuserprofile{
+  margin-left: 380px;
+}
+.searchuserprofileinfo{
+  width: 75%;
+  height: 150px;
+}
+.htline{
+  color: white;
+  margin-left: -50px;
+}
+.htline2{
+  color: white;
+  margin-left: 100px;
+}
+.srchuserpgposthead{
+  margin-left: -110px;
+}
+.frndspgcontent{
+  margin-left: 350px;
+}
+.friendlist{
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 150px;
+  width: 85%;
+  margin-left: 0px;
+}
+.eachfrnd{
+  width: 32%;
+}
+.personalprofilecontent{
+  margin-left: 450px;
+}
+.personalprofiledetails{
+  height: 100px;
+}
+.nameusrpassprofile{
+  width: 75%;
+}
+.editprofilebtn{
+  margin-left: 13%;
+  width: 50%;
+}
+.postprofhead{
+  margin-left: -140px;
+}
+.phead{
+  margin-left: -80px;
+}
+.postimageownprof{
+  width: 20%;
+  height: 280px;
+  margin-right: 0.5rem;
+}
 
+.updateprofilebdy{
+  margin-left: 380px;
+}
+.updateprofile{
+  width: 75%;
+}
+.upthead{
+  width: 75%;
+}
+
+.nameinp{
+  width: 50%;
+}
+.uptbtn{
+  width: 25%;
+}
+.modallength{
+  height: 700px;
+  width: 100%;
+  
+}
+.mdlbdy{
+  height: 90vh;
+  width: 100%;
+  padding-top: 15px;
+}
+
+
+@media only screen and (max-width: 500px) {
+  
+  .navleftbar{
+    display: none;
+  }
+  .homepost{
+    margin-left: 0px;
+    width: 100%;
+    background-color: black;
+  }
+  .adfrnd{
+    display: none;
+  }
+  .cardstyle{
+    width: 100%;
+  }
+  .navbarhome{
+    display: block;
+    border-bottom: 1px solid white;
+    background-color: black;
+    width: 100%;
+    
+  }
+  .navbarhomesrchpg{
+    display: block;
+    border-bottom: 1px solid white;
+    background-color: black;
+    width: 100%;
+    
+  }
+  .fullbody{
+    margin-left: 0px;
+    margin-right: 0px;
+    width: 100%;
+  }
+  .favouritepage{
+    margin-left: 0px;
+  }
+  .userinfobookmaark{
+    width: 100%;
+  }
+  .postfavpage{
+    margin-left: 0px;
+    text-align: center;
+  }
+  .post{
+    margin-left: 0px;
+  }
+  .navbtm{
+    display: block;
+  }
+  .favhead{
+    margin-left: 0px;
+  }
+  .favimg{
+    width: 33%;
+    height: 200px;
+    margin: 0px;
+  }
+  .bkmrkprofile{
+    overflow-x: visible;
+  }
+  .searchpg{
+    margin-left: 0px;
+  }
+  .srch{
+    position: fixed;
+    padding-bottom: 25px;
+    border-bottom: 1px solid white;
+    z-index: 45;
+    margin-top: 50px;
+    margin-left: 0px;
+    padding-left: 0px;
+    padding-top: 20px;
+    display: flex;
+    justify-content: center;
+  }
+  .searchpginp{
+    width: 90%;
+  }
+  .srchpgalluser{
+    margin-top: 120px;
+    justify-content: center;
+  }
+  .srcheachuser{
+    width: 80%;
+    margin-right: 0px;
+    padding: 5px;
+    
+  }
+  .fullsearchbdy{
+    position: relative;
+  }
+  .srchuserprofile{
+    margin-left: 0px;
+  }
+  .searchuserprofileinfo{
+    width: 100%;
+  }
+  .Followerssrchuser{
+    margin-top: 25px;
+  }
+  .followingsrchuser{
+    margin-top: 25px;
+  }
+  .htline{
+    margin-left: 0px;
+  }
+  .srchuserpgposthead{
+    margin-left: 0px;
+  }
+  .htline2{
+    margin-left: 0px;
+  }
+  .po1{
+    width: 33%;
+    margin-right: 0px;
+  }
+  .frndspgcontent{
+    margin-left: 0px;
+  }
+  .friendlist{
+    margin-top: 20px;
+    width: 100%;
+    justify-content: center;
+  }
+  .eachfrnd{
+    width: 80%;
+  }
+  .brd1{
+    display: none;
+  }
+  .personalprofilecontent{
+    margin-left: 0px;
+  }
+  .personalprofiledetails{
+    width: 100%;
+  }
+  .nameusrpassprofile{
+    width: 100%;
+  }
+  .Followersprsnlprofile{
+    margin-top: 20px;
+  }
+  .followingprsnlprofile{
+    margin-top: 20px;
+  }
+  .editprofilebtn{
+    width: 80%;
+  }
+  .postprofhead{
+    margin-left: 0px;
+  }
+  .phead{
+    margin-left: 0px;
+  }
+  .postimageownprof{
+    width: 33%;
+    height: 250px;
+    margin-right: 0px;
+  }
+  .updateprofilebdy{
+    margin-left: 0px;
+    
+  }
+  .upthead{
+    width: 100%;
+  }
+  .updateprofile{
+    width: 100%;
+  }
+  .nameinp{
+    width: 80%;
+  }
+  .uptbtn{
+    width: 50%;
+  }
+  .imgmodal{
+    display: none;
+  }
+  .modallength{
+    height: 60vh;
+  }
+  .mdlbdy{
+    height: 60vh;
+  }
+  .fullcomment{
+    height: 250px;
+  }
+
+}

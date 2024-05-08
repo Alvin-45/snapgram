@@ -355,10 +355,10 @@ useEffect(()=>{
 
   return (
     <>
-      <div className='postbdy'>
+      <div className='postbdy pt-5'>
         {posts?.length > 0 ?
           posts.sort((a, b) => b._id.localeCompare(a._id)).map(posted => (
-            <Card key={posted._id} sx={{ width: '80%', paddingBottom: '40px' }} className='text-light mt-5' style={{ backgroundColor: 'black' }}>
+            <Card key={posted._id} className='text-light mb-2 cardstyle' style={{ backgroundColor: 'black' }}>
               <CardHeader
                 avatar={<Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">{posted.profileImage ? <img className='img-fluid' src={`${SERVER_URL}/uploads/${posted.profileImage}`} alt='' style={{ width: '100%', height: '100%' }} /> : <img src={userimg} alt='' className='mt-2' style={{}} />}</Avatar>}
                 action={<Dropdown >
@@ -383,7 +383,7 @@ useEffect(()=>{
 
               <CardMedia
                 component="img"
-                width="600"
+                width="100%"
                 className='pic img-fluid'
                 height="694"
                 image={`${SERVER_URL}/uploads/${posted.image}`}
@@ -423,10 +423,10 @@ useEffect(()=>{
           onHide={() => setLgShow(false)}
           aria-labelledby="example-modal-sizes-title-lg"
         >
-          <Modal.Body style={{ backgroundColor: 'black', height: '90vh', width: '100%', paddingTop: '15px' }}>
+          <Modal.Body className='mdlbdy' style={{ backgroundColor: 'black'}}>
             {selectedPost && (
-              <div className="row" style={{ height: '700px', width: '100%' }}>
-                <div className="col-lg-6">
+              <div className="row modallength" >
+                <div className="col-lg-6 imgmodal">
                   <img src={`${SERVER_URL}/uploads/${selectedPost.image}`} style={{ width: '100%', height: '600px' }} className='img-fluid mt-2' />
                 </div>
                 <div className="col-lg-6 text-light">
@@ -439,7 +439,7 @@ useEffect(()=>{
                     </span>
                   </div>
                   <hr />
-                  <div className='fullcomment' style={{ height: '450px' }}>
+                  <div className='fullcomment'>
                     {comments.length > 0 ?
                       comments.map((comment, index) => (
                         <div className="d-flex justify-content-between align-items-start w-100">

@@ -7,6 +7,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import { friendremoveResponseContext, userResponseContext } from '../Context/ContextAPI';
 import { useNavigate } from 'react-router-dom';
 import { SERVER_URL } from '../../services/serverURL';
+import { Nav } from 'react-bootstrap';
 
 function Friendspage() {
   const {friendstatusResponse, setFriendStatusResponse}=useContext(friendremoveResponseContext)
@@ -82,12 +83,16 @@ function Friendspage() {
   return (
     <>
       <div className='friendspage' style={{ backgroundColor: 'black', height: '100vh' }}>
-        <Navbar />
+      <div className='row'>
+            <div className='w-100 navbarhome'>
+              <Navbar/>
+              </div>
+          </div>
         <div className='row'>
-          <div className='col-lg-2 text-light pt-5 pb-5 navl ms-3' style={{ height: '100vh', position: 'fixed' }}>
+          <div className='col-lg-2 text-light pt-5 pb-5 navl ms-3 navleftbar' style={{ height: '100vh', position: 'fixed' }}>
             <NavLeft />
           </div>
-          <div className='col-lg-9' style={{ marginLeft: '350px' }}>
+          <div className='col-lg-9 frndspgcontent'>
             <div className='search' style={{ backgroundColor: 'black', color: 'white' }}>
               <div className='brd1'>
                 <div className=''>
@@ -97,10 +102,11 @@ function Friendspage() {
                 </div>
                 <hr style={{ opacity: '0' }} />
               </div>
-              <div className="friendsp  d-flex justify-content-start align-items-center flex-wrap" style={{ marginTop: '150px', width: '85%',marginLeft:'0px' }}>
+              <h1 className="title text-center">Friends</h1>
+              <div className="friendlist" >
                 {users?.length > 0 ?
                   users.map(user => (
-                    <div key={user._id} className="b1 d-flex justify-content-between align-items-center mb-1 me-2 border rounded flex-wrap" style={{width:'32%'}}>
+                    <div key={user._id} className="b1 d-flex justify-content-between align-items-center mb-1 me-2 border rounded flex-wrap eachfrnd" >
                       <div className='d-flex justify-content-start p-2' onClick={() => handleNavigate(user)}>
                         {user.fimg?<img className='me-2' src={`${SERVER_URL}/uploads/${user.fimg}`} alt='' style={{ width: '80px',height:'80px',borderRadius:'50%' }} />:<img src={userimg} alt='' className='me-2' style={{ width: '80px',height:'80px'}} />}
                         <h5 className='text-light mt-4'>{user.fname}</h5>
@@ -119,6 +125,25 @@ function Friendspage() {
           </div>
         </div>
         <ToastContainer position='top-center' theme='colored' autoClose={3000} />
+      </div>
+      <div className="fixed-bottom navbtm">
+      <div className='text-light p-2' style={{height:'55px',backgroundColor:'black'}}>
+        <Nav fill variant="tabs" defaultActiveKey="/friends">
+          <Nav.Item>
+            <Nav.Link href="/" className='text-light'> <i className="fa-solid fa-home"></i> </Nav.Link>
+          </Nav.Item>
+          <Nav.Item>
+            <Nav.Link href="/search" className='text-light'> <i className="fa-solid fa-search"></i> </Nav.Link>
+          </Nav.Item>
+          <Nav.Item>
+            <Nav.Link href="/friends" className=''> <i className="fa-solid fa-users"></i> </Nav.Link>
+          </Nav.Item>
+          <Nav.Item>
+            <Nav.Link href="/profile" className='text-light'> <i className="fa-solid fa-circle-user"></i> </Nav.Link>
+          </Nav.Item>
+        </Nav>
+    </div>
+
       </div>
     </>
   )

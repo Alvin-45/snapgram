@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Modal, Navbar } from 'react-bootstrap';
+import { Modal, Nav } from 'react-bootstrap';
 import userimg from '../assets/user.png';
 import { addCommentAPI, frndcountAPI, getPostCommentsAPI, getSearchNavigatePostsAPI, getUserPostsAPI } from '../../services/allAPI';
 import { addResponseContext, editResponseContext, userResponseContext } from '../Context/ContextAPI';
@@ -7,6 +7,7 @@ import { SERVER_URL } from '../../services/serverURL';
 import { Avatar } from '@mui/material';
 import { orange, purple, red } from '@mui/material/colors';
 import NavLeft from '../components/NavLeft';
+import Navbar from '../components/Navbar';
 
 
 function UserProfile(post) {
@@ -162,13 +163,17 @@ function UserProfile(post) {
   return (
     <>
     <div className='profile' style={{ backgroundColor: 'black', height: '150vh' }}>
-        <Navbar />
+    <div className='row'>
+            <div className='w-100 navbarhome'>
+              <Navbar/>
+              </div>
+          </div>
         <div className='row'>
-          <div className='col-lg-2 text-light pt-5 pb-5 navl ms-3' style={{ height: '100vh', position: 'fixed' }}>
+          <div className='col-lg-2 text-light pt-5 pb-5 navl ms-3 navleftbar' style={{ height: '100vh', position: 'fixed' }}>
             <NavLeft />
           </div>
-          <div className='col-lg-10' style={{ marginLeft: '380px' }}>
-            <div className='proileinfo d-flex justify-content-between align-items-center w-75' style={{ height: '150px' }}>
+          <div className='col-lg-10 srchuserprofile'>
+            <div className='proileinfo d-flex justify-content-between align-items-center  searchuserprofileinfo'>
 
               <div className='d-flex'>
               {searchUser.profileImage?<img className='mt-2 me-2' src={`${SERVER_URL}/uploads/${searchUser.profileImage}`} alt='' style={{ width: '100px',height:'100px',borderRadius:'50%' }} />:<img src={userimg} alt='' className='' style={{ width: '100px',height:'100px',borderRadius:'50%' }} />}
@@ -177,30 +182,28 @@ function UserProfile(post) {
                   <p className='text-light'>{searchUser.username}</p>
               </div>
               </div>
-              <div className="Followers d-flex flex-column">
+              <div className="Followerssrchuser d-flex flex-column">
                   <p className="text-light fw-bolder">Followers</p>
                   <p className="text-light text-center fw-bolder">{flwr.length}</p>
                 </div>
-                <div className="following d-flex flex-column">
+                <div className="followingsrchuser d-flex flex-column">
                   <p className="text-light fw-bolder">Following</p>
                   <p className="text-light text-center fw-bolder">
                     {searchfriends.length}
                   </p>
                 </div>
-              {/* <button className='btn btn-light text-dark w-50' onClick={() => handleModalsOpen()} style={{ marginTop: '90px' }} >
-                Edit Profile
-              </button> */}
+              
             </div>
-            <hr style={{ color: 'white',marginLeft:'-50px' }} />
+            <hr className='htline' />
             <div className='post'>
               <div className='row'>
-                <div className='col text-center text-light fw-bolder' style={{marginLeft:'-110px'}}> <i className="fa-solid fa-table-cells-large text-light"></i> POST</div>
-                <hr style={{ color: 'white', marginLeft: '100px' }} />
+                <div className='col text-center text-light fw-bolder srchuserpgposthead'> <i className="fa-solid fa-table-cells-large text-light"></i> POST</div>
+                <hr className='htline2' />
               </div>
               <div className='mt-4 w-100 d-flex justify-content-start   align-items-start flex-wrap'>
                 {postData?.length > 0 ? (
                   postData?.map((post) => (
-                    <div key={post.id} className='d-flex justify-content-start border align-items-start p-1 rounded mb-2 me-2 flex-column po1' style={{width:'20%',height:'280px'}} onClick={() => handleModalOpen(post)}>
+                    <div key={post.id} className='d-flex justify-content-start border align-items-start p-1 rounded mb-2  flex-column po1'  onClick={() => handleModalOpen(post)}>
                       
                       <img className='img-fluid' src={preview?preview:`${SERVER_URL}/uploads/${post.image}`} alt='post img' style={{ width: '350px',height:'200px' }} />
                       <p className='text-light'><span className="fw-bolder">{displayuName.split(' ')}:  </span>{post?.caption}</p>
@@ -219,10 +222,10 @@ function UserProfile(post) {
           onHide={() => setmLShow(false)}
           aria-labelledby="example-modal-sizes-title-lg"
         >
-          <Modal.Body style={{ backgroundColor: 'black', height: '90vh', width: '100%', paddingTop: '15px' }}>
+          <Modal.Body className='mdlbdy' style={{ backgroundColor: 'black'}}>
             {selectedPost && (
-              <div className="row" style={{ height: '700px', width: '100%' }}>
-                <div className="col-lg-6">
+              <div className="row modallength">
+                <div className="col-lg-6 imgmodal">
                   <img src={`${SERVER_URL}/uploads/${selectedPost.image}`} style={{ width: '100%', height: '600px' }} className='img-fluid mt-2' />
                 </div>
                 <div className="col-lg-6 text-light">
@@ -235,7 +238,7 @@ function UserProfile(post) {
                     </span>
                   </div>
                   <hr />
-                  <div className='fullcomment' style={{ height: '450px' }}>
+                  <div className='fullcomment'>
                     {comments.length > 0 ?
                       comments.map((comment, index) => (
                         <div className="comments mt-4" key={index}>
@@ -262,10 +265,10 @@ function UserProfile(post) {
           onHide={() => setLgShow(false)}
           aria-labelledby="example-modal-sizes-title-lg"
         >
-          <Modal.Body style={{ backgroundColor: 'black', height: '90vh', width: '100%', paddingTop: '15px' }}>
+          <Modal.Body  className='mdlbdy' style={{ backgroundColor: 'black'}}>
             {selectedPost && (
-              <div className="row" style={{ height: '700px', width: '100%' }}>
-                <div className="col-lg-6">
+              <div className="row modallength">
+                <div className="col-lg-6 imgmodal">
                   <img src={`${SERVER_URL}/uploads/${selectedPost.image}`} style={{ width: '100%', height: '600px' }} className='img-fluid mt-2' />
                 </div>
                 <div className="col-lg-6 text-light">
@@ -278,7 +281,7 @@ function UserProfile(post) {
                     </span>
                   </div>
                   <hr />
-                  <div className='fullcomment' style={{ height: '450px' }}>
+                  <div className='fullcomment' >
                     {comments.length > 0 ?
                       comments.map((comment, index) => (
                         <div className="comments mt-4" key={index}>
@@ -298,6 +301,25 @@ function UserProfile(post) {
             )}
           </Modal.Body>
         </Modal>
+      </div>
+      <div className="fixed-bottom navbtm">
+      <div className='text-light p-2' style={{height:'55px',backgroundColor:'black'}}>
+        <Nav fill variant="tabs" defaultActiveKey="/search">
+          <Nav.Item>
+            <Nav.Link href="/" className='text-light'> <i className="fa-solid fa-home"></i> </Nav.Link>
+          </Nav.Item>
+          <Nav.Item>
+            <Nav.Link href="/search" className=''> <i className="fa-solid fa-search"></i> </Nav.Link>
+          </Nav.Item>
+          <Nav.Item>
+            <Nav.Link href="/friends" className='text-light'> <i className="fa-solid fa-users"></i> </Nav.Link>
+          </Nav.Item>
+          <Nav.Item>
+            <Nav.Link href="/profile" className='text-light'> <i className="fa-solid fa-circle-user"></i> </Nav.Link>
+          </Nav.Item>
+        </Nav>
+    </div>
+
       </div>
     </>
   )
