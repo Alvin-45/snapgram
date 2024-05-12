@@ -49,7 +49,7 @@ function Bookmark(post) {
         const result = await removePostAPI(postId, reqHeader)
         console.log(result);
         if (result.status == 200) {
-          setPostStatusResponse(result.status)
+          setPostStatusResponse(result.data)
           setLgShow(false)
           // toast.success('Post deleted Successfully')
         } else {

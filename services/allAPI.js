@@ -162,6 +162,10 @@ export const frndcountAPI = async (reqHeader)=>{
   return await commonAPI("GET",`${SERVER_URL}/frndcount`,'',reqHeader)
 }
 
+export const searchfrndcountAPI = async (uid,reqHeader)=>{
+  return await commonAPI("GET",`${SERVER_URL}/searchfrndcount/${uid}`,'',reqHeader)
+}
+
 export const getallfavAPI = async (reqHeader)=>{
   return await commonAPI("GET",`${SERVER_URL}/getallfav`,'',reqHeader)
 }
@@ -180,4 +184,8 @@ export const managelikeAPI = async (reqBody,reqHeader)=>{
 
 export const dltlikeAPI = async (reqBody,reqHeader)=>{
   return await commonAPI("POST",`${SERVER_URL}/dlt-likes`,reqBody,reqHeader)
+}
+
+export const dltfavAPI = async (reqBody,reqHeader)=>{
+  return await commonAPI("POST",`${SERVER_URL}/dlt-fav`,reqBody,reqHeader)
 }

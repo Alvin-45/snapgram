@@ -1,14 +1,15 @@
 import React, { useContext, useEffect, useState } from 'react';
 import userimg from '../assets/user.png';
-import { addFriendAPI, getAllUsersAPI, isFriendAPI } from '../../services/allAPI';
+import { addFriendAPI, getAllUsersAPI, isFriendAPI, luserAPI, removeFriendAPI } from '../../services/allAPI';
 import NavLeft from '../components/NavLeft';
 import Navbar from '../components/Navbar';
 import { Modal, Nav } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import { userResponseContext } from '../Context/ContextAPI';
+import { friendResponseContext, friendremoveResponseContext, userResponseContext } from '../Context/ContextAPI';
 import { SERVER_URL } from '../../services/serverURL';
 
 function Search() {
+  const {friendResponse, setFriendResponse}=useContext(friendResponseContext)
   const [searchKey, setSearchKey] = useState('');
   const [users, setUsers] = useState([]);
   const [handleFriend, setHandleFriend] = useState([]);
@@ -17,6 +18,27 @@ function Search() {
   const [lgShow, setLgShow] = useState(false);
   const navigate=useNavigate()
   const {userResponse,setUserResponse}=useContext(userResponseContext)
+  const [currentuser,setcurrentUser]=useState('')
+  const {friendstatusResponse, setFriendStatusResponse}=useContext(friendremoveResponseContext)
+
+  async function loggedinUser() {
+    console.log('Inside logged in user details');
+    const token = sessionStorage.getItem("token");
+    if (token) {
+      const reqHeader = {
+        "Authorization": `Bearer ${token}`,
+      };
+      try {
+        const result = await luserAPI(reqHeader)
+        console.log(result.data);
+        setcurrentUser(result.data)
+        
+
+      } catch (error) {
+        console.log(err);
+      }
+    }
+  }
 
   const toggleIcon = async (userId) => {
     setHandleFriend((prevToggled) =>
@@ -31,7 +53,9 @@ function Search() {
   
     try {
       const result = await addFriendAPI(userId, reqHeader);
+       setFriendResponse(result.data)
       if (result.status === 200) {
+       
         setUsers((prevUsers) => {
           const updatedUsers = prevUsers.map((user) =>
             user._id === userId ? { ...user, friends: result.data.friends } : user
@@ -44,6 +68,27 @@ function Search() {
       console.log(error);
     }
   };
+
+  const handledeleteFriend=async(fid)=>{
+    const token = sessionStorage.getItem("token");
+        if (token) {
+          const reqHeader = {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
+          };
+          try {
+            console.log(fid);
+            const result = await removeFriendAPI(fid,reqHeader);
+            if (result.status === 200) {
+              setFriendStatusResponse(result)
+            } else {
+              toast.warning(result.response.data);
+            }
+          } catch (err) {
+            console.log(err);
+          }
+        }
+  }
 
   const getAllUsers = async () => {
     const token = sessionStorage.getItem('token');
@@ -71,7 +116,10 @@ function Search() {
     setUserResponse(user)
      navigate('/user-Profile')
   };
-  
+  const luserId=currentuser._id
+  useEffect(()=>{
+    loggedinUser()
+  },[friendResponse,friendstatusResponse])
   return (
     <>
       <div className='fullsearchbdy' style={{ backgroundColor: 'black', height: '100vh' }}>
@@ -112,14 +160,13 @@ function Search() {
                             <p className='text-secondary' style={{marginTop:'-9px'}}>{user.firstName}</p>
                           </div>
                         </div>
-                        <i
-                          onClick={() => toggleIcon(user._id)}
-                          className={`fa-solid fa-user-plus frnd ${handleFriend.includes(user._id) ? 'text-danger' : 'text-primary'}`}
-                        ></i>
-                        {/* <i
-                          onClick={() => toggleIcon(user._id)}
-                          className={`fa-solid fa-user-minus frnd text-danger`}
-                        ></i> */}
+                        
+                        {currentuser && currentuser.friends && currentuser.friends.some(friend => friend.fid === user._id) ? (
+  <i className={`fa-solid fa-user-minus frnd text-danger`} onClick={()=>handledeleteFriend(user._id)}/>
+) : (
+  <i className={`fa-solid fa-user-plus frnd text-primary`} onClick={() => toggleIcon(user._id)} />
+)}
+                        
                       </div>
                     )
                   ))

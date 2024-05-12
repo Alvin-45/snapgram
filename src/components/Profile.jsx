@@ -49,7 +49,7 @@ function Profile(post) {
         if (result.status == 200) {
           setPostStatusResponse(result.status)
           setLgShow(false)
-          toast.success('Post deleted Successfully')
+          // toast.success('Post deleted Successfully')
         } else {
           console.log(result)
           toast.error('There has been a small problem....Try after sometime....')

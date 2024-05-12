@@ -12,13 +12,13 @@ import BookmarkBorderOutlinedIcon from '@mui/icons-material/BookmarkBorderOutlin
 import BookmarkOutlinedIcon from '@mui/icons-material/BookmarkOutlined';
 import Modal from 'react-bootstrap/Modal';
 import { Button, Dropdown } from 'react-bootstrap';
-import { addCommentAPI, addFavPostAPI, addFlagPostAPI, addFlagcommentAPI, dltlikeAPI, editCommentAPI, getHomePostsAPI, getPostCommentsAPI, getUsernamesAPI, luserAPI, managelikeAPI, removePostAPI, removecommentAPI } from '../../services/allAPI';
+import { addCommentAPI, addFavPostAPI, addFlagPostAPI, addFlagcommentAPI, dltfavAPI, dltlikeAPI, editCommentAPI, getHomePostsAPI, getPostCommentsAPI, getUsernamesAPI, luserAPI, managelikeAPI, removePostAPI, removecommentAPI, removefavAPI } from '../../services/allAPI';
 import { SERVER_URL } from '../../services/serverURL';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import userimg from '../assets/user.png';
 import { useNavigate } from 'react-router-dom';
-import { addCommentResponseContext, addResponseContext, commentdeleteContext, likecountResponseContext, likeremoveContext, postremoveResponseContext } from '../Context/ContextAPI';
+import { addCommentResponseContext, addResponseContext, commentdeleteContext, favremoveContext, likecountResponseContext, likeremoveContext, postremoveResponseContext } from '../Context/ContextAPI';
 
 
 function Post({ post }) {
@@ -38,6 +38,7 @@ function Post({ post }) {
   const [currentuser,setcurrentUser]=useState('')
   const { likecountResponse, setLikecountResponse } = useContext(likecountResponseContext)
   const {likeremove,setLikeremove}=useContext(likeremoveContext)
+  const {favremove,setFavremove} = useContext(favremoveContext)
 
 
 
@@ -89,11 +90,32 @@ function Post({ post }) {
       console.log(err);
     }
   }
+  const handledltfav=async(post)=>{
+    const postId=post._id
+    const token = sessionStorage.getItem("token");
+    try {
+      const reqHeader = {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      };
+      const result=await dltfavAPI({postId},reqHeader)
+      console.log(result);
+      if (result.status === 200) {
+        setFavremove(result.data)
+       
+      } else {
+        console.log(result);
+        // alert("Network failure!!!!")
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
   useEffect(() => {
 
     getHomePosts();
-  }, [poststatusResponse, commentdlt,likecountResponse,addResponse,likeremove]);
+  }, [poststatusResponse, commentdlt,likecountResponse,addResponse,likeremove,favremove]);
   async function getHomePosts() {
     try {
       const result = await getHomePostsAPI();
@@ -307,7 +329,7 @@ useEffect(()=>{
         console.log(result);
         if (result.status == 200) {
           SetCommentdlt(result.data)
-          toast.success('Comment removed Successfully!!!')
+          // toast.success('Comment removed Successfully!!!')
         } else {
           console.log(result)
         }
@@ -336,12 +358,12 @@ useEffect(()=>{
         const result = await addFavPostAPI({ poster, postId, postCaption, postImage }, reqHeader);
         console.log(result);
         if (result.status == 200) {
-          setPostStatusResponse(result.status);
-          toast.success('Added to Favourites')
+          setPostStatusResponse(result.data);
+          // toast.success('Added to Favourites')
           // alert('Added to Favourites')
         } else {
           console.log(result);
-          toast.error(`Post Already added to Favourites`)
+          // toast.error(`Post Already added to Favourites`)
 
         }
       } catch (err) {
@@ -372,9 +394,6 @@ useEffect(()=>{
                       }}><i className="fa-regular fa-trash-can"></i> Delete Post</span> </Dropdown.Item> : <Dropdown.Item onClick={() => handlereportPost(posted)} className='text-light'><span className='p-3 p1' style={{
                         height: '100%'
                       }}><i className="fa-regular fa-flag"></i>  Report Post</span></Dropdown.Item>}
-
-                    {/* <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
-        <Dropdown.Item href="#/action-3">Something else</Dropdown.Item> */}
                   </Dropdown.Menu>
                 </Dropdown>}
                 title={posted.username}
@@ -395,7 +414,7 @@ useEffect(()=>{
                 </Typography>
 
               </CardContent>
-              {posted.likes.length>0? <p className="text-light fw-bolder ps-3">{posted.likes.length} Like</p> : ""}
+              {posted.likes.length>0? <p className="text-light fw-bolder ps-3">{posted.likes.length} &nbsp; Like</p> : ""}
               <CardActions style={{ width: '100%' }}>
                 <div className="d-flex justify-content-between w-100">
 
@@ -405,8 +424,8 @@ useEffect(()=>{
                     {/* <SendIcon className="ic1 snd" /> */}
                   </div>
                   <div className="d-flex justify-content-evenly">
-                    <BookmarkBorderOutlinedIcon className="bk" onClick={() => handlefavPost(posted)} />
-                    <BookmarkOutlinedIcon className="bk1 active" style={{ display: 'none' }} />
+                  {posted.fav.some(fav => fav.fid === luserId)?(<i className={`fa-solid fa-bookmark fa-lg `} onClick={() => handledltfav(posted)}></i>):(<i className={`fa-regular fa-bookmark fa-lg bk`} onClick={() => handlefavPost(posted)}></i>)}
+                    
                   </div>
                 </div>
               </CardActions>

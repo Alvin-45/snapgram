@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Modal, Nav } from 'react-bootstrap';
 import userimg from '../assets/user.png';
-import { addCommentAPI, frndcountAPI, getPostCommentsAPI, getSearchNavigatePostsAPI, getUserPostsAPI } from '../../services/allAPI';
+import { addCommentAPI, frndcountAPI, getPostCommentsAPI, getSearchNavigatePostsAPI, getUserPostsAPI, searchfrndcountAPI } from '../../services/allAPI';
 import { addResponseContext, editResponseContext, userResponseContext } from '../Context/ContextAPI';
 import { SERVER_URL } from '../../services/serverURL';
 import { Avatar } from '@mui/material';
@@ -22,9 +22,7 @@ function UserProfile(post) {
     const [userData,setuserData]=useState({
         id:userResponse._id,firstName:userResponse.firstName,username:userResponse?.username,email:userResponse?.email,friends:userResponse.friends 
       })
-    //   const fcount=userData.friends.length()
-    //   console.log(fcount);
-      // console.log(userData);
+    
     const [postData,setPostData]=useState({
       id:post?._id,image:"",caption:post?.caption 
     })
@@ -43,14 +41,12 @@ function UserProfile(post) {
 
     
     useEffect(() => {
-      frndcount()
       if (userResponse) {
         setSearchUser(userResponse)
         console.log(userResponse);
 
         const username=userResponse.username
         const  firstName = userResponse.firstName;
-        const userId=userResponse._id
         setDisplayuName(username);
         setFname(firstName);
         const frnd=userResponse.friends
@@ -89,7 +85,7 @@ function UserProfile(post) {
         }
         fetchComments();
       }
-      
+      frndcount()
     }, [postData.image,addResponse,lgShow,MlShow]);
   
     const getUserPosts = async () => {
@@ -145,15 +141,17 @@ function UserProfile(post) {
       setmLShow(true)
     }
     async function frndcount(){
+      const userId=userData.id
       const token = sessionStorage.getItem("token")
-        const reqHeader = {
-          "Authorization": `Bearer ${token}`
-        }
+      const reqHeader = {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      }
+      console.log(userId);
         try {
-          // console.log('Inside frnd count function');
-        
-        const result=await frndcountAPI(reqHeader)
-        // console.log(result);
+          console.log('Inside frnd count function');
+        const result=await searchfrndcountAPI(userId,reqHeader)
+        console.log(result);
         setflwr(result.data)
         } catch (err) {
           console.log(err);
