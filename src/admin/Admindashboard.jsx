@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import AdminNav from './AdminNav'
-import { adddeletedpostAPI, adminallUsersAPI, doespostexist, getHomePostsAPI, getflagPostsAPI, getflagcmtAPI, removePostAPI, removecmtflagAPI, removecommentAPI, removefavAPI, removeflagAPI, reportedPost } from '../../services/allAPI'
+import { adddeletedpostAPI, adminallUsersAPI, dltuserAPI, doespostexist, getHomePostsAPI, getflagPostsAPI, getflagcmtAPI, removePostAPI, removecmtflagAPI, removecommentAPI, removefavAPI, removeflagAPI, reportedPost } from '../../services/allAPI'
 import { Button, Dropdown, DropdownMenu, Modal } from 'react-bootstrap'
 import { commentdeleteContext, postremoveResponseContext, responseinvalidContext } from '../Context/ContextAPI'
 import { SERVER_URL } from '../../services/serverURL'
@@ -386,6 +386,28 @@ alert('Request was removed successfully!!!')
     }
   }
 
+  const handledeleteaccount=async (userId)=>{
+    const token = sessionStorage.getItem("token")
+    console.log(userId);
+    if (token) {
+      const reqHeader = {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      }
+      try {
+        const result=await dltuserAPI({userId},reqHeader)
+        if(result.status==200){
+          console.log(result.data);
+        }
+        
+      } catch (err) {
+        console.log(err);
+      }
+    }else{
+      toast.error('Unauthorized action')
+    }
+  }
+
   return (
     <>
       <div className="adminportal text-light" style={{ backgroundColor: 'black', width: '100%', height: '100vh' }}>
@@ -405,8 +427,8 @@ alert('Request was removed successfully!!!')
                   <thead style={{ width: '100%', height: '50px' }}>
                     <tr className='border text-center'>
                       <th>Sl.No</th>
+                      <th>Account where act reported</th>
                       <th>Reporter Id</th>
-                      <th>Reported Account</th>
                       <th>Post Details</th>
                       <th>Action</th>
                     </tr>
@@ -428,7 +450,7 @@ alert('Request was removed successfully!!!')
                               <Dropdown.Item value="Pending" className='w-100 text-warning text-center text-success fw-bolder'>Pending</Dropdown.Item>
                               <Dropdown.Item value="Report Invalid" className='w-100 text-dark text-center  fw-bolder' onClick={() => handleremovereport(report)}>Report Invalid</Dropdown.Item>
                               <Dropdown.Item value="Delete Post" className='text-danger text-center  fw-bolder' onClick={() => handleopenmodalpostdelete(report)}>Delete Post</Dropdown.Item>
-                              {/* <option value="Delete Account" className='text-danger fw-bolder text-center'>Delete Account</option> */}
+                               <Dropdown.Item value="Delete Account" className='text-danger fw-bolder text-center' onClick={()=>handledeleteaccount(report.posterId)}>Delete Account</Dropdown.Item> 
                             </DropdownMenu>
 
 

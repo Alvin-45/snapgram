@@ -189,3 +189,7 @@ export const dltlikeAPI = async (reqBody,reqHeader)=>{
 export const dltfavAPI = async (reqBody,reqHeader)=>{
   return await commonAPI("POST",`${SERVER_URL}/dlt-fav`,reqBody,reqHeader)
 }
+
+export const dltuserAPI = async (reqBody,reqHeader)=>{
+  return await commonAPI("DELETE",`${SERVER_URL}/dlt-user`,reqBody,reqHeader)
+}
