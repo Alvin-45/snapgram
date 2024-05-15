@@ -4,6 +4,7 @@ import { addFriendAPI, getAllFriendsAPI, getAllUsersAPI } from '../../services/a
 import { chatstartResponseContext, userResponseContext } from '../Context/ContextAPI';
 import logo from '../assets/instalogo.png';
 import { useNavigate } from 'react-router-dom';
+import { SERVER_URL } from '../../services/serverURL';
 
 function Chat() {
   const navigate=useNavigate()
@@ -114,7 +115,7 @@ function Chat() {
             {friends?.length > 0 ?
               friends.map(friend => (
                 <div key={friend._id} className="d-flex justify-content-start align-items-start w-100 mb-4" onClick={() => handleOpenchat(friend)}>
-                  <img src={userimg} alt='' style={{ width: '20%' }} />
+                  {friend.fimg?<img className='img-fluid me-2 mt-2' src={`${SERVER_URL}/uploads/${friend.fimg}`} alt='' style={{ width: '25px',height:'25px',borderRadius:'50%'}} />:<img src={userimg} alt='' className='me-3' style={{ width: '65px',height:'65px'}} />}
                   <p className='text-light fw-bolder mt-2'>{friend.fname}</p>
                 </div>
               )) : <div className="fw-bolder text-danger text-center">User Not Found !!!</div>}
@@ -125,7 +126,8 @@ function Chat() {
               users.map((user) => (
                 <div key={user._id} className='d-flex justify-content-start align-items-start w-100 mb-2'>
                   <div className='d-flex justify-content-start align-items-start w-100'>
-                    <img src={userimg} alt='' style={{ width: '20%' }} />
+                  {user.profileImage?<img className='img-fluid me-2 mt-1' src={`${SERVER_URL}/uploads/${user.profileImage}`} alt='' style={{ width: '30px',height:'30px',borderRadius:'50%'}} />:<img src={userimg} alt='' className='me-3' style={{ width: '65px',height:'65px'}} />}
+                    {/* <img src={userimg} alt='' style={{ width: '20%' }} /> */}
                     <p className='text-light fw-bolder mt-2'>{user.username}</p>
                   </div>
                   <i className="fa-solid fa-plus mt-2 text-primary" onClick={() => toggleIcon(user._id)}></i>

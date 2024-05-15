@@ -463,7 +463,7 @@ useEffect(()=>{
                       comments.map((comment, index) => (
                         <div className="d-flex justify-content-between align-items-start w-100">
                           <div className="comments mt-4" key={index}>
-                            <img src={userimg} alt='' style={{ width: '40px' }} /> <span className="text-light fw-bolder">{comment.username} <span className="text-light fw-normal ms-2">{comment.comment} </span></span>
+                            {comment?.profileImage?<img src={`${SERVER_URL}/uploads/${comment.profileImage}`} alt='' style={{ width: '40px',height:'40px',borderRadius:'50%' }} />:<img src={userimg} alt='' style={{ width: '40px' }} />} <span className="text-light fw-bolder">{comment.username} <span className="text-light fw-normal ms-2">{comment.comment} </span></span>
                           </div>
                           <Dropdown className='mt-4'>
                             <Dropdown.Toggle className='btn-dark'><i className="fa-solid fa-ellipsis-vertical "></i></Dropdown.Toggle><Dropdown.Menu className='bg-dark text-light'>

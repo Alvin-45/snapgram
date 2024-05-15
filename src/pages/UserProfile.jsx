@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Modal, Nav } from 'react-bootstrap';
+import { Dropdown, Modal, Nav } from 'react-bootstrap';
 import userimg from '../assets/user.png';
-import { addCommentAPI, frndcountAPI, getPostCommentsAPI, getSearchNavigatePostsAPI, getUserPostsAPI, searchfrndcountAPI } from '../../services/allAPI';
-import { addResponseContext, editResponseContext, userResponseContext } from '../Context/ContextAPI';
+import { addCommentAPI, addFlagcommentAPI, frndcountAPI, getPostCommentsAPI, getSearchNavigatePostsAPI, getUserPostsAPI, removecommentAPI, searchfrndcountAPI } from '../../services/allAPI';
+import { addResponseContext, commentdeleteContext, editResponseContext, postremoveResponseContext, userResponseContext } from '../Context/ContextAPI';
 import { SERVER_URL } from '../../services/serverURL';
 import { Avatar } from '@mui/material';
 import { orange, purple, red } from '@mui/material/colors';
@@ -14,7 +14,8 @@ function UserProfile(post) {
     const {addResponse,setAddResponse}=useContext(addResponseContext)
     const {editResponse,setEditResponse}=useContext(editResponseContext)
     const {userResponse,setUserResponse}=useContext(userResponseContext)
-    
+    const { commentdlt, SetCommentdlt } = useContext(commentdeleteContext)
+
     const [show, setShow] = useState(false);
     const [preview,setPreview]=useState("")
     const [displayuName, setDisplayuName] = useState('');
@@ -38,6 +39,7 @@ function UserProfile(post) {
     const [searchUser,setSearchUser]=useState('')
     const [searchfriends,setSearchFriends]=useState([])
     const [flwr,setflwr]=useState([])
+    const { poststatusResponse, setPostStatusResponse } = useContext(postremoveResponseContext)
 
     
     useEffect(() => {
@@ -86,7 +88,7 @@ function UserProfile(post) {
         fetchComments();
       }
       frndcount()
-    }, [postData.image,addResponse,lgShow,MlShow]);
+    }, [postData.image,addResponse,lgShow,MlShow,poststatusResponse,commentdlt]);
   
     const getUserPosts = async () => {
       const token = sessionStorage.getItem("token")
@@ -157,7 +159,65 @@ function UserProfile(post) {
           console.log(err);
         }
     }
-    
+    const handlereportcomment = async (cmt) => {
+      const token = sessionStorage.getItem("token");
+      const posterId = cmt.userId;
+      const postId = cmt.postId
+      const commentId = cmt._id
+      console.log(posterId);
+      console.log(postId);
+      console.log(commentId);
+  
+  
+      if (token) {
+        const reqHeader = {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        };
+  
+        try {
+          const result = await addFlagcommentAPI(postId, commentId, { posterId }, reqHeader);
+          console.log(result);
+          if (result.status === 200) {
+            setPostStatusResponse(result.status);
+            toast.success('Report Sumbitted Successfully! Waiting for admin to analyse it....')
+            // alert('Report Sumbitted Successfully! Waiting for admin to analyse it....')
+          } else {
+            console.log(result);
+            toast.error('Its not you but us getting this patched up....Try after sometime')
+  
+          }
+        } catch (err) {
+          //  alert('Its not you but us getting this patched up....Try after sometime')
+          console.log(err);
+        }
+      }
+    };
+    const lusername = JSON.parse(sessionStorage.getItem('username'))
+    const handleremovecomment = async (cmt) => {
+      const token = sessionStorage.getItem("token")
+      console.log(cmt);
+      if (token) {
+        const reqHeader = {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        }
+        try {
+  
+          const result = await removecommentAPI(cmt, reqHeader)
+          console.log(result);
+          if (result.status == 200) {
+            SetCommentdlt(result.data)
+            // toast.success('Comment removed Successfully!!!')
+          } else {
+            console.log(result)
+          }
+        } catch (err) {
+          console.log(err);
+        }
+  
+      }
+    }
   return (
     <>
     <div className='profile' style={{ backgroundColor: 'black', height: '150vh' }}>
@@ -182,7 +242,7 @@ function UserProfile(post) {
               </div>
               <div className="Followerssrchuser d-flex flex-column">
                   <p className="text-light fw-bolder">Followers</p>
-                  <p className="text-light text-center fw-bolder">{flwr.length}</p>
+                  <p className="text-light text-center fw-bolder">{flwr?flwr.length:0}</p>
                 </div>
                 <div className="followingsrchuser d-flex flex-column">
                   <p className="text-light fw-bolder">Following</p>
@@ -199,18 +259,18 @@ function UserProfile(post) {
                 <hr className='htline2' />
               </div>
               <div className='mt-4 w-100 d-flex justify-content-start   align-items-start flex-wrap'>
-                {postData?.length > 0 ? (
-                  postData?.map((post) => (
-                    <div key={post.id} className='d-flex justify-content-start border align-items-start p-1 rounded mb-2  flex-column po1'  onClick={() => handleModalOpen(post)}>
-                      
-                      <img className='img-fluid' src={preview?preview:`${SERVER_URL}/uploads/${post.image}`} alt='post img' style={{ width: '350px',height:'200px' }} />
-                      <p className='text-light'><span className="fw-bolder">{displayuName.split(' ')}:  </span>{post?.caption}</p>
-                      
-                    </div>
-                  ))
-                ) : (
-                  <div className='fw-bolder text-danger text-center'>No Posts Uploaded Yet !!!</div>
-                )}
+              {userResponse && postData?.length > 0 ? (
+                postData?.sort((a, b) => b._id.localeCompare(a._id)).map((post) => (
+                  <div key={post.id} className='d-flex justify-content-start border align-items-start p-1 rounded mb-2  flex-column po1'  onClick={() => handleModalOpen(post)}>
+                    
+                    <img className='img-fluid' src={preview?preview:`${SERVER_URL}/uploads/${post.image}`} alt='post img' style={{ width: '350px',height:'200px' }} />
+                    <p className='text-light'><span className="fw-bolder">{displayuName.split(' ')}:  </span>{post?.caption}</p>
+                    
+                  </div>
+                ))
+              ) : (
+                <div className='fw-bolder text-danger text-center'>No Posts Uploaded Yet !!!</div>
+              )}
               </div>
             </div>
           </div>
@@ -228,8 +288,8 @@ function UserProfile(post) {
                 </div>
                 <div className="col-lg-6 text-light">
                   <div className='w-100 d-flex mt-4'>
-                    <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-                      A
+                    <Avatar>
+                    {selectedPost.profileImage?<img className='img-fluid' src={`${SERVER_URL}/uploads/${selectedPost.profileImage}`} alt='' style={{ width: '100%',height:'100%',borderRadius:'50%'}} />:<img src={userimg} alt='' className='me-3' style={{ width: '100%',height:'100%'}} />}
                     </Avatar>
                     <b className='mt-2 ms-2'>{selectedPost.username} </b><span className='text-light mt-2 ms-2'>
                       {selectedPost.caption}
@@ -271,8 +331,8 @@ function UserProfile(post) {
                 </div>
                 <div className="col-lg-6 text-light">
                   <div className='w-100 d-flex mt-4'>
-                    <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-                      A
+                    <Avatar>
+                    {selectedPost.profileImage?<img className='img-fluid' src={`${SERVER_URL}/uploads/${selectedPost.profileImage}`} alt='' style={{ width: '100%',height:'100%',borderRadius:'50%'}} />:<img src={userimg} alt='' className='me-3' style={{ width: '100%',height:'100%'}} />}
                     </Avatar>
                     <b className='mt-2 ms-2'>{selectedPost.username} </b><span className='text-light mt-2 ms-2'>
                       {selectedPost.caption}
@@ -282,9 +342,26 @@ function UserProfile(post) {
                   <div className='fullcomment' >
                     {comments.length > 0 ?
                       comments.map((comment, index) => (
+                        <div className="d-flex justify-content-between align-items-start w-100">
                         <div className="comments mt-4" key={index}>
-                          <img src={userimg} alt='' style={{ width: '40px' }} /> <span className="text-light fw-bolder">{comment.username} <span className="text-light fw-normal ms-2">{comment.comment} </span></span>
+                          {comment?.profileImage?<img src={`${SERVER_URL}/uploads/${comment.profileImage}`} alt='' style={{ width: '40px',height:'40px',borderRadius:'50%' }} />:<img src={userimg} alt='' style={{ width: '40px' }} />} <span className="text-light fw-bolder">{comment.username} <span className="text-light fw-normal ms-2">{comment.comment} </span></span>
                         </div>
+                        <Dropdown className='mt-4'>
+                          <Dropdown.Toggle className='btn-dark'><i className="fa-solid fa-ellipsis-vertical "></i></Dropdown.Toggle><Dropdown.Menu className='bg-dark text-light'>
+                            {lusername != comment.username ?
+                              <Dropdown.Item className='text-light' onClick={() => handlereportcomment(comment)}><span className='p-3 p1' style={{
+                                height: '100%'
+                              }}><i class="fa-regular fa-flag" aria-hidden="true"></i> Report Comment</span></Dropdown.Item> :
+                              <Dropdown.Item onClick={() => handleremovecomment(comment._id)} className='text-light'> <span className='p-3 p1' style={{
+                                height: '100%'
+                              }} ><i className="fa-regular fa-trash-can"></i> Delete Comment </span></Dropdown.Item>
+                            }
+                            {/* <Dropdown.Item className='text-light' onClick={()=>handleeditcomment(comment)}><span className='p-3 p1' style={{
+                    height:'100%'
+                  }}> <i className="fa-solid fa-pen"></i> Edit Comment </span></Dropdown.Item> */}
+                          </Dropdown.Menu>
+                        </Dropdown>
+                      </div>
                       )) :
                       <div className="comments mt-4">
                         No comments yet.

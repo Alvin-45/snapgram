@@ -284,7 +284,7 @@ const handleremovecomment = async (cmt) => {
               </div>
               <div className='mt-4 w-100 d-flex justify-content-start   align-items-start flex-wrap'>
                 {postData?.length > 0 ? (
-                  postData?.map((post) => (
+                  postData?.sort((a, b) => b._id.localeCompare(a._id)).map((post) => (
                     <div key={post.id} className='d-flex justify-content-start border align-items-start p-1 shadow  mb-2  flex-column postimageownprof' onClick={() => handleModalOpen(post)}>
 
                       <img className='img-fluid' src={preview ? preview : `${SERVER_URL}/uploads/${post.image}`} alt='post img' style={{ width: '350px', height: '200px' }} />
@@ -314,8 +314,8 @@ const handleremovecomment = async (cmt) => {
                 <div className="col-lg-6 text-light">
                   <div className='w-100 d-flex mt-4 justify-content-between'>
                     <div className='d-flex'>
-                      <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-                        A
+                      <Avatar>
+                      {selectedPost.profileImage?<img className='img-fluid' src={`${SERVER_URL}/uploads/${selectedPost.profileImage}`} alt='' style={{ width: '100%',height:'100%',borderRadius:'50%'}} />:<img src={userimg} alt='' className='me-3' style={{ width: '100%',height:'100%'}} />}
                       </Avatar>
                       <b className='mt-2 ms-2'>{selectedPost.username} </b><span className='text-light mt-2 ms-2'>
                         {selectedPost.caption}

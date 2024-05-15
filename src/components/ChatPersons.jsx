@@ -42,7 +42,8 @@ function ChatPersons() {
                   {users?.length>0?
                   users.map(user=>(
                   <div key={user._id} className="b1 d-flex justify-content-evenly align-items-center w-100 mb-1">
-                      <img src={userimg} alt="" style={{width:'80px'}} />
+                    
+                      <img src={`${SERVER_URL}/uploads/${user.profileImage}`} alt="" style={{width:'80px'}} />
                       <h5 className='text-light'>{user.username}</h5>
                       <p className="text-secondary">{user.firstname}</p>
                       <i

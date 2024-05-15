@@ -12,6 +12,7 @@ import { setChat } from "../Redux/chatSlice";
 import { chataddResponseContext, chatstartResponseContext } from '../Context/ContextAPI';
 import { addChatAPI, getChatsAPI } from '../../services/allAPI';
 import { ToastContainer, toast } from 'react-toastify';
+import { SERVER_URL } from '../../services/serverURL';
 
 
 function Messages() {
@@ -33,8 +34,9 @@ function Messages() {
     getChats()
   }, [chataddResponse]);
 
-
-  
+  const now=new Date()
+  const resultday=now.toLocaleString()
+  console.log(resultday);
   async function getChats() {
     const receiver = chatstartResponse.fname
     const lfirstname = sessionStorage.getItem('username').replace(/^"(.*)"$/, '$1');
@@ -111,7 +113,8 @@ function Messages() {
           <div className="col-lg-8 bg-dark" style={{ height: '100vh', borderLeft: '1px solid white', position: 'fixed', marginLeft: '30%' }}>
             <div className="row">
               <div className="col d-flex justify-content-start align-items-start">
-                {chatstart ? <img src={userimg} alt="" style={{ width: '70px' }} /> : ""}
+                {chatstart ? 
+                <img src={`${SERVER_URL}/uploads/${chatstartResponse.fimg}`} alt="" style={{ width: '40px',height:'40px',borderRadius:'50%' }} className='mt-2 me-2' /> : ""}
 
                 <div className='mt-3 d-flex flex-column nameu'>
                   <h5 className='text-light '>{chatstartResponse.fname}</h5>
@@ -128,18 +131,19 @@ function Messages() {
                 <p className="text-light">Happy chatting <i className="fa-regular fa-handshake"></i></p></div> */}
 
                 {updatevalue ?
-                  updatevalue.map(user => (
+                  updatevalue.sort((a, b) => a._id.localeCompare(b._id)).map(user => (
                     <div key={user.id}>
                       {chatstartResponse.fname === user.sender ? (
-                        <div className="fromchat w-25 rounded bg-light d-flex justify-content-between mb-2 p-1">
-                          <p className='ms-4 fw-bolder'>{user.chatmessage}</p>
-                          <span className='me-3 d-flex justify-content-end align-items-end w-100'>received</span>
+                        <div className="fromchat w-25 rounded bg-light d-flex justify-content-between mb-2 p-1 flex-column">
+                          <p className='ms-2 fw-bolder w-100'>{user.chatmessage}</p>
+                          <span className='me-3 d-flex justify-content-end align-items-end w-100'>{user.time} </span>
                         </div>
                       ) : null}
                       {chatstartResponse.fname === user.receiver ? (
-                        <div className="tochat w-25 rounded bg-primary d-flex justify-content-end mb-2 p-1" style={{ marginLeft: '75%' }}>
-                          <span className='me-3 d-flex justify-content-start align-items-start w-100 text-secondary'>sent</span>
-                          <p className='me-4 fw-bolder text-light'>{user.chatmessage}</p>
+                        <div className="tochat w-25 rounded bg-primary d-flex justify-content-end mb-2 p-1 flex-column" style={{ marginLeft: '75%' }}>
+                          
+                          <p className='me-2  fw-bolder text-light w-100'>{user.chatmessage}</p>
+                          <span className='d-flex justify-content-end align-items-end w-100 text-dark'>{user.time}</span>
                         </div>
                       ) : null}
                     </div>
