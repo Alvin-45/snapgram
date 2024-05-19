@@ -100,7 +100,9 @@ function Messages() {
   return (
     <>
       <div className='fullsearchbdy' style={{ backgroundColor: 'black', height: '150vh' }}>
-        <Navbar />
+      <div className='w-100 navbarhome text-light'>
+            <Navbar />
+          </div>
         <div className='row'>
           <div className='col-lg-1 text-light  pb-5 navl ms-3'
             style={{ height: '100vh', position: 'fixed' }}

@@ -193,3 +193,7 @@ export const dltfavAPI = async (reqBody,reqHeader)=>{
 export const dltuserAPI = async (reqBody,reqHeader)=>{
   return await commonAPI("DELETE",`${SERVER_URL}/dlt-user`,reqBody,reqHeader)
 }
+
+export const connectionAPI = async (reqHeader)=>{
+  return await commonAPI("GET",`${SERVER_URL}/connection`,reqHeader)
+}

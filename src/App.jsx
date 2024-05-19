@@ -20,6 +20,7 @@ import AdminProfile from './admin/AdminProfile';
 import Bookmark from './pages/Bookmark';
 import Updateprofile from './pages/Updateprofile';
 import Uploadpic from './components/Uploadpic';
+import Chatres from './pages/Chatres';
 
 
 function App() {
@@ -47,6 +48,8 @@ function App() {
       <Route path='/saved'element={<Bookmark/>}></Route>
       <Route path='/updateprofile'element={<Updateprofile/>}></Route>
       <Route path='/uploadpic'element={<Uploadpic/>}></Route>
+      <Route path='/uploadpic'element={<Uploadpic/>}></Route>
+      <Route path='/chatres'element={<Chatres/>}></Route>
 
       <Route path='/*'element={<Home/>}></Route>
 

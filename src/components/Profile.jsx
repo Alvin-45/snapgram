@@ -8,7 +8,7 @@ import { SERVER_URL } from '../../services/serverURL';
 import { Avatar } from '@mui/material';
 import { orange, purple, red } from '@mui/material/colors';
 import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Navbar from './Navbar';
 
 
@@ -362,22 +362,30 @@ const handleremovecomment = async (cmt) => {
         </Modal>
       </div>
       <div className="fixed-bottom navbtm">
-      <div className='text-light p-2' style={{height:'55px',backgroundColor:'black'}}>
-        <Nav fill variant="tabs" defaultActiveKey="/profile">
+      <div className='text-light ' style={{height:'45px',backgroundColor:'black'}}>
+        <Nav fill variant="tabs p-2" defaultActiveKey="#search">
           <Nav.Item>
-            <Nav.Link href="/" className='text-light'> <i className="fa-solid fa-home"></i> </Nav.Link>
+            <Link to='/' className='text-light '> <i className="fa-solid  fa-home mt-2"></i> </Link>
           </Nav.Item>
-          <Nav.Item>
-            <Nav.Link href="/search" className='text-light'> <i className="fa-solid fa-search"></i> </Nav.Link>
-          </Nav.Item>
-          <Nav.Item>
-            <Nav.Link href="/friends" className='text-light'> <i className="fa-solid fa-users"></i> </Nav.Link>
-          </Nav.Item>
-          <Nav.Item>
-            <Nav.Link href="/profile" className=''> <i className="fa-solid fa-circle-user"></i> </Nav.Link>
-          </Nav.Item>
+          
+            <Nav.Item>
+              <Link to='/search'> <i className="fa-solid fa-search mt-2 text-light  fw-bolder"></i> </Link>
+            </Nav.Item>
+          
+          
+            <Nav.Item>
+              <Link to={'/friends'}  className='text-light'> <i className="fa-solid fa-users mt-2"></i> </Link>
+            </Nav.Item>
+          
+         
+            <Nav.Item style={{backgroundColor:'white'}} className='rounded'>
+               <Link to='/profile'  className='text-light'> <i className="fa-solid fa-circle-user mt-2 text-dark fw-bolder "></i></Link>
+            </Nav.Item>
+          
         </Nav>
     </div>
+
+      
 
       </div>
     </>

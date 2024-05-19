@@ -11,13 +11,13 @@ import ChatBubbleOutlineOutlinedIcon from '@mui/icons-material/ChatBubbleOutline
 import BookmarkBorderOutlinedIcon from '@mui/icons-material/BookmarkBorderOutlined';
 import BookmarkOutlinedIcon from '@mui/icons-material/BookmarkOutlined';
 import Modal from 'react-bootstrap/Modal';
-import { Button, Dropdown } from 'react-bootstrap';
+import { Button, Dropdown, Nav } from 'react-bootstrap';
 import { addCommentAPI, addFavPostAPI, addFlagPostAPI, addFlagcommentAPI, dltfavAPI, dltlikeAPI, editCommentAPI, getHomePostsAPI, getPostCommentsAPI, getUsernamesAPI, luserAPI, managelikeAPI, removePostAPI, removecommentAPI, removefavAPI } from '../../services/allAPI';
 import { SERVER_URL } from '../../services/serverURL';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import userimg from '../assets/user.png';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { addCommentResponseContext, addResponseContext, commentdeleteContext, favremoveContext, likecountResponseContext, likeremoveContext, postremoveResponseContext } from '../Context/ContextAPI';
 
 
@@ -496,6 +496,31 @@ useEffect(()=>{
             )}
           </Modal.Body>
         </Modal>
+        <div className="fixed-bottom navbtm">
+      <div className='text-light p-2' style={{height:'55px',backgroundColor:'black'}}>
+        <Nav fill variant="tabs" defaultActiveKey="#search">
+          <Nav.Item style={{backgroundColor:'white'}} className='rounded'>
+            <Link to='/' className='text-light '> <i className="fa-solid fa-home mt-2 text-dark"></i> </Link>
+          </Nav.Item>
+         
+            <Nav.Item>
+              <Link to='/search' className='text-light'> <i className="fa-solid fa-search fw-bolder mt-2"></i> </Link>
+            </Nav.Item>
+          
+          
+            <Nav.Item>
+              <Link to='/friends'  className='text-light'> <i className="fa-solid fa-users mt-2"></i> </Link>
+            </Nav.Item>
+          
+         
+            <Nav.Item>
+               <Link to='/profile'  className='text-light'> <i className="fa-solid fa-circle-user mt-2"></i></Link>
+            </Nav.Item>
+          
+        </Nav>
+    </div>
+
+      </div>
         <ToastContainer position='top-center' theme='colored' autoClose={2000} />
       </div>
     </>

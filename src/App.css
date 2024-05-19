@@ -179,6 +179,16 @@
   padding-left: 15px;
   padding-top: 80px;
 }
+.srch3{
+  position: fixed;
+  padding-bottom: 10px;
+  border-bottom: 1px solid grey;
+  z-index: 45;
+  margin-top: 0px;
+  margin-left: -25px;
+  padding-left: 15px;
+  padding-top: 0px;
+}
 .cmt1{
   margin-left: -2px;
 }
@@ -341,8 +351,15 @@ color: black;
   width: 100%;
   padding-top: 15px;
 }
-
-
+.favimg2{
+  display: none;
+}
+#favcomment{
+  margin-top: 1.5rem;
+}
+.reschat{
+  display: none;
+}
 @media only screen and (max-width: 500px) {
   
   .navleftbar{
@@ -532,5 +549,26 @@ color: black;
   .fullcomment{
     height: 250px;
   }
-
+  .captionarea{
+    height: 80px;
+  }
+  .favimg{
+    display: none;
+  }
+  .favimg2{
+    display: block;
+    height: 200px;
+  }
+  #favcomment{
+    margin-top: -1.5rem;
+  }
+  .post{
+    margin-left: -35px;
+  }
+  .comments1{
+    margin-top: -50px;
+  }
+  .reschat{
+    display: block;
+  }
 }

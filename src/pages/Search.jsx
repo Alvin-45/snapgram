@@ -4,7 +4,7 @@ import { addFriendAPI, getAllUsersAPI, isFriendAPI, luserAPI, removeFriendAPI } 
 import NavLeft from '../components/NavLeft';
 import Navbar from '../components/Navbar';
 import { Modal, Nav } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { friendResponseContext, friendremoveResponseContext, userResponseContext } from '../Context/ContextAPI';
 import { SERVER_URL } from '../../services/serverURL';
 
@@ -190,19 +190,25 @@ function Search() {
       </div>
       <div className="fixed-bottom navbtm">
       <div className='text-light p-2' style={{height:'55px',backgroundColor:'black'}}>
-        <Nav fill variant="tabs" defaultActiveKey="/search">
+        <Nav fill variant="tabs" defaultActiveKey="#search">
           <Nav.Item>
-            <Nav.Link href="/" className='text-light'> <i className="fa-solid fa-home"></i> </Nav.Link>
+            <Link to='/' className='text-light '> <i className="fa-solid fa-home mt-2"></i> </Link>
           </Nav.Item>
-          <Nav.Item>
-            <Nav.Link href="/search" className=''> <i className="fa-solid fa-search"></i> </Nav.Link>
-          </Nav.Item>
-          <Nav.Item>
-            <Nav.Link href="/friends" className='text-light'> <i className="fa-solid fa-users"></i> </Nav.Link>
-          </Nav.Item>
-          <Nav.Item>
-            <Nav.Link href="/profile" className='text-light'> <i className="fa-solid fa-circle-user"></i> </Nav.Link>
-          </Nav.Item>
+          <Link to='/search' style={{backgroundColor:'white'}} className='rounded'>
+            <Nav.Item>
+              <Nav.Link id="search" className=''> <i className="fa-solid fa-search text-dark fw-bolder"></i> </Nav.Link>
+            </Nav.Item>
+          </Link>
+          
+            <Nav.Item>
+              <Link to={'/friends'}  className='text-light'> <i className="fa-solid fa-users mt-2"></i> </Link>
+            </Nav.Item>
+          
+         
+            <Nav.Item>
+               <Link to='/profile'  className='text-light'> <i className="fa-solid fa-circle-user mt-2"></i></Link>
+            </Nav.Item>
+          
         </Nav>
     </div>
 

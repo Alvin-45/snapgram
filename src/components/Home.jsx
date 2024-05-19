@@ -49,9 +49,9 @@ function Home() {
             </div>
 
           </div>
-          <div className="fixed-bottom navbtm">
+          {/* <div className="fixed-bottom navbtm">
             <BottomNav/>
-          </div>
+          </div> */}
 
         </div>
       </div>

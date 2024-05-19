@@ -383,10 +383,11 @@ function Bookmark(post) {
             {selectedPost && (
               <div className="row" style={{ height: '700px', width: '100%' }}>
                 <div className="col-lg-6">
-                  <img src={`${SERVER_URL}/uploads/${selectedPost.postImage}`} style={{ width: '100%', height: '600px' }} className='img-fluid mt-2' />
+                  <img src={`${SERVER_URL}/uploads/${selectedPost.postImage}`}  style={{ width: '100%', height: '600px' }} className='img-fluid mt-2 favimg' />
+                  <img src={`${SERVER_URL}/uploads/${selectedPost.postImage}`}  style={{ width: '100%'}} className='img-fluid  favimg2' />
                 </div>
                 <div className="col-lg-6 text-light">
-                  <div className='w-100 d-flex mt-4 justify-content-between'>
+                  <div id='favcomment' className='w-100 d-flex  justify-content-between'>
                     <div className='d-flex'>
                       <Avatar>
                       {selectedPost.profileImage ? <img className='img-fluid' src={`${SERVER_URL}/uploads/${selectedPost.profileImage}`} alt='' style={{ width: '100%', height: '100%' }} /> : <img src={userimg} alt='' className='mt-2' style={{}} />}
@@ -418,7 +419,7 @@ function Bookmark(post) {
                     </Dropdown>
                   </div>
                   <hr />
-                  <div className='fullcomment' style={{ height: '450px' }}>
+                  <div  className='fullcomment' >
                     {comments.length > 0 ?
                       comments.map((comment, index) => (
                         <div className="d-flex justify-content-between align-items-start w-100">
@@ -440,7 +441,7 @@ function Bookmark(post) {
                         No comments yet.
                       </div>}
                   </div>
-                  <div className="comments d-flex justify-content-bottom">
+                  <div className="comments1 d-flex justify-content-bottom">
                     <input type="text" className="bg-dark w-100 mt-3 cmt rounded text-light cmt1" placeholder='Add comment' value={userInput.comment} onChange={e => setUserInput({ ...userInput, comment: e.target.value })} />
                     <span className="fw-bolder text-primary mt-3 post" onClick={handleComment}>Post</span>
                   </div>
