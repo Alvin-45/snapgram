@@ -233,7 +233,7 @@ alert('Request was removed successfully!!!')
       if (result.status === 200) {
         setPostStatusResponse(result.status);
         console.log('Inside success cmt Report delete option');
-        toast.success('Comment was removed successfully!!!')
+        // toast.success('Comment was removed successfully!!!')
         // setReqinvmodal(false)
 
       } else {
@@ -316,7 +316,8 @@ alert('Request was removed successfully!!!')
       }
     } catch (err) {
       console.log(err);
-    } toast.success('Request was removed successfully!!!')
+    } 
+    // toast.success('Request was removed successfully!!!')
 
   };
 
@@ -377,7 +378,7 @@ alert('Request was removed successfully!!!')
         if (result.status == 200 && result2.status==200) {
           console.log("success");
           SetCommentdlt(result.data)
-          toast.success('Comment removed Successfully!!!')
+          // toast.success('Comment removed Successfully!!!')
         } else {
           console.log(result)
         }
