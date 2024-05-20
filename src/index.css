@@ -21,3 +21,8 @@
     overflow-x: hidden;
     overflow-y: auto;
 }
+@media only screen and (max-width: 500px) {
+    .inp{
+        width: 80%;
+    }
+}

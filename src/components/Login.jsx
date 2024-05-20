@@ -64,7 +64,7 @@ function Login() {
     
   return (
     <>
-    <div className="Authfullbody" style={{ width: '100%', backgroundColor: 'black',height:'100vh' }}>
+    <div className="Authfullbody pb-2" style={{ width: '100%', backgroundColor: 'black',height:'100vh' }}>
         {connectStat==200?<div className="border1 shadow container">
           <img src={logo} alt="" style={{ width: '45%', height: '500px' }} />
           <h1 className='title text-light head1'>SnapGram</h1>

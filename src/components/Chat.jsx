@@ -108,7 +108,7 @@ function Chat() {
             {/* Snapgram Community */}
             <div className="d-flex justify-content-start align-items-start w-100 mb-4">
               <img src={logo} alt='' style={{ width: '20%' }} />
-              <a href='http://localhost:5174/' target='_blank'><p onClick={communitynav} className='text-light fw-bolder mt-2'>Snapgram Community</p></a>
+              <a href='https://snapcommunitychat.netlify.app/' target='_blank'><p onClick={communitynav} className='text-light fw-bolder mt-2'>Snapgram Community</p></a>
             </div>
             {/* Friends */}
             <h5 className="text-light fw-bolder mt-2">Friends</h5>

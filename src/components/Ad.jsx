@@ -85,7 +85,7 @@ function Ad(post) {
 
         <span className='text-light'>{currentuser.firstName}</span>
         <span className="text-warning">@{currentuser.username}</span>
-        <div className="profileinfo d-flex justify-content-evenly align-items-center w-100 ms-5 text-center">
+        <div className="profileinfo d-flex justify-content-evenly align-items-center w-100 ms-5 text-center " style={{color:'darkgray'}}>
           <div className="post d-flex flex-column">
             <span>Posts</span>
             <span className='text-center'>{postData.length}</span>

@@ -45,6 +45,9 @@ export const addFlagPostAPI = async (pid,pc,reqBody,reqHeader)=>{
 export const addFavPostAPI = async (reqBody,reqHeader)=>{
   return await commonAPI("POST",`${SERVER_URL}/fav-post`,reqBody,reqHeader)
 }
+export const addadminFavPostAPI = async (reqBody,reqHeader)=>{
+  return await commonAPI("POST",`${SERVER_URL}/adminfav-post`,reqBody,reqHeader)
+}
 
 export const getflagPostsAPI = async (reqHeader)=>{
   return await commonAPI("GET",`${SERVER_URL}/flag-post`,"",reqHeader)
@@ -55,6 +58,9 @@ export const addCommentAPI = async (postId, reqBody, reqHeader) => {
 }
 export const addFriendAPI = async (fid, reqHeader) => { 
   return await commonAPI("POST", `${SERVER_URL}/add-friend/${fid}`,"", reqHeader);
+}
+export const addMarkAPI = async (fid, reqHeader) => { 
+  return await commonAPI("POST", `${SERVER_URL}/add-mark/${fid}`,"", reqHeader);
 }
 export const getUserPostsAPI = async (reqHeader)=>{
   return await commonAPI("GET",`${SERVER_URL}/user-post`,"",reqHeader)
@@ -81,6 +87,10 @@ export const getAllFriendsAPI = async (reqHeader)=>{
   return await commonAPI("GET",`${SERVER_URL}/friendspage`,'',reqHeader)
 }
 
+export const getAllBookedAPI = async (reqHeader)=>{
+  return await commonAPI("GET",`${SERVER_URL}/bookedpage`,'',reqHeader)
+}
+
 export const isFavAPI=async (pid,reqHeader)=>{
   return await commonAPI("GET",`${SERVER_URL}/isfav/${pid}`,reqHeader)
 }
@@ -105,6 +115,9 @@ export const removeFriendAPI = async (fid,reqHeader)=>{
   return await commonAPI("DELETE",`${SERVER_URL}/remove-friend/${fid}`,{},reqHeader)
 }
 
+export const removeBookAPI = async (fid,reqHeader)=>{
+  return await commonAPI("DELETE",`${SERVER_URL}/remove-book/${fid}`,{},reqHeader)
+}
 export const removecommentAPI = async (cid,reqHeader)=>{
   return await commonAPI("DELETE",`${SERVER_URL}/remove-comment/${cid}`,{},reqHeader)
 }
@@ -125,6 +138,9 @@ export const luserAPI = async (reqHeader)=>{
   return await commonAPI("GET",`${SERVER_URL}/luser`,"",reqHeader)
 }
 
+export const ladminAPI = async (reqHeader)=>{
+  return await commonAPI("GET",`${SERVER_URL}/ladmin`,"",reqHeader)
+}
 
 export const editProfileAPI = async (reqBody,reqHeader)=>{
   return await commonAPI("PUT",`${SERVER_URL}/edit-profile`,reqBody,reqHeader)
@@ -181,6 +197,11 @@ export const profilepicAPI = async (reqBody,reqHeader)=>{
 export const managelikeAPI = async (reqBody,reqHeader)=>{
   return await commonAPI("POST",`${SERVER_URL}/manage-likes`,reqBody,reqHeader)
 }
+
+export const manageadminlikeAPI = async (reqBody,reqHeader)=>{
+  return await commonAPI("POST",`${SERVER_URL}/manage-adminlikes`,reqBody,reqHeader)
+}
+
 
 export const dltlikeAPI = async (reqBody,reqHeader)=>{
   return await commonAPI("POST",`${SERVER_URL}/dlt-likes`,reqBody,reqHeader)

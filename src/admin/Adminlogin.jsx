@@ -45,22 +45,22 @@ function Adminlogin() {
   return (
     <>
 <div className="Authfullbody" style={{ width: '100%', backgroundColor: 'black'}}>
-        <div className="border1 shadow container">
-          <img src={logo} alt="" style={{ width: '45%', height: '500px' }} />
+        <div className="border1 shadow container w-100">
+          <img src={logo} alt="" className='adminimg' style={{ width: '45%'}} />
           <h1 className='title text-light head1'>SnapGram</h1>
           <p className="text-warning">*Email- admin@snapgram.com  Password:- 12345678</p>
           <h5 className="text-light">Admin Login</h5>
-          <FloatingLabel controlId="floatingEmail" label="Email" className='mb-2 inp'>
-            <Form.Control type="email" placeholder="Email" onChange={e=>setUserinput({...userInput,email:e.target.value})}   style={{backgroundColor:'black',borderTop:'0px',borderBottom:'2px solid white',borderLeft:'0px',borderRight:'0px',textAlign:'center',borderRadius:'0px',color:'white'}}/>
+          <FloatingLabel controlId="floatingEmail" label="Email" className='mb-1 inp'>
+            <Form.Control className='inp2' type="email" placeholder="Email" onChange={e=>setUserinput({...userInput,email:e.target.value})}   style={{backgroundColor:'black',borderTop:'0px',borderBottom:'2px solid white',borderLeft:'0px',borderRight:'0px',textAlign:'center',borderRadius:'0px',color:'white'}}/>
           </FloatingLabel>
-          <FloatingLabel controlId="floatingPassword" label="Password" className='mb-2 inp'>
-            <Form.Control type="email" placeholder="Password" onChange={e=>setUserinput({...userInput,password:e.target.value})}   style={{backgroundColor:'black',borderTop:'0px',borderBottom:'2px solid white',borderLeft:'0px',borderRight:'0px',textAlign:'center',borderRadius:'0px',color:'white'}}/>
+          <FloatingLabel controlId="floatingPassword" label="Password" className='mb-1 inp'>
+            <Form.Control className='inp2' type="email" placeholder="Password" onChange={e=>setUserinput({...userInput,password:e.target.value})}   style={{backgroundColor:'black',borderTop:'0px',borderBottom:'2px solid white',borderLeft:'0px',borderRight:'0px',textAlign:'center',borderRadius:'0px',color:'white'}}/>
           </FloatingLabel>
 
-          <button onClick={handleLogin} className="btn btn-primary mt-5" style={{width:'40%'}}>Login</button>
+          <button onClick={handleLogin} className="btn btn-primary mt-1" style={{width:'40%'}}>Login</button>
 
           <p className='text-light mt-2'>New Here!!!  <Link to={'/adminsignup'}><span className="text-primary"> Sign up</span></Link></p>
-          <Link to={'/login'}><p className="text-primary">User login</p></Link>
+          <Link to={'/login'}><span className="text-primary">User login</span></Link>
         </div>
         <ToastContainer position='top-center' theme='colored' autoClose={3000} />
       </div>

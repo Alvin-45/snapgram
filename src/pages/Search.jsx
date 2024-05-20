@@ -162,9 +162,9 @@ function Search() {
                         </div>
                         
                         {currentuser && currentuser.friends && currentuser.friends.some(friend => friend.fid === user._id) ? (
-  <i className={`fa-solid fa-user-minus frnd text-danger`} onClick={()=>handledeleteFriend(user._id)}/>
+  <i className={`fa-solid fa-user-minus frnd text-danger likebtn`} onClick={()=>handledeleteFriend(user._id)}/>
 ) : (
-  <i className={`fa-solid fa-user-plus frnd text-primary`} onClick={() => toggleIcon(user._id)} />
+  <i className={`fa-solid fa-user-plus frnd text-primary likebtn`} onClick={() => toggleIcon(user._id)} />
 )}
                         
                       </div>

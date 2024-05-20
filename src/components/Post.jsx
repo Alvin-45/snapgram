@@ -218,7 +218,7 @@ const luserId=currentuser._id
         console.log(result);
         if (result.status === 200) {
           setPostStatusResponse(result.status);
-          toast.success('Report Sumbitted Successfully! Waiting for admin to analyse it....')
+          alert('Report Sumbitted Successfully! Waiting for admin to analyse it....')
           // alert('Report Sumbitted Successfully! Waiting for admin to analyse it....')
         } else {
           console.log(result);
@@ -420,11 +420,11 @@ useEffect(()=>{
 
                   <div className="d-flex justify-content-evenly">
                     {posted.likes.some(like => like.lid === luserId)?(<i className={`fa-solid fa-heart text-danger fa-lg ic1 mt-2 likebtn `} onClick={() => dltike(posted)}></i>):(<i className={`fa-regular fa-heart fa-lg ic1 mt-2 likebtn`} onClick={() => managelike(posted)}></i>)}
-                    <ChatBubbleOutlineOutlinedIcon className="ic1" onClick={() => handleModalOpen(posted)} />
+                    <ChatBubbleOutlineOutlinedIcon className="ic1 cmtbtn" onClick={() => handleModalOpen(posted)} />
                     {/* <SendIcon className="ic1 snd" /> */}
                   </div>
                   <div className="d-flex justify-content-evenly">
-                  {posted.fav.some(fav => fav.fid === luserId)?(<i className={`fa-solid fa-bookmark fa-lg `} onClick={() => handledltfav(posted)}></i>):(<i className={`fa-regular fa-bookmark fa-lg bk`} onClick={() => handlefavPost(posted)}></i>)}
+                  {posted.fav.some(fav => fav.fid === luserId)?(<i className={`fa-solid fa-bookmark fa-lg favbtn`} onClick={() => handledltfav(posted)}></i>):(<i className={`fa-regular fa-bookmark fa-lg bk favbtn`} onClick={() => handlefavPost(posted)}></i>)}
                     
                   </div>
                 </div>

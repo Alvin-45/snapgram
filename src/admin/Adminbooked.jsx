@@ -1,12 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { getAllFriendsAPI, removeFriendAPI, userdetails } from '../../services/allAPI';
+import { getAllBookedAPI, getAllFriendsAPI, removeBookAPI, removeFriendAPI, userdetails } from '../../services/allAPI';
 import userimg from '../assets/user.png'
 import { friendremoveResponseContext } from '../Context/ContextAPI';
 import { SERVER_URL } from '../../services/serverURL';
 
-
-function Friends() {
-  const {friendstatusResponse, setFriendStatusResponse}=useContext(friendremoveResponseContext)
+function Adminbooked() {
+    const {friendstatusResponse, setFriendStatusResponse}=useContext(friendremoveResponseContext)
 
   const [users, setUsers] = useState([]);
   const [isClassA, setIsClassA] = useState(true);
@@ -21,7 +20,7 @@ function Friends() {
           };
           try {
             console.log(fid);
-            const result = await removeFriendAPI(fid,reqHeader);
+            const result = await removeBookAPI(fid,reqHeader);
             if (result.status === 200) {
               setFriendStatusResponse(result)
             } else {
@@ -39,7 +38,7 @@ function Friends() {
       const token = sessionStorage.getItem('token');
       const reqHeader = { Authorization: `Bearer ${token}` };
       try {
-        const result = await getAllFriendsAPI(reqHeader);
+        const result = await getAllBookedAPI(reqHeader);
         setUsers(result.data);
       } catch (err) {
         console.log(err);
@@ -47,10 +46,9 @@ function Friends() {
     }
     fetchData();
   }, [friendstatusResponse]);
-
   return (
     <>
-      <h4 className='fw-bolder mt-5'>Friends</h4>
+    <h4 className='fw-bolder mt-5'>Marked Suspesious</h4>
       <div className='frndlist'>
         <div className="friends  d-flex justify-content-around align-items-start flex-wrap flex-column w-100" >
         {users?.length > 0 ?
@@ -62,7 +60,7 @@ function Friends() {
                       </div>
                       <i
                         onClick={() => handledeleteFriend(user.fid)}
-                        className={` ${handleFriend.includes(user.fid) ? 'fa-solid fa-user-plus text-primary' : 'fa-solid fa-user-minus  text-danger likebtn'
+                        className={` ${handleFriend.includes(user.fid) ? 'fa-solid fa-user-plus text-primary' : 'fa-solid fa-lock-open  text-danger'
                           }`}
                       ></i>
                     </div>
@@ -73,9 +71,8 @@ function Friends() {
 
 
       </div>
-
     </>
   )
 }
 
-export default Friends
+export default Adminbooked

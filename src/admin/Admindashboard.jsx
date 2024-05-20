@@ -1,10 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react'
 import AdminNav from './AdminNav'
 import { adddeletedpostAPI, adminallUsersAPI, dltuserAPI, doespostexist, getHomePostsAPI, getflagPostsAPI, getflagcmtAPI, removePostAPI, removecmtflagAPI, removecommentAPI, removefavAPI, removeflagAPI, reportedPost } from '../../services/allAPI'
-import { Button, Dropdown, DropdownMenu, Modal } from 'react-bootstrap'
+import { Button, Dropdown, DropdownMenu, Modal, Nav } from 'react-bootstrap'
 import { commentdeleteContext, postremoveResponseContext, responseinvalidContext } from '../Context/ContextAPI'
 import { SERVER_URL } from '../../services/serverURL'
 import { ToastContainer, toast } from 'react-toastify'
+import { Link } from 'react-router-dom'
+import AdminNavbar from './AdminNavbar'
 
 function Admindashboard(props) {
   const [flag, setFlag] = useState("")
@@ -410,15 +412,19 @@ alert('Request was removed successfully!!!')
 
   return (
     <>
+    <div className='navadmin'>
+      <AdminNavbar/>
+    </div>
+
       <div className="adminportal text-light" style={{ backgroundColor: 'black', width: '100%', height: '100vh' }}>
         <div className="row">
-          <div className="col-2 ms-4 mt-5 fixed-left" style={{ position: 'fixed' }}>
+          <div className="col-lg-2 ms-4 mt-5 fixed-left adminnav" style={{ position: 'fixed' }}>
             <AdminNav />
           </div>
-          <div className="col-8 pt-5 mb-5 pb-5" style={{ marginLeft: '20%' }}>
+          <div className="col-lg-8 pt-5 mb-5 pb-5 dashbody">
             <h3>Reported Cases</h3>
-            <div className="border f-flex">
-              <button id='postbtn' className={posttable ? "btn btn-primary w-50  fw-bolder" : "btn btn-dark w-50"} onClick={handlePost}>Posts</button>
+            <div className="table">
+              <button id='postbtn' className={posttable ? "btn btn-primary   fw-bolder" : "btn btn-dark w-50"} onClick={handlePost}>Posts</button>
               <button className={cmttable ? "btn btn-primary w-50 fw-bolder" : "btn btn-dark w-50"} onClick={handleComment}>Comment</button>
             </div>
             {posttable ? <div id='cmtbtn' className="reportedcases postsection w-100 border">
@@ -426,7 +432,7 @@ alert('Request was removed successfully!!!')
                 <table style={{ width: '100%' }}>
                   <thead style={{ width: '100%', height: '50px' }}>
                     <tr className='border text-center'>
-                      <th>Sl.No</th>
+                      <th className='dno'>Sl.No</th>
                       <th>Account where act reported</th>
                       <th>Reporter Id</th>
                       <th>Post Details</th>
@@ -439,22 +445,26 @@ alert('Request was removed successfully!!!')
 
 
                         <tr key={report._id} className='border text-center'>
-                          <td>{index + 1}</td>
+                          <td className='dno'>{index + 1}</td>
                           <td>{report.poster} </td>
                           <td>{report.reporter}</td>
-                          <td>{report.postId} <i className="fa-solid fa-eye text-primary " onClick={() => handlereportedPost(report)}></i></td>
-                          <Dropdown>
-                            <Dropdown.Toggle value="Pending" className='w-100 text-warning text-center  fw-bolder'>Pending</Dropdown.Toggle>
+                          <td className='dno'>{report.postId} <i className="fa-solid fa-eye text-primary " onClick={() => handlereportedPost(report)}></i></td>
 
-                            <DropdownMenu>
-                              <Dropdown.Item value="Pending" className='w-100 text-warning text-center text-success fw-bolder'>Pending</Dropdown.Item>
-                              <Dropdown.Item value="Report Invalid" className='w-100 text-dark text-center  fw-bolder' onClick={() => handleremovereport(report)}>Report Invalid</Dropdown.Item>
-                              <Dropdown.Item value="Delete Post" className='text-danger text-center  fw-bolder' onClick={() => handleopenmodalpostdelete(report)}>Delete Post</Dropdown.Item>
-                               <Dropdown.Item value="Delete Account" className='text-danger fw-bolder text-center' onClick={()=>handledeleteaccount(report.posterId)}>Delete Account</Dropdown.Item> 
-                            </DropdownMenu>
-
-
-                          </Dropdown>
+                          <td className='fno'> <i className="fa-solid fa-eye text-primary " onClick={() => handlereportedPost(report)}></i></td>
+                          <td>
+                            <Dropdown>
+                              <Dropdown.Toggle value="Pending" className='w-100 text-warning text-center  fw-bolder'>Pending</Dropdown.Toggle>
+  
+                              <DropdownMenu>
+                                <Dropdown.Item value="Pending" className='w-100 text-warning text-center text-success fw-bolder'>Pending</Dropdown.Item>
+                                <Dropdown.Item value="Report Invalid" className='w-100 text-dark text-center  fw-bolder' onClick={() => handleremovereport(report)}>Report Invalid</Dropdown.Item>
+                                <Dropdown.Item value="Delete Post" className='text-danger text-center  fw-bolder' onClick={() => handleopenmodalpostdelete(report)}>Delete Post</Dropdown.Item>
+                                 <Dropdown.Item value="Delete Account" className='text-danger fw-bolder text-center' onClick={()=>handledeleteaccount(report.posterId)}>Delete Account</Dropdown.Item> 
+                              </DropdownMenu>
+  
+  
+                            </Dropdown>
+                          </td>
                         </tr>)) : ''}
                   </tbody>
 
@@ -468,7 +478,7 @@ alert('Request was removed successfully!!!')
                 <table style={{ width: '100%' }}>
                   <thead style={{ width: '100%', height: '50px' }}>
                     <tr className='border text-center'>
-                      <th>Sl.No</th>
+                      <th className='dno'>Sl.No</th>
                       <th>Reporter Id</th>
                       <th>Reported Account</th>
                       <th>Reported Comment</th>
@@ -481,7 +491,7 @@ alert('Request was removed successfully!!!')
 
 
                         <tr key={report._id} className='border text-center'>
-                          <td>{index + 1}</td>
+                          <td className='dno'>{index + 1}</td>
                           <td>{report.reporter} </td>
                           <td>{report.poster}</td>
                           <td className='fw-bolder'>{report.comment} </td>
@@ -509,7 +519,7 @@ alert('Request was removed successfully!!!')
 
             </div>
 
-            <div className='fixed-bottom w-75' style={{ marginLeft: '18%', backgroundColor: 'black' }}>
+            <div className='fixed-bottom analysis' style={{ backgroundColor: 'black' }}>
               <h3 className='text-center'>Analysis</h3>
               <hr />
               <div className='d-flex justify-content-around align-items-center'>
@@ -531,7 +541,7 @@ alert('Request was removed successfully!!!')
             </div> */}
 
           </div>
-          <div className="col"></div>
+          <div className="col-lg"></div>
         </div>
 
       </div>
@@ -544,7 +554,7 @@ alert('Request was removed successfully!!!')
       >
         {postData[0] ?
           (<Modal.Body className='bg-dark p-5'>
-            <img src={`${SERVER_URL}/uploads/${postData[0].image}`} alt="" className='img-fluid' style={{ width: '100%', height: '450px' }} />
+            <img src={`${SERVER_URL}/uploads/${postData[0].image}`} alt="" className='img-fluid repoimg' style={{ width: '100%', height: '450px' }} />
             <p className='text-light fw-bolder mt-2'>{postData[0].username}: <span className="text-light fw-normal ms-2">{postData[0].caption}</span> </p>
           </Modal.Body>)
           :
@@ -610,6 +620,31 @@ alert('Request was removed successfully!!!')
       </Modal>
       <ToastContainer position='top-center' theme='colored' autoClose={3000} />
 
+      {/* <div className="fixed-bottom navbtm">
+      <div className='text-light p-2' style={{height:'55px',backgroundColor:'black'}}>
+        <Nav fill variant="tabs" defaultActiveKey="#search">
+          <Nav.Item>
+            <Link to='/' className='text-light '> <i className="fa-solid fa-home mt-2"></i> </Link>
+          </Nav.Item>
+          <Link to='/search' style={{backgroundColor:'white'}} className='rounded'>
+            <Nav.Item>
+              <Nav.Link id="search" className=''> <i className="fa-solid fa-search text-dark fw-bolder"></i> </Nav.Link>
+            </Nav.Item>
+          </Link>
+          
+            <Nav.Item>
+              <Link to={'/friends'}  className='text-light'> <i className="fa-solid fa-users mt-2"></i> </Link>
+            </Nav.Item>
+          
+         
+            <Nav.Item>
+               <Link to='/profile'  className='text-light'> <i className="fa-solid fa-circle-user mt-2"></i></Link>
+            </Nav.Item>
+          
+        </Nav>
+    </div>
+
+      </div> */}
     </>
   )
 }

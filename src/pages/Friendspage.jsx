@@ -114,7 +114,7 @@ function Friendspage() {
                       {/* <p className="text-secondary">{user.fid}</p> */}
                       <i
                       onClick={()=>handledeleteFriend(user?.fid)}
-                        className='fa-solid fa-user-minus text-danger me-2'
+                        className='fa-solid fa-user-minus text-danger me-2 likebtn'
                           
                       ></i>
                     </div>
